@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+      <title>꼬옥! - 회원 전용 페이지</title>
+    
+    <!-- Tailwind CSS CDN 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 폰트 설정 -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc; /* 연한 배경 */
+        }
+        /* 스크롤바 디자인 개선 (선택 사항) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a8a8a8;
+            border-radius: 4px;
+        }
+    </style>
+    <script>
+        // 로그인 체크 (localStorage 기반 간단 구현)
+        window.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('ko_og_logged_in');
+            if (!isLoggedIn) {
+                alert('로그인이 필요한 페이지입니다.');
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</head>
+
+<body class="min-h-screen">
+    <!-- 메인 컨테이너: 화면 중앙 정렬 및 반응형 최대 너비 설정 -->
+    <div class="max-w-xl mx-auto p-4 sm:p-6 bg-white shadow-xl min-h-screen">
+
+         <!-- 헤더 및 타이틀 -->
+        <header class="py-4 border-b-2 border-indigo-100 mb-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-indigo-700">
+                    <span class="text-4xl">📌</span> 꼬옥!
+                </h1>
+                <div class="flex items-center gap-3">
+                    <!-- 새 약속 등록 버튼 -->
+                    <button id="addAppointmentBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300 transform hover:scale-105 active:scale-95 text-sm">
+                        + 새 약속 등록
+                    </button>
+                    <!-- 로그아웃 버튼 -->
+                    <button onclick="logout()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-xl shadow-md transition duration-300 text-sm">
+                        로그아웃
+                    </button>
+                </div>
+            </div>
+            <p class="text-gray-500 mt-2 text-sm">회원 전용 약속 관리 페이지</p>
+        </header>
+
+        <!-- 약속 목록 표시 영역 -->
+        <main>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">다가오는 약속 목록</h2>
+            
+            <div id="appointment-list" class="space-y-4">
+                <!-- 여기에 JavaScript로 약속 카드들이 동적으로 추가됩니다 -->
+                <p id="empty-message" class="text-center text-gray-500 p-8 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
+                    등록된 약속이 없습니다. '새 약속 등록' 버튼을 눌러 첫 약속을 잡아보세요!
+                </p>
+            </div>
+        </main>
+
+        <!-- 메시지 모달 (alert() 대신 사용) -->
+        <div id="message-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4" onclick="closeModal()">
+            <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100" onclick="event.stopPropagation()">
+                <h3 class="text-xl font-bold mb-3 text-red-600">알림</h3>
+                <p id="modal-message" class="text-gray-700 mb-4"></p>
+                <button onclick="closeModal()" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-semibold transition">확인</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 상수 정의: localStorage 키
+        const APPOINTMENTS_KEY = 'ko_og_appointments';
+        // HTML 요소 참조
+        const appointmentList = document.getElementById('appointment-list');
+        const emptyMessage = document.getElementById('empty-message');
+        const addAppointmentBtn = document.getElementById('addAppointmentBtn');
+        const messageModal = document.getElementById('message-modal');
+        const modalMessage = document.getElementById('modal-message');
+
+        /**
+         * alert() 대신 사용할 사용자 지정 메시지 모달 함수
+         * @param {string} message - 표시할 메시지 내용
+         */
+        function showMessage(message) {
+            modalMessage.textContent = message;
+            messageModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            messageModal.classList.add('hidden');
+        }
+
+        // 1주차 목표: 데이터 구조 정의
+        // 약속 객체 형태 예시:
+        // {
+        //     id: 'uuid-123',
+        //     title: '팀플 기획 회의',
+        //     date: '2025-11-20', // YYYY-MM-DD
+        //     time: '14:00',     // HH:MM
+        //     place: '중앙 도서관 3층',
+        //     penalty: '지각 1분당 벌금 1000원',
+        //     status: '예정'    // '예정', '진행 중', '지각 발생', '완료'
+        // }
+
+
+        /**
+         * localStorage에서 약속 데이터를 불러오는 함수 (2주차 목표의 시작)
+         * @returns {Array<Object>} 저장된 약속 객체 배열 (없으면 빈 배열)
+         */
+        function getAppointments() {
+            try {
+                const data = localStorage.getItem(APPOINTMENTS_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error("localStorage 데이터를 불러오는 데 실패했습니다.", e);
+                // 오류 발생 시 모달 대신 콘솔에 출력하고 빈 배열 반환
+                return [];
+            }
+        }
+
+        /**
+         * D-Day를 계산하여 문자열로 반환합니다.
+         * @param {string} dateString - 약속 날짜 ('YYYY-MM-DD')
+         * @returns {string} D-Day 문자열
+         */
+        function calculateDDay(dateString) {
+            const today = new Date();
+            // 시간 정보를 제거하여 순수 날짜만 비교
+            today.setHours(0, 0, 0, 0); 
+            const appointmentDate = new Date(dateString);
+            appointmentDate.setHours(0, 0, 0, 0);
+            
+            const diffTime = appointmentDate.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) return 'D-Day 💥';
+            if (diffDays > 0) return `D-${diffDays}일`;
+            return '약속 지남 🗓️';
+        }
+
+        /**
+         * 약속 목록을 화면에 렌더링하는 함수 (2주차 목표의 핵심)
+         */
+        function renderAppointments() {
+            
+            const appointments = getAppointments();
+            appointmentList.innerHTML = ''; // 기존 목록 초기화
+
+            if (appointments.length === 0) {
+                emptyMessage.classList.remove('hidden');
+                appointmentList.appendChild(emptyMessage);
+                return;
+            }
+
+            emptyMessage.classList.add('hidden');
+
+            // 1. 약속 날짜가 가까운 순서로 정렬 (필수 UX)
+            appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            appointments.forEach(app => {
+                const dDay = calculateDDay(app.date);
+                let statusColor = 'bg-indigo-100 text-indigo-700'; // 예정
+                
+                // D-Day 상태에 따라 카드 색상 변경
+                if (dDay.includes('D-Day')) {
+                    statusColor = 'bg-yellow-100 text-yellow-700 font-bold';
+                } else if (dDay.includes('약속 지남')) {
+                    statusColor = 'bg-red-100 text-red-700 opacity-70';
+                }
+
+                // 약속 카드 생성 (DOM 조작)
+                const card = document.createElement('div');
+                card.className = `p-4 border-l-4 shadow-lg rounded-xl transition duration-300 hover:shadow-xl cursor-pointer ${statusColor.includes('indigo') ? 'border-indigo-500' : statusColor.includes('yellow') ? 'border-yellow-500' : 'border-red-500'}`;
+                card.setAttribute('data-id', app.id);
+                
+                // 클릭 시 상세 페이지로 이동 (register.html을 임시로 사용)
+                card.onclick = () => {
+                    // 실제 구현 시 window.location.href = `detail.html?id=${app.id}`;
+                    showMessage(`[${app.title}] 약속 상세 페이지로 이동합니다. (ID: ${app.id})`);
+                };
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-lg font-semibold text-gray-900 truncate">${app.title}</h3>
+                        <span class="px-3 py-1 text-xs font-bold rounded-full ${statusColor}">${dDay}</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-1">
+                        <span class="font-medium">장소:</span> ${app.place || '미정'}
+                    </p>
+                    <p class="text-sm text-gray-600 mb-1">
+                        <span class="font-medium">일시:</span> ${app.date} ${app.time}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        <span class="font-medium text-red-500">페널티:</span> ${app.penalty}
+                    </p>
+                `;
+                
+                appointmentList.appendChild(card);
+            });
+        }
+
+                // 로그아웃 함수
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                localStorage.removeItem('ko_og_logged_in');
+                localStorage.removeItem('ko_og_username');
+                alert('로그아웃 되었습니다.');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 초기 화면 로드 시 약속 목록 렌더링
+        window.onload = function() {
+            // 임시 데이터 (테스트용)
+            // localStorage.removeItem(APPOINTMENTS_KEY); // 테스트 시 주석 해제하여 데이터 초기화
+            if (getAppointments().length === 0) {
+                const sampleData = [{
+                    id: '1', title: '웹프로젝트 발표 준비', date: '2025-11-06', time: '18:00', place: '제3공학관', penalty: '지각 시 아메리카노 1잔', status: '예정'
+                }, {
+                    id: '2', title: '팀원과의 약속 (벌칙: 짜장면)', date: '2025-11-25', time: '12:30', place: '학교 식당', penalty: '벌칙: 짜장면 쏘기', status: '예정'
+                }, {
+                    id: '3', title: '지난 과제 제출', date: '2025-10-30', time: '23:59', place: '온라인', penalty: '패널티 적용됨', status: '지각 발생'
+                }];
+                localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
+            }
+            
+            renderAppointments();
+
+            // '새 약속 등록' 버튼 클릭 이벤트 (등록 폼으로 이동)
+            
+            addAppointmentBtn.addEventListener('click', () => {
+                // 실제 구현 시 window.location.href = 'register.html';
+                showMessage("약속 등록 폼 (register.html) 페이지로 이동합니다. \n(다음 단계에서 구현 예정)");
+            });
+        };
+
+    </script>
+</body>
+
+</html>
