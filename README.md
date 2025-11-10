@@ -217,3 +217,29 @@ VII. 참고 자료
 - [정보구조도(IA) 및 와이어프레임 작성법](https://blog.naver.com/soomichip_/223127062784)
 - Tailwind CSS Documentation
 - localStorage API MDN Documentation
+
+
+통합 모노레포 스타일
+```
+Web_Time
+├─ backend
+│  ├─ config
+│  │  └─ dbConnect.js
+│  └─ models
+├─ frontend
+│  ├─ public
+│  │  ├─ images
+│  │  │  ├─ homepage.jpeg
+│  │  │  └─ 웹 페이지 깊이구조도.png
+│  │  ├─ index.html
+│  │  ├─ login.html
+│  │  ├─ signup.html
+│  │  └─ user.html
+│  └─ src
+│     ├─ app.js
+│     └─ styles
+│        └─ main.css
+├─ package-lock.json
+└─ README.md
+
+```
