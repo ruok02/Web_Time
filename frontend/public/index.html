@@ -116,27 +116,31 @@
         </nav>
     </header>
 
+
     <!-- Hero Section -->
     <section class="gradient-bg text-white py-20 px-4">
         <div class="max-w-5xl mx-auto text-center">
-            <!-- 메인 헤드라인 -->
+            <!-- 메인 헤드라인 text-5xl (기본 크기), md:text-6xl (중간 화면 이상에서 더 크게), font-extrabold (매우 굵게), mb-6 (아래쪽 마진 6), leading-tight (줄 간격을 좁게) 설정합니다.-->
             <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
                 약속을 지키는 습관,<br>
+                <!--타이틀의 특정 단어에만 밝은 노란색을 적용하여 강조합니다.-->
                 <span class="text-yellow-300">꼬옥!</span>
             </h2>
-            
-            <!-- 서브 헤드라인 -->
+
+            <!-- 서브 헤드라인 text-xl (기본 크기), md:text-2xl (중간 화면 이상에서 더 크게), mb-8 (아래쪽 마진 8), text-indigo-100 (인디고 색상), max-w-3xl (최대 너비 3xl), mx-auto (수평 중앙 정렬) 설정합니다. -->
             <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto">
                 지각 패널티 관리로 친구들과의 약속을 더 즐겁고 공정하게!<br>
                 10~20대 학생들을 위한 스마트한 약속 관리 솔루션
             </p>
-            
-            <!-- CTA 버튼 -->
+
+            <!-- CTA 버튼 flex 컨테이너 -->
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                <!-- 무료로 시작하기 버튼-->
                 <a href="/frontend/public/signup.html" 
                    class="px-8 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl hover:shadow-xl">
                     무료로 시작하기 →
                 </a>
+                <!-- 기능 둘러보기 버튼-->
                 <a href="#features" 
                    class="px-8 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg">
                     기능 둘러보기
@@ -153,13 +157,14 @@
         </div>
     </section>
 
+    
     <!-- Features Section -->
     <section id="features" class="py-20 px-4 bg-white">
         <div class="max-w-6xl mx-auto">
             <!-- 섹션 타이틀 -->
             <div class="text-center mb-16">
                 <h3 class="text-4xl font-extrabold text-gray-800 mb-4">주요 기능</h3>
-                <p class="text-lg text-gray-600">약속 관리가 이렇게 쉬워집니다</p>
+                <p class="text-2xl font-semibold text-blue-600">약속 관리가 이렇게 쉬워집니다</p>
             </div>
             
             <!-- Feature 카드 그리드 -->
