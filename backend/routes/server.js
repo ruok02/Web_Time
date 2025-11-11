@@ -5,7 +5,7 @@ const app = express();
 dbConnect(); // DB접속
 
 
-app.listen(8080, function(){
+app.listen(5050, function(){
     console.log('listening on 8080')
 });
 
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 //라우터 파일
 //app.use("/contacts", require("./routes/contactRoutes"));
 
-app.get('/pet', function(요청, 응답){
+app.get('/login', function(요청, 응답){
     응답.send('펫용품 쇼핑할 수 있는 사이트다.');
 });
 
