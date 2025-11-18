@@ -7,7 +7,11 @@
     <meta name="description" content="지각 패널티 관리로 약속을 지키는 습관을 만들어보세요. 꼬옥!">
     <title>꼬옥! - 약속을 지키는 습관</title>
 
+
+
     <script src="https://cdn.tailwindcss.com"></script>
+
+
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
@@ -16,17 +20,52 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* 부드러운 스크롤: 앵커 링크 클릭 시 애니메이션처럼 스크롤 */
         html {
             scroll-behavior: smooth;
         }
 
-        /* 그라데이션 배경 클래스 정의 */
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        /* 호버(Hover) 효과 및 애니메이션 설정 클래스 */
+        /* --- 기존 애니메이션 스타일 제거 --- */
+        /* .animate-on-scroll, @keyframes fadeInScaleUp 등은 이 섹션에서 사용하지 않으므로 제거하거나 수정합니다. */
+        /* (다른 섹션에서 쓴다면 유지) */
+
+        /* --- 새로운 Sticky Scroll 섹션 스타일 --- */
+
+        /* 텍스트 스텝: 활성화/비활성화 시 투명도 조절 */
+        .feature-step {
+            /* 텍스트 블록이 화면의 약 70% 높이를 차지하도록 하여 스크롤을 유도 */
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+            opacity: 0.3;
+            /* 비활성 시 흐리게 */
+        }
+
+        .feature-step.is-active {
+            opacity: 1;
+            /* 활성 시 선명하게 */
+        }
+
+        /* 이미지 컨테이너: 이미지 간 페이드 전환 */
+        #feature-image-container>* {
+            position: absolute;
+            inset: 0;
+            /* top/left/right/bottom: 0 */
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* 이미지가 잘리지 않게 'contain'으로 설정 (또는 'cover') */
+            transition: opacity 0.7s ease-in-out;
+            border-radius: 1rem;
+            /* 이미지 컨테이너에 둥근 모서리 적용 */
+        }
+
+        /* --- (기존 스타일) --- */
         .hover-scale-y {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -36,32 +75,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
-        /* 스크롤 시 나타나는 애니메이션 키프레임 정의: 아래에서 위로 나타나면서 확대 */
-        @keyframes fadeInScaleUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px) scale(0.95); /* 시작 시 조금 아래, 약간 축소 */
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1); /* 끝날 때 원래 위치, 원래 크기 */
-            }
-        }
-
-        /* 애니메이션이 적용될 클래스 (초기에는 숨김) */
-        .animate-on-scroll {
-            opacity: 0; /* 기본적으로 숨김 */
-            transform: translateY(50px) scale(0.95); /* 기본 위치 (아래) 및 크기 */
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* JavaScript로 클래스 추가 시 부드럽게 전환 */
-        }
-
-        /* 애니메이션 활성화 클래스 */
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* 스텝 연결선 클래스 정의 (가상 요소 ::after 사용) */
         .step-connector {
             position: relative;
         }
@@ -86,205 +99,241 @@
                 left: 50%;
                 transform: translateX(-50%);
             }
+
+            /* 모바일에서는 sticky 대신 순차적으로 보이도록 처리 */
+            .feature-step {
+                min-height: auto;
+                margin-bottom: 3rem;
+                opacity: 1;
+                /* 모바일에선 항상 선명하게 */
+            }
         }
     </style>
 </head>
 
 <body class="bg-gray-50">
 
+
+
     <header class="bg-white shadow-sm sticky top-0 z-50">
+        <!-- ... (헤더 내용 동일) ... -->
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
                     <span class="text-4xl">⏰</span>
                     <h1 class="text-2xl font-extrabold text-indigo-600">꼬옥!</h1>
                 </div>
-
                 <div class="flex space-x-3">
                     <a href="/frontend/public/login.html"
-                        class="px-4 py-2 text-gray-700 font-semibold hover:text-indigo-600 transition duration-200">
-                        로그인
-                    </a>
+                        class="px-4 py-2 text-gray-700 font-semibold hover:text-indigo-600 transition duration-200">로그인</a>
                     <a href="/frontend/public/signup.html"
-                        class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md">
-                        회원가입
-                    </a>
+                        class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md">회원가입</a>
                 </div>
             </div>
         </nav>
     </header>
 
 
+
+
     <section class="gradient-bg text-white py-20 px-4">
+        <!-- ... (히어로 섹션 내용 동일) ... -->
         <div class="max-w-5xl mx-auto text-center">
             <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
                 약속을 지키는 습관,<br>
                 <span class="text-yellow-300">꼬옥!</span>
             </h2>
-
             <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto">
                 지각 패널티 관리로 친구들과의 약속을 더 즐겁고 공정하게!<br>
                 약속을 지키지 못하는 지각러들을 위한 스마트한 약속 관리 홈페이지
             </p>
-
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
                 <a href="/frontend/public/signup.html"
-                    class="px-8 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl hover:shadow-xl">
-                    무료로 시작하기 →
-                </a>
+                    class="px-8 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl hover:shadow-xl">무료로
+                    시작하기 →</a>
                 <a href="#features"
-                    class="px-8 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg">
-                    기능 둘러보기
-                </a>
+                    class="px-8 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg">기능
+                    둘러보기</a>
             </div>
-
             <div class="mt-12 flex justify-center space-x-8 text-6xl opacity-90">
-                <span>📅</span>
-                <span>⏰</span>
-                <span>✅</span>
-                <span>🎯</span>
+                <span>📅</span> <span>⏰</span> <span>✅</span> <span>🎯</span>
             </div>
         </div>
     </section>
 
 
-    <section id="features" class="py-20 px-4 bg-white">
+
+
+    <section id="features" class="py-20 px-4 bg-white overflow-hidden">
         <div class="max-w-6xl mx-auto">
+
+
             <div class="text-center mb-16">
                 <h3 class="text-4xl font-extrabold text-gray-800 mb-4">주요 기능</h3>
                 <p class="underline decoration-wavy text-2xl font-semibold text-blue-600">약속 관리가 이렇게 쉬워집니다</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
 
-                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl shadow-lg hover-scale-y animate-on-scroll">
-                    <div class="text-5xl mb-4">📝</div>
-                    <h4 class="text-2xl font-bold text-gray-800 mb-3">간편한 약속 등록</h4>
-                    <p class="text-gray-600 leading-relaxed">
-                        날짜, 시간, 장소, 페널티를<br>
-                        한 번에 간편하게 설정하세요.<br>
-                        몇 번의 클릭으로 약속 완료!
-                    </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
+
+
+
+                <div class="w-full h-[300px] md:h-auto">
+                    <div class="sticky top-28">
+
+
+                        <div id="feature-image-container"
+                            class="relative w-full h-[50vh] max-h-[500px] bg-gray-100 rounded-2xl shadow-xl overflow-hidden">
+
+
+
+                            <img id="feature-img-1" src="/frontend/public/images/Calendar/2025-CALENDAR.png"
+                                alt="꼬옥! 캘린더 기능" class="opacity-100">
+
+
+
+                            <img id="feature-img-2" src="/frontend/public/images/Calendar/2025-Home.png"
+                                alt="꼬옥! D-Day 기능" class="opacity-0">
+
+
+
+                            <div id="feature-img-3"
+                                class="bg-gradient-to-br from-green-50 to-teal-50 flex items-center justify-center text-8xl text-green-600 opacity-0">
+                                <span>✅</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl shadow-lg hover-scale-y animate-on-scroll">
-                    <div class="text-5xl mb-4">⏰</div>
-                    <h4 class="text-2xl font-bold text-gray-800 mb-3">D-Day 자동 계산</h4>
-                    <p class="text-gray-600 leading-relaxed">
-                        다가오는 약속을 한눈에 확인!<br>
-                        자동으로 남은 날짜를 계산하여<br>
-                        약속을 잊지 않도록 도와드립니다.
-                    </p>
-                </div>
 
-                <div class="bg-gradient-to-br from-green-50 to-teal-50 p-8 rounded-2xl shadow-lg hover-scale-y animate-on-scroll">
-                    <div class="text-5xl mb-4">✅</div>
-                    <h4 class="text-2xl font-bold text-gray-800 mb-3">체크인 & 페널티</h4>
-                    <p class="text-gray-600 leading-relaxed">
-                        체크인 버튼으로 지각 여부 자동 판단!<br>
-                        공정한 페널티 관리로<br>
-                        약속 지키는 습관을 만들어요.
-                    </p>
+
+                <div class="flex flex-col relative">
+
+
+
+                    <div id="feature-step-1" class="feature-step">
+                        <div class="text-5xl mb-4 text-indigo-600">📝</div>
+                        <h4 class="text-3xl font-bold text-gray-800 mb-4">간편한 약속 등록</h4>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            날짜, 시간, 장소, 페널티를<br>
+                            한 번에 간편하게 설정하세요.<br>
+                            몇 번의 클릭으로 약속 완료!
+                        </p>
+                    </div>
+
+
+
+                    <div id="feature-step-2" class="feature-step">
+                        <div class="text-5xl mb-4 text-purple-600">⏰</div>
+                        <h4 class="text-3xl font-bold text-gray-800 mb-4">D-Day 자동 계산</h4>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            다가오는 약속을 한눈에 확인!<br>
+                            자동으로 남은 날짜를 계산하여<br>
+                            약속을 잊지 않도록 도와드립니다.
+                        </p>
+                    </div>
+
+
+
+                    <div id="feature-step-3" class="feature-step">
+                        <div class="text-5xl mb-4 text-green-600">✅</div>
+                        <h4 class="text-3xl font-bold text-gray-800 mb-4">체크인 & 페널티</h4>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            체크인 버튼으로 지각 여부 자동 판단!<br>
+                            공정한 페널티 관리로<br>
+                            약속 지키는 습관을 만들어요.
+                        </p>
+                    </div>
                 </div>
 
             </div>
         </div>
     </section>
 
+
+
     <section class="py-20 px-4 bg-gray-50">
+        <!-- ... (How It Works 섹션 내용 동일 - 여기도 animate-on-scroll 사용 가능) ... -->
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
                 <h3 class="text-4xl font-extrabold text-gray-800 mb-4">이용 방법</h3>
                 <p class="text-lg text-gray-600">4단계로 시작하는 스마트한 약속 관리</p>
             </div>
-
             <div class="grid md:grid-cols-4 gap-8 relative">
-
+                <!-- Step 1 -->
                 <div class="text-center step-connector">
-                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y animate-on-scroll">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y">
                         <div
                             class="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                            1
-                        </div>
+                            1</div>
                         <h5 class="text-xl font-bold text-gray-800 mb-2">회원가입</h5>
                         <p class="text-gray-600">간단한 정보 입력으로<br>1분 만에 가입 완료</p>
                     </div>
                 </div>
-
+                <!-- Step 2 -->
                 <div class="text-center step-connector">
-                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y animate-on-scroll" style="animation-delay: 0.1s;">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y">
                         <div
                             class="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                            2
-                        </div>
+                            2</div>
                         <h5 class="text-xl font-bold text-gray-800 mb-2">약속 등록</h5>
                         <p class="text-gray-600">친구들과의 약속을<br>등록하고 공유하세요</p>
                     </div>
                 </div>
-
+                <!-- Step 3 -->
                 <div class="text-center step-connector">
-                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y animate-on-scroll" style="animation-delay: 0.2s;">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y">
                         <div
                             class="w-16 h-16 bg-pink-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                            3
-                        </div>
+                            3</div>
                         <h5 class="text-xl font-bold text-gray-800 mb-2">체크인하기</h5>
                         <p class="text-gray-600">약속 장소에 도착하면<br>체크인 버튼 클릭!</p>
                     </div>
                 </div>
-
+                <!-- Step 4 -->
                 <div class="text-center">
-                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y animate-on-scroll" style="animation-delay: 0.3s;">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale-y">
                         <div
                             class="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                            ✓
-                        </div>
+                            ✓</div>
                         <h5 class="text-xl font-bold text-gray-800 mb-2">약속 완료!</h5>
                         <p class="text-gray-600">지각 여부 자동 판단<br>페널티 내역 확인</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
+
+
 
     <section class="gradient-bg text-white py-20 px-4">
+        <!-- ... (CTA 섹션 내용 동일) ... -->
         <div class="max-w-4xl mx-auto text-center">
-            <h3 class="text-4xl md:text-5xl font-extrabold mb-6">
-                지금 바로 시작하세요
-            </h3>
-            <p class="text-xl mb-10 text-indigo-100">
-                무료로 가입하고 친구들과 약속을 더 즐겁게 지켜보세요!
-            </p>
-
+            <h3 class="text-4xl md:text-5xl font-extrabold mb-6">지금 바로 시작하세요</h3>
+            <p class="text-xl mb-10 text-indigo-100">무료로 가입하고 친구들과 약속을 더 즐겁게 지켜보세요!</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="/frontend/public/signup.html"
-                    class="px-10 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl">
-                    회원가입하기
-                </a>
+                    class="px-10 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl">회원가입하기</a>
                 <a href="/frontend/public/login.html"
-                    class="px-10 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg border-2 border-white">
-                    로그인하기
-                </a>
+                    class="px-10 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg border-2 border-white">로그인하기</a>
             </div>
         </div>
     </section>
 
+
+
     <footer class="bg-gray-800 text-gray-300 py-10 px-4">
+        <!-- ... (푸터 내용 동일) ... -->
         <div class="max-w-6xl mx-auto">
             <div class="grid md:grid-cols-3 gap-8 mb-8">
-
                 <div>
                     <div class="flex items-center space-x-2 mb-4">
                         <span class="text-3xl">⏰</span>
                         <h4 class="text-xl font-bold text-white">꼬옥!</h4>
                     </div>
-                    <p class="text-sm leading-relaxed">
-                        약속을 지키는 습관을 만드는<br>
-                        스마트한 지각 패널티 관리 앱
-                    </p>
+                    <p class="text-sm leading-relaxed">약속을 지키는 습관을 만드는<br>스마트한 지각 패널티 관리 앱</p>
                 </div>
-
                 <div>
                     <h5 class="font-semibold text-white mb-4">바로가기</h5>
                     <ul class="space-y-2 text-sm">
@@ -293,55 +342,88 @@
                         <li><a href="/frontend/public/signup.html" class="hover:text-white transition">회원가입</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h5 class="font-semibold text-white mb-4">프로젝트 정보</h5>
-                    <p class="text-sm leading-relaxed">
-                        3학년 웹 프로그래밍<br>
-                        사이드 프로젝트<br>
-                        개발 기간: 2025.11.04 ~ 2025.12.08
-                    </p>
+                    <p class="text-sm leading-relaxed">3학년 웹 프로그래밍<br>사이드 프로젝트<br>개발 기간: 2025.11.04 ~ 2025.12.08</p>
                 </div>
-
             </div>
-
             <div class="border-t border-gray-700 pt-6 text-center text-sm">
                 <p>&copy; 2025 꼬옥! 프로젝트</p>
-                <p class="mt-2 text-xs text-gray-400">
-                    함께하는 약속, 건강한 관계를 만들어보세요
-                </p>
+                <p class="mt-2 text-xs text-gray-400">함께하는 약속, 건강한 관계를 만들어보세요</p>
             </div>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const observerOptions = {
-                root: null, // 뷰포트를 기준으로 관찰
-                rootMargin: '0px', // 추가 마진 없음
-                threshold: 0.2 // 요소의 20%가 뷰포트에 들어오면 콜백 실행
-            };
 
-            // IntersectionObserver API 사용 → .animate-on-scroll 클래스를 가진 요소들이 뷰포트(화면)에 특정 비율(여기서는 20%) 이상 들어오면, 해당 요소에 is-visible 클래스를 추가
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // 요소가 뷰포트에 들어왔을 때
-                        entry.target.classList.add('is-visible');
-                        // 한번 애니메이션이 실행되면 더 이상 관찰하지 않음
-                        observer.unobserve(entry.target);
+
+
+            const featureSteps = document.querySelectorAll('.feature-step');
+            const imageContainer = document.getElementById('feature-image-container');
+
+            // 이미지 컨테이너가 없거나 스텝이 없으면 JS 실행 안함
+            if (!imageContainer || featureSteps.length === 0) {
+                console.log("Sticky feature elements not found. Skipping observer.");
+                return;
+            }
+
+            const images = imageContainer.children; // 이미지/div 요소들
+
+            const updateActiveFeature = (activeIndex) => {
+                // 1. 모든 텍스트 스텝의 활성 상태 업데이트
+                featureSteps.forEach((step, index) => {
+                    if (index === activeIndex) {
+                        step.classList.add('is-active');
+                    } else {
+                        step.classList.remove('is-active');
                     }
                 });
-            }, observerOptions);
 
-            // 주요 기능 카드와 이용 방법 스텝에 애니메이션 클래스 적용
-            document.querySelectorAll('.animate-on-scroll').forEach((element, index) => {
-                // 스텝 카드에만 지연 시간 추가 (선택 사항)
-                if (element.closest('.grid.md\\:grid-cols-4')) { // 이용 방법 스텝 그리드 내부 요소일 경우
-                    element.style.transitionDelay = `${index * 0.1}s`; // 0.1초씩 지연
-                }
-                observer.observe(element);
+                // 2. 활성 인덱스에 맞는 이미지만 표시
+                Array.from(images).forEach((image, index) => {
+                    if (index === activeIndex) {
+                        image.classList.remove('opacity-0');
+                        image.classList.add('opacity-100');
+                    } else {
+                        image.classList.remove('opacity-100');
+                        image.classList.add('opacity-0');
+                    }
+                });
+            };
+
+            // Intersection Observer 설정
+            const stickyObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 화면에 들어온 스텝의 ID에서 인덱스 추출 (e.g., "feature-step-1" -> 0)
+                        const stepId = entry.target.id;
+                        const activeIndex = parseInt(stepId.split('-')[2]) - 1;
+                        updateActiveFeature(activeIndex);
+                    }
+                });
+            }, {
+                root: null, // 뷰포트 기준
+                threshold: 0.6 // 텍스트 블록의 60%가 보여야 활성화
             });
+
+            // 모든 텍스트 스텝 관찰 시작
+            featureSteps.forEach(step => {
+                stickyObserver.observe(step);
+            });
+
+            // 페이지 로드 시 첫 번째 스텝을 활성화 상태로 초기화
+            // (스크롤 없이 바로 첫 화면에 보일 경우 대비)
+            // 단, 모바일이 아닐 경우에만 초기화 (옵션)
+            if (window.innerWidth >= 768) { // md 브레이크포인트
+                updateActiveFeature(0);
+            } else {
+                // 모바일에서는 모든 텍스트를 그냥 활성화
+                featureSteps.forEach(step => step.classList.add('is-active'));
+            }
+
+            // (참고: 다른 섹션에서 .animate-on-scroll을 쓴다면, 해당 옵저버 로직도 여기에 있어야 합니다)
+
         });
     </script>
 
