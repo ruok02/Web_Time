@@ -358,19 +358,25 @@
                 imgMainCalendar.classList.add('opacity-0'); 
 
                 // FIX: 루프 시작 전 1월(현재 인덱스)을 즉시 보이게 설정
-                // 이렇게 해야 1.2초 기다리지 않고 바로 1월이 뜹니다.
                 monthlyImages.forEach(img => img.classList.remove('opacity-100'));
                 monthlyImages.forEach(img => img.classList.add('opacity-0'));
                 monthlyImages[currentMonthIndex].classList.remove('opacity-0');
                 monthlyImages[currentMonthIndex].classList.add('opacity-100');
 
                 autoLoopInterval = setInterval(() => {
+                    // [수정됨] 현재 12월(index 11)이라면 애니메이션 종료하고 리턴
+                    if (currentMonthIndex >= 11) {
+                        clearInterval(autoLoopInterval);
+                        autoLoopInterval = null;
+                        return;
+                    }
+
                     // 현재 달 숨기기
                     monthlyImages[currentMonthIndex].classList.remove('opacity-100');
                     monthlyImages[currentMonthIndex].classList.add('opacity-0');
                     
-                    // 다음 달 인덱스 계산
-                    currentMonthIndex = (currentMonthIndex + 1) % 12;
+                    // 다음 달 인덱스 계산 (모듈러 연산 % 삭제하고 단순 증가)
+                    currentMonthIndex++;
                     
                     // 다음 달 보이기
                     monthlyImages[currentMonthIndex].classList.remove('opacity-0');
