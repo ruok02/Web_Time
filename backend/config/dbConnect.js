@@ -3,6 +3,8 @@ require('dotenv').config(); //dotenv 모듈가져와서 그 안의 config() 함�
 
 
 //디비 연결시, async await 사용하여 비동기 처리 꼭!
+
+/* 프로젝트 발표 이후에 더 건들여볼 예정
 const dbConnect = async() => {
     try{
         const connect = await mongoose.connect(process.env.DB_CONNECT);
@@ -12,4 +14,4 @@ const dbConnect = async() => {
     }
 }
 
-module.exports = dbConnect;
+module.exports = dbConnect;*/

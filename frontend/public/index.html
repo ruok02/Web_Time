@@ -330,7 +330,7 @@
         const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
         // 11.25 추가 사항.
-        //'color-theme'이 만약에 dark 또는 localStroage에 들어있는 'color-theme'이 아니고, window.matchMedia(=창에서 미디어 매칭)의 색상이 dark라면
+        //'color-theme'이 만약에 dark 또는 localStroage에 들어있는 'color-theme'이 아니고, window.matchMedia(=창에서 미디어 매칭)의 색상이 dark라면 prefers-color-sheme: dark → "tailwndcss의 darkmode 문법"
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             themeToggleLightIcon.classList.remove('hidden');

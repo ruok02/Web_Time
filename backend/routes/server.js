@@ -4,7 +4,7 @@ const app = express();
 
 dbConnect(); // DB접속
 
-
+/* backend 서버 공부하다가 프로젝트 발표 이후에 더 건들여볼 예정
 app.listen(5050, function(){
     console.log('listening on 8080')
 });
@@ -27,4 +27,4 @@ app.get('/beauty', function(요청, 응답){
 // 메인 화면
 app.get('/', function(요청, 응답){
     응답.sendFile(__dirname + '/index.html');
-});
+});*/
