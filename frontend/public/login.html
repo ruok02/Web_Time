@@ -125,7 +125,8 @@
                 localStorage.setItem('ko_og_logged_in', 'true');
                 localStorage.setItem('ko_og_username', user.name);
                 alert(`환영합니다, ${user.name}님!`);
-                window.location.href = '/frontend/public/user.html';
+                // //frontend/public/user.html ->
+                window.location.href = '/user.html';
             } else {
                 // 로그인 실패
                 alert('이메일 또는 비밀번호가 일치하지 않습니다.');
