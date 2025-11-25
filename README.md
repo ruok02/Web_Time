@@ -261,3 +261,66 @@ Web_Time
 🌐 위치 인증 (GPS 기반 체크인)
 
 프로젝트 구조도
+```
+Web_Time
+├─ backend
+│  ├─ config
+│  │  └─ dbConnect.js
+│  └─ models
+├─ frontend
+│  ├─ public
+│  │  ├─ images
+│  │  │  ├─ Calendar
+│  │  │  │  ├─ 2025-CALENDAR.png
+│  │  │  │  ├─ 2025-Home.png
+│  │  │  │  ├─ April.png
+│  │  │  │  ├─ August.png
+│  │  │  │  ├─ December.png
+│  │  │  │  ├─ February.png
+│  │  │  │  ├─ January.png
+│  │  │  │  ├─ July.png
+│  │  │  │  ├─ June.png
+│  │  │  │  ├─ March.png
+│  │  │  │  ├─ May.png
+│  │  │  │  ├─ November.png
+│  │  │  │  ├─ October.png
+│  │  │  │  └─ September.png
+│  │  │  ├─ homepage.jpeg
+│  │  │  ├─ Promise
+│  │  │  │  ├─ Promise_Date.png
+│  │  │  │  ├─ Promise_Locate.png
+│  │  │  │  ├─ Promise_Panalty.png
+│  │  │  │  └─ Promise_Time.png
+│  │  │  └─ 정보 구조도 수정중.drawio.png
+│  │  ├─ index.html
+│  │  ├─ login.html
+│  │  ├─ signup.html
+│  │  └─ user.html
+│  └─ src
+│     ├─ app.js
+│     └─ styles
+│        └─ main.css
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ temporary folder
+   ├─ Calendar
+   │  ├─ 2025-CALENDAR.png
+   │  ├─ 2025-Home.png
+   │  ├─ April.png
+   │  ├─ August.png
+   │  ├─ December.png
+   │  ├─ February.png
+   │  ├─ January.png
+   │  ├─ July.png
+   │  ├─ June.png
+   │  ├─ March.png
+   │  ├─ May.png
+   │  ├─ November.png
+   │  ├─ October.png
+   │  └─ September.png
+   ├─ index 11.24-(2).html
+   ├─ index.html
+   └─ user.html
+
+```
