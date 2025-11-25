@@ -28,6 +28,8 @@
     <!-- Google Fonts -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        /*11.25 css 분리를 위한 스타일.css 적용 API 가져오기*/
+        @import "tailwindcss";
 
         body { font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
@@ -41,8 +43,10 @@
             overflow: hidden;
             border-radius: 1rem;
         }
+
+        /* 11.25 수정 사항. visual-box 크기 높이 조절 500px -> 350px*/
         @media (min-width: 768px) {
-            .feature-visual-box { height: 500px; }
+            .feature-visual-box { height: 350px; } 
         }
 
         .feature-visual-box img, .feature-visual-box .mock-ui {
@@ -325,17 +329,21 @@
         const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
         const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
+        // 11.25 추가 사항.
+        //'color-theme'이 만약에 dark 또는 localStroage에 들어있는 'color-theme'이 아니고, window.matchMedia(=창에서 미디어 매칭)의 색상이 dark라면
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             themeToggleLightIcon.classList.remove('hidden');
-        } else {
+        } else { // else문은 필요 없는 부분이지 않나? 예외사항을 추가할 경우 트래픽 부담이 더 되지않나?
             document.documentElement.classList.remove('dark');
             themeToggleDarkIcon.classList.remove('hidden');
         }
 
+        // 11.25 추가사항. 버튼의 객체. 클릭이 이벤트를 불러올경우 function() 함수에서
         themeToggleBtn.addEventListener('click', function() {
             themeToggleDarkIcon.classList.toggle('hidden');
             themeToggleLightIcon.classList.toggle('hidden');
+            // 11.25 
             if (localStorage.getItem('color-theme')) {
                 if (localStorage.getItem('color-theme') === 'light') {
                     document.documentElement.classList.add('dark');
