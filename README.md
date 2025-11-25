@@ -218,7 +218,7 @@ VII. 참고 자료
 - [정보구조도(IA) 및 와이어프레임 작성법](https://blog.naver.com/soomichip_/223127062784)
 - Tailwind CSS Documentation
 - localStorage API MDN Documentation
-
+- [웹 LocalStorage 브라우저 저장의 이해](https://velog.io/@langoustine/Kakao-Cloud-School-3%EC%A3%BC%EC%B0%A8-%ED%9A%8C%EA%B3%A0%EB%A1%9D)
 
 통합 모노레포 스타일
 ```
@@ -259,3 +259,269 @@ Web_Time
 🔔 알림 기능 (약속 D-Day 알림)
 📱 PWA 전환 (모바일 앱처럼 사용)
 🌐 위치 인증 (GPS 기반 체크인)
+
+
+```
+Web_Time
+├─ backend
+│  ├─ config
+│  │  └─ dbConnect.js
+│  └─ models
+├─ frontend
+│  ├─ public
+│  │  ├─ images
+│  │  │  ├─ Calendar
+│  │  │  │  ├─ 2025-CALENDAR.png
+│  │  │  │  ├─ 2025-Home.png
+│  │  │  │  ├─ April.png
+│  │  │  │  ├─ August.png
+│  │  │  │  ├─ December.png
+│  │  │  │  ├─ February.png
+│  │  │  │  ├─ January.png
+│  │  │  │  ├─ July.png
+│  │  │  │  ├─ June.png
+│  │  │  │  ├─ March.png
+│  │  │  │  ├─ May.png
+│  │  │  │  ├─ November.png
+│  │  │  │  ├─ October.png
+│  │  │  │  └─ September.png
+│  │  │  ├─ homepage.jpeg
+│  │  │  ├─ Promise
+│  │  │  │  ├─ Promise_Date.png
+│  │  │  │  ├─ Promise_Locate.png
+│  │  │  │  ├─ Promise_Panalty.png
+│  │  │  │  └─ Promise_Time.png
+│  │  │  └─ 정보 구조도 수정중.drawio.png
+│  │  ├─ index.html
+│  │  ├─ login.html
+│  │  ├─ signup.html
+│  │  └─ user.html
+│  └─ src
+│     ├─ app.js
+│     └─ styles
+│        └─ main.css
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ temporary folder
+   ├─ Calendar
+   │  ├─ 2025-CALENDAR.png
+   │  ├─ 2025-Home.png
+   │  ├─ April.png
+   │  ├─ August.png
+   │  ├─ December.png
+   │  ├─ February.png
+   │  ├─ January.png
+   │  ├─ July.png
+   │  ├─ June.png
+   │  ├─ March.png
+   │  ├─ May.png
+   │  ├─ November.png
+   │  ├─ October.png
+   │  └─ September.png
+   ├─ index 11.23.html
+   ├─ index 11.24-(2).html
+   ├─ index 11.24.html
+   ├─ index copy 3.html
+   ├─ index.html
+   └─ user.html
+
+```
+```
+Web_Time
+├─ backend
+│  ├─ config
+│  │  └─ dbConnect.js
+│  └─ models
+├─ frontend
+│  ├─ public
+│  │  ├─ images
+│  │  │  ├─ Calendar
+│  │  │  │  ├─ 2025-CALENDAR.png
+│  │  │  │  ├─ 2025-Home.png
+│  │  │  │  ├─ April.png
+│  │  │  │  ├─ August.png
+│  │  │  │  ├─ December.png
+│  │  │  │  ├─ February.png
+│  │  │  │  ├─ January.png
+│  │  │  │  ├─ July.png
+│  │  │  │  ├─ June.png
+│  │  │  │  ├─ March.png
+│  │  │  │  ├─ May.png
+│  │  │  │  ├─ November.png
+│  │  │  │  ├─ October.png
+│  │  │  │  └─ September.png
+│  │  │  ├─ homepage.jpeg
+│  │  │  ├─ Promise
+│  │  │  │  ├─ Promise_Date.png
+│  │  │  │  ├─ Promise_Locate.png
+│  │  │  │  ├─ Promise_Panalty.png
+│  │  │  │  └─ Promise_Time.png
+│  │  │  └─ 정보 구조도 수정중.drawio.png
+│  │  ├─ index.html
+│  │  ├─ login.html
+│  │  ├─ signup.html
+│  │  └─ user.html
+│  └─ src
+│     ├─ app.js
+│     └─ styles
+│        └─ main.css
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ temporary folder
+   ├─ Calendar
+   │  ├─ 2025-CALENDAR.png
+   │  ├─ 2025-Home.png
+   │  ├─ April.png
+   │  ├─ August.png
+   │  ├─ December.png
+   │  ├─ February.png
+   │  ├─ January.png
+   │  ├─ July.png
+   │  ├─ June.png
+   │  ├─ March.png
+   │  ├─ May.png
+   │  ├─ November.png
+   │  ├─ October.png
+   │  └─ September.png
+   ├─ index 11.23.html
+   ├─ index 11.24-(2).html
+   ├─ index 11.24.html
+   ├─ index copy 3.html
+   ├─ index.html
+   └─ user.html
+
+```
+```
+Web_Time
+├─ backend
+│  ├─ config
+│  │  └─ dbConnect.js
+│  └─ models
+├─ frontend
+│  ├─ public
+│  │  ├─ images
+│  │  │  ├─ Calendar
+│  │  │  │  ├─ 2025-CALENDAR.png
+│  │  │  │  ├─ 2025-Home.png
+│  │  │  │  ├─ April.png
+│  │  │  │  ├─ August.png
+│  │  │  │  ├─ December.png
+│  │  │  │  ├─ February.png
+│  │  │  │  ├─ January.png
+│  │  │  │  ├─ July.png
+│  │  │  │  ├─ June.png
+│  │  │  │  ├─ March.png
+│  │  │  │  ├─ May.png
+│  │  │  │  ├─ November.png
+│  │  │  │  ├─ October.png
+│  │  │  │  └─ September.png
+│  │  │  ├─ homepage.jpeg
+│  │  │  ├─ Promise
+│  │  │  │  ├─ Promise_Date.png
+│  │  │  │  ├─ Promise_Locate.png
+│  │  │  │  ├─ Promise_Panalty.png
+│  │  │  │  └─ Promise_Time.png
+│  │  │  └─ 정보 구조도 수정중.drawio.png
+│  │  ├─ index.html
+│  │  ├─ login.html
+│  │  ├─ signup.html
+│  │  └─ user.html
+│  └─ src
+│     ├─ app.js
+│     └─ styles
+│        └─ main.css
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ temporary folder
+   ├─ Calendar
+   │  ├─ 2025-CALENDAR.png
+   │  ├─ 2025-Home.png
+   │  ├─ April.png
+   │  ├─ August.png
+   │  ├─ December.png
+   │  ├─ February.png
+   │  ├─ January.png
+   │  ├─ July.png
+   │  ├─ June.png
+   │  ├─ March.png
+   │  ├─ May.png
+   │  ├─ November.png
+   │  ├─ October.png
+   │  └─ September.png
+   ├─ index 11.23.html
+   ├─ index 11.24-(2).html
+   ├─ index 11.24.html
+   ├─ index copy 3.html
+   ├─ index.html
+   └─ user.html
+
+```
+```
+Web_Time
+├─ backend
+│  ├─ config
+│  │  └─ dbConnect.js
+│  └─ models
+├─ frontend
+│  ├─ public
+│  │  ├─ images
+│  │  │  ├─ Calendar
+│  │  │  │  ├─ 2025-CALENDAR.png
+│  │  │  │  ├─ 2025-Home.png
+│  │  │  │  ├─ April.png
+│  │  │  │  ├─ August.png
+│  │  │  │  ├─ December.png
+│  │  │  │  ├─ February.png
+│  │  │  │  ├─ January.png
+│  │  │  │  ├─ July.png
+│  │  │  │  ├─ June.png
+│  │  │  │  ├─ March.png
+│  │  │  │  ├─ May.png
+│  │  │  │  ├─ November.png
+│  │  │  │  ├─ October.png
+│  │  │  │  └─ September.png
+│  │  │  ├─ homepage.jpeg
+│  │  │  ├─ Promise
+│  │  │  │  ├─ Promise_Date.png
+│  │  │  │  ├─ Promise_Locate.png
+│  │  │  │  ├─ Promise_Panalty.png
+│  │  │  │  └─ Promise_Time.png
+│  │  │  └─ 정보 구조도 수정중.drawio.png
+│  │  ├─ index.html
+│  │  ├─ login.html
+│  │  ├─ signup.html
+│  │  └─ user.html
+│  └─ src
+│     ├─ app.js
+│     └─ styles
+│        └─ main.css
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ temporary folder
+   ├─ Calendar
+   │  ├─ 2025-CALENDAR.png
+   │  ├─ 2025-Home.png
+   │  ├─ April.png
+   │  ├─ August.png
+   │  ├─ December.png
+   │  ├─ February.png
+   │  ├─ January.png
+   │  ├─ July.png
+   │  ├─ June.png
+   │  ├─ March.png
+   │  ├─ May.png
+   │  ├─ November.png
+   │  ├─ October.png
+   │  └─ September.png
+   ├─ index 11.23.html
+   ├─ index 11.24-(2).html
+   ├─ index 11.24.html
+   ├─ index copy 3.html
+   ├─ index.html
+   └─ user.html
+
+```
