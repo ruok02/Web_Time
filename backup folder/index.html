@@ -204,13 +204,23 @@
             </div>
 
 
-            <!-- [SECTION 3] D-Day (기존 유지) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-                <div class="w-full">
-                    <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
-                        <img src="/backup folder/images/Calendar/2025-Home.png" class="opacity-100 bg-white dark:bg-gray-800">
+            <!-- ========================================== -->
+            <!-- [SECTION 3] D-Day (11.26 추가 사항: 카운트다운 애니메이션 적용) -->
+            <!-- ========================================== -->
+            <div id="section-dday" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+                
+                <!-- 11.26 수정 사항. 왼쪽 이미지 박스 + D-Day 텍스트 오버레이 -->
+                <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 relative">
+                    <!-- 배경 이미지: 글씨가 잘 보이도록 opacity 조절 (0.4) -->
+                    <img src="/images/Calendar/2025-Home.png" class="opacity-40 bg-white dark:bg-gray-800">
+                    
+                    <!-- 11.26 추가 사항. D-Day 카운트다운 텍스트가 표시될 영역 -->
+                    <div id="dday-display" class="absolute inset-0 flex items-center justify-center text-7xl md:text-8xl font-black text-indigo-600 dark:text-indigo-400 z-10">
+                        D-7
                     </div>
                 </div>
+
+                <!-- 오른쪽: 텍스트 -->
                 <div>
                     <div class="text-5xl mb-4 text-purple-600">⏰</div>
                     <h4 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">D-Day 자동 계산</h4>
@@ -481,6 +491,49 @@
                     promiseImages[currentPromiseIndex].classList.remove('opacity-0');
                     promiseImages[currentPromiseIndex].classList.add('opacity-100');
                 }, 1200);
+            };
+
+            // ---------------------------------------------------
+            // [SECTION 3] 11.26 추가 사항. D-Day 카운트다운 애니메이션 로직
+            // ---------------------------------------------------
+            const sectionDday = document.getElementById('section-dday');
+            const ddayDisplay = document.getElementById('dday-display');
+
+            // 카운트다운 할 텍스트 배열
+            const ddaySequence = ['D-7', 'D-6', 'D-5', 'D-4', 'D-3', 'D-2', 'D-1', 'D-Day'];
+            let ddayInterval = null;
+            let ddayIndex = 0;
+
+            const startDDayAnim = () => {
+                if (ddayInterval) return; // 이미 실행 중이면 패스 [예외 처리 필수!!]
+
+                ddayIndex = 0;
+                ddayDisplay.innerText = ddaySequence[0]; // 초기값 D-7
+                ddayDisplay.classList.remove('text-red-600', 'scale-125'); // D-Day 강조 스타일 초기화
+                
+                ddayInterval = setInterval(() => {
+                    ddayIndex++;
+
+                    // 배열 끝(D-Day)에 도달했는지 확인
+                    if (ddayIndex >= ddaySequence.length) {
+                        clearInterval(ddayInterval);
+                        ddayInterval = null;
+                        
+                        // D-Day 도달 시 강조 효과 (빨간색 + 커짐)
+                        ddayDisplay.innerText = "D-Day";
+                        ddayDisplay.classList.add('text-red-600', 'scale-125', 'transition-transform', 'duration-300');
+                        return;
+                    }
+
+                    // 텍스트 업데이트
+                    ddayDisplay.innerText = ddaySequence[ddayIndex];
+                    
+                    // 팝업 애니메이션 효과 재실행 (class 뺐다 끼우기)
+                    ddayDisplay.classList.remove('pop-in');
+                    void ddayDisplay.offsetWidth; // reflow 강제 발생
+                    ddayDisplay.classList.add('pop-in');
+
+                }, 800); // 0.8초 간격으로 카운트다운
             };
 
             const stopPromiseAnim = () => {
