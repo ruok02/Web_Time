@@ -388,7 +388,7 @@
         // --- 2. 개별 섹션 애니메이션 로직 ---
         document.addEventListener('DOMContentLoaded', () => {
             
-            // [SECTION 1] 달력 애니메이션 로직
+            // [SECTION 1] 달력 애니메이션 로직 (버그 수정됨)
             const sectionCalendar = document.getElementById('section-calendar');
             const imgMainCalendar = document.getElementById('img-main-calendar');
             const monthlyCalendarGroup = document.getElementById('monthly-calendar-group');
@@ -400,38 +400,52 @@
             const startCalendarAnim = () => {
                 if(calendarInterval) return;
 
+                // 1. 달력 그룹 컨테이너 보이기
                 monthlyCalendarGroup.classList.remove('opacity-0'); 
                 monthlyCalendarGroup.classList.add('opacity-100');
-                imgMainCalendar.classList.add('opacity-0'); 
+                
+                // [버그 수정] 표지 이미지(2025-CALENDAR) 즉시 숨김 처리
+                // opacity-0을 주면서 z-index를 낮춰서 겹침 방지
+                imgMainCalendar.classList.remove('opacity-100', 'z-10'); 
+                imgMainCalendar.classList.add('opacity-0', '-z-10'); 
 
+                // 2. 월별 이미지 초기화
                 monthlyImages.forEach(img => {
                     img.classList.remove('opacity-100', 'flip-scale-up-exit');
                     img.classList.add('opacity-0');
                     img.style.zIndex = ''; 
                 });
+
+                // 3. 1월(Index 0) 바로 보이기
                 monthlyImages[0].classList.remove('opacity-0');
                 monthlyImages[0].classList.add('opacity-100');
                 currentMonthIndex = 0;
 
+                // 4. 애니메이션 루프 시작
                 calendarInterval = setInterval(() => {
-                    if (currentMonthIndex >= 13) {
+                    // 12월(마지막)에 도달하면 정지
+                    if (currentMonthIndex >= 11) { 
                         clearInterval(calendarInterval);
                         calendarInterval = null;
                         return;
                     }
+
                     const currentImg = monthlyImages[currentMonthIndex];
                     const nextImg = monthlyImages[currentMonthIndex + 1];
                     
+                    // 다음 달 미리 준비 (뒤에 깔기)
                     if(nextImg) {
                         nextImg.style.zIndex = '10';
                         nextImg.classList.remove('opacity-0');
                         nextImg.classList.add('opacity-100');
                     }
 
+                    // 현재 달 위로 넘기기 (플립 애니메이션)
                     if(currentImg) {
                         currentImg.style.zIndex = '20';
                         currentImg.classList.add('flip-scale-up-exit');
 
+                        // 애니메이션 끝나면 정리
                         setTimeout(() => {
                             currentImg.classList.remove('flip-scale-up-exit', 'opacity-100');
                             currentImg.classList.add('opacity-0');
@@ -449,9 +463,16 @@
                     clearInterval(calendarInterval);
                     calendarInterval = null;
                 }
+                
+                // 정지 시 상태 초기화 (표지 이미지 다시 보이기)
                 monthlyCalendarGroup.classList.remove('opacity-100');
                 monthlyCalendarGroup.classList.add('opacity-0');
-                imgMainCalendar.classList.remove('opacity-0');
+                
+                // [버그 수정] 표지 이미지 복구
+                imgMainCalendar.classList.remove('opacity-0', '-z-10');
+                imgMainCalendar.classList.add('opacity-100', 'z-10');
+                
+                // 월별 이미지 초기화
                 monthlyImages.forEach(img => {
                     img.classList.remove('opacity-100', 'flip-scale-up-exit');
                     img.classList.add('opacity-0');
