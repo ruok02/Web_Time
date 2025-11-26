@@ -71,6 +71,22 @@
             100% { transform: translateY(-100%) rotateX(180deg) scale(1); opacity: 0; }
         }
 
+        /* 11.26 추가 사항. D-Day 텍스트 팝업(Pop-in) 애니메이션 CSS */
+        .pop-in {
+            animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes pop-in {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
         .step-connector { position: relative; }
         .step-connector::after {
             content: '→'; position: absolute; right: -30px; top: 50%; transform: translateY(-50%); font-size: 24px; color: #667eea; font-weight: bold;
@@ -212,7 +228,7 @@
                 <!-- 11.26 수정 사항. 왼쪽 이미지 박스 + D-Day 텍스트 오버레이 -->
                 <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 relative">
                     <!-- 배경 이미지: 글씨가 잘 보이도록 opacity 조절 (0.4) -->
-                    <img src="/backup folder/images/Calendar/2025-CALENDAR.png" class="opacity-40 bg-white dark:bg-gray-800">
+                    <img src="/backup folder/images/Calendar/2025-Home.png" class="opacity-40 bg-white dark:bg-gray-800">
                     
                     <!-- 11.26 추가 사항. D-Day 카운트다운 텍스트가 표시될 영역 -->
                     <div id="dday-display" class="absolute inset-0 flex items-center justify-center text-7xl md:text-8xl font-black text-indigo-600 dark:text-indigo-400 z-10">

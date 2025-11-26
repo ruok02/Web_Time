@@ -478,23 +478,25 @@
             if(sectionPromise) promiseObserver.observe(sectionPromise);
 
 
-            // ---------------------------------------------------
+           // ---------------------------------------------------
             // [SECTION 3] 11.26 추가 사항. D-Day 카운트다운 애니메이션 로직
             // ---------------------------------------------------
             const sectionDday = document.getElementById('section-dday');
             const ddayDisplay = document.getElementById('dday-display');
-
             // 카운트다운 할 텍스트 배열
             const ddaySequence = ['D-7', 'D-6', 'D-5', 'D-4', 'D-3', 'D-2', 'D-1', 'D-Day'];
             let ddayInterval = null;
             let ddayIndex = 0;
 
             const startDDayAnim = () => {
-                if (ddayInterval) return; // 이미 실행 중이면 패스 [예외 처리 필수!!]
+                if (ddayInterval) return; // 이미 실행 중이면 패스
 
                 ddayIndex = 0;
                 ddayDisplay.innerText = ddaySequence[0]; // 초기값 D-7
-                ddayDisplay.classList.remove('text-red-600', 'scale-125'); // D-Day 강조 스타일 초기화
+                
+                // [11.26 수정 사항] 초기화 시 빨간색 클래스 제거 및 기본 인디고색 복구
+                ddayDisplay.classList.remove('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300'); 
+                ddayDisplay.classList.add('text-indigo-600', 'dark:text-indigo-400');
                 
                 ddayInterval = setInterval(() => {
                     ddayIndex++;
@@ -506,7 +508,10 @@
                         
                         // D-Day 도달 시 강조 효과 (빨간색 + 커짐)
                         ddayDisplay.innerText = "D-Day";
-                        ddayDisplay.classList.add('text-red-600', 'scale-125', 'transition-transform', 'duration-300');
+                        
+                        // [11.26 핵심 수정] 기존 인디고색 클래스를 제거해야 빨간색이 적용됩니다.
+                        ddayDisplay.classList.remove('text-indigo-600', 'dark:text-indigo-400');
+                        ddayDisplay.classList.add('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300');
                         return;
                     }
 
@@ -528,7 +533,10 @@
                 }
                 // 초기 상태로 리셋
                 ddayDisplay.innerText = "D-7";
-                ddayDisplay.classList.remove('text-red-600', 'scale-125');
+                
+                // [11.26 수정 사항] 정지 시에도 빨간색 제거 및 기본색 복구
+                ddayDisplay.classList.remove('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300');
+                ddayDisplay.classList.add('text-indigo-600', 'dark:text-indigo-400');
             };
 
             const ddayObserver = new IntersectionObserver((entries) => {
@@ -542,7 +550,6 @@
             }, { threshold: 0.5 });
 
             if (sectionDday) ddayObserver.observe(sectionDday);
-
             // 초기 로드 시 강제 실행
             startCalendarAnim();
         });
