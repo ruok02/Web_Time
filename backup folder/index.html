@@ -17,6 +17,7 @@
             theme: {
                 extend: {
                     colors: {
+                        // 다크 모드 전용 커스텀 컬러 팔레트
                         darkbg: '#1a202c',
                     }
                 }
@@ -42,11 +43,12 @@
             border-radius: 1rem;
         }
 
-        /* 11.25 수정 사항. visual-box 크기 높이 조절 500px -> 350px*/
+        /* 11.25 수정 사항. visual-box 크기 높이 조절 500px -> 350px */
         @media (min-width: 768px) {
             .feature-visual-box { height: 350px; } 
         }
 
+        /* 11.24 수정 사항. (기존 이미지 공통 스타일을 이쪽으로 이관함) */
         .feature-visual-box img, .feature-visual-box .mock-ui {
             position: absolute;
             inset: 0;
@@ -89,6 +91,7 @@
             background-color: #fff;
             box-shadow: 0 0 16px 3px rgba(0, 0, 0, 0.15);
             cursor: pointer;
+            /* margin 제거 (Flex 중앙 정렬 사용) */
         }
 
         .toggleSwitch .toggleButton {
@@ -96,7 +99,7 @@
             height: 40px;
             position: absolute;
             top: 50%;
-            left: 5px; 
+            left: 5px; /* 미세 조정 */
             transform: translateY(-50%);
             border-radius: 50%;
             background: #f03d3d; /* 기본 빨간색 버튼 */
@@ -113,6 +116,7 @@
             background: #fff; /* 버튼이 하얗게 변함 */
         }
 
+        /* 스텝 연결선 클래스 정의 */
         .step-connector { position: relative; }
         .step-connector::after {
             content: '→'; position: absolute; right: -30px; top: 50%; transform: translateY(-50%); font-size: 24px; color: #667eea; font-weight: bold;
@@ -140,6 +144,7 @@
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                     </button>
+                    <!-- 백업 폴더 경로 유지 -->
                     <a href="/backup folder/login.html" class="px-4 py-2 text-gray-700 font-semibold hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition duration-200">로그인</a>
                     <a href="/backup folder/signup.html" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md">회원가입</a>
                 </div>
@@ -158,7 +163,7 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- 11.24 수정 사항. 전체 Features 섹션을 개별 섹션으로 분리하여 독립성 확보 -->
     <section id="features" class="py-20 px-4 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div class="max-w-6xl mx-auto space-y-32"> 
 
@@ -168,13 +173,15 @@
             </div>
 
             <!-- ========================================== -->
-            <!-- [SECTION 1] 달력 롤링 -->
+            <!-- [SECTION 1] 달력 롤링 (독립된 공간) -->
             <!-- ========================================== -->
             <div id="section-calendar" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+                <!-- 왼쪽: 달력 이미지 -->
                 <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
-                    <!-- 11.24 수정 사항. 모든 달력 이미지를 하나의 그룹으로 통합 -->
+                    <!-- 11.24 수정 사항. 모든 달력 이미지를 하나의 그룹으로 통합하여 투명도 버그 해결 -->
                     <img id="img-main-calendar" src="/backup folder/images/Calendar/2025-CALENDAR.png" class="opacity-100 z-10 bg-white dark:bg-gray-800">
                     <div id="monthly-calendar-group" class="absolute inset-0 opacity-0 transition-opacity duration-500 z-20">
+                        <!-- 백업 폴더 경로 적용 -->
                         <img src="/backup folder/images/Calendar/January.png" class="opacity-0 bg-white dark:bg-gray-800">
                         <img src="/backup folder/images/Calendar/February.png" class="opacity-0 bg-white dark:bg-gray-800">
                         <img src="/backup folder/images/Calendar/March.png" class="opacity-0 bg-white dark:bg-gray-800">
@@ -190,12 +197,13 @@
                     </div>
                 </div>
 
+                <!-- 오른쪽: 텍스트 -->
                 <div>
                     <div class="text-5xl mb-4 text-indigo-600">📅</div>
                     <h4 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">2025년 캘린더 & 월별 관리</h4>
                     <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                         한 해의 모든 약속을 한눈에.<br>
-                        <span class="text-indigo-600 dark:text-indigo-400 font-bold">1월부터 12월까지</span>,<br>
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold">표지부터 12월까지</span>,<br>
                         자동으로 넘어가는 캘린더로 흐름을 놓치지 마세요.
                     </p>
                 </div>
@@ -205,7 +213,9 @@
             <!-- [SECTION 2] 약속 등록 -->
             <!-- ========================================== -->
             <div id="section-promise" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+                <!-- 왼쪽: 약속 등록 이미지 -->
                 <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
+                    <!-- 11.24 추가 사항. 약속 등록 이미지 4장 (순차 재생) -->
                     <div id="promise-image-group">
                         <img src="/backup folder/images/Promise/Promise_Time.png" class="opacity-100 bg-white dark:bg-gray-800">
                         <img src="/backup folder/images/Promise/Promise_Date.png" class="opacity-0 bg-white dark:bg-gray-800">
@@ -214,6 +224,7 @@
                     </div>
                 </div>
 
+                <!-- 오른쪽: 텍스트 -->
                 <div>
                     <div class="text-5xl mb-4 text-blue-500">📝</div>
                     <h4 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">간편한 약속 등록</h4>
@@ -229,14 +240,19 @@
             <!-- [SECTION 3] D-Day (11.26 추가 사항: 카운트다운 애니메이션 적용) -->
             <!-- ========================================== -->
             <div id="section-dday" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+                
                 <!-- 11.26 수정 사항. 왼쪽 이미지 박스 + D-Day 텍스트 오버레이 -->
                 <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 relative">
+                    <!-- 배경 이미지: 글씨가 잘 보이도록 opacity 조절 (0.4) -->
                     <img src="/backup folder/images/Calendar/2025-Home.png" class="opacity-40 bg-white dark:bg-gray-800">
+                    
+                    <!-- 11.26 추가 사항. D-Day 카운트다운 텍스트가 표시될 영역 -->
                     <div id="dday-display" class="absolute inset-0 flex items-center justify-center text-7xl md:text-8xl font-black text-indigo-600 dark:text-indigo-400 z-10">
                         D-7
                     </div>
                 </div>
 
+                <!-- 오른쪽: 텍스트 -->
                 <div>
                     <div class="text-5xl mb-4 text-purple-600">⏰</div>
                     <h4 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">D-Day 자동 계산</h4>
@@ -252,24 +268,29 @@
             <!-- ========================================== -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
                 
-                <!-- 11.26 수정 사항. 토글 스위치 및 배경 이미지 교체 영역 -->
-                <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 relative">
+                <!-- 11.26 수정 사항. 이미지를 제거하고 텍스트/아이콘 기반의 토글 UI로 교체 -->
+                <div id="checkin-container" class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center relative transition-colors duration-500">
                     
-                    <!-- 배경 이미지 1: Failed (토글 OFF일 때 보임) -->
-                    <img id="img-checkin-failed" src="/backup folder/images/bg_imgs/failed.png" class="opacity-100 bg-white dark:bg-gray-800 transition-opacity duration-500">
-                    
-                    <!-- 배경 이미지 2: Check (토글 ON일 때 보임) -->
-                    <img id="img-checkin-success" src="/backup folder/images/bg_imgs/check.png" class="opacity-0 bg-white dark:bg-gray-800 transition-opacity duration-500">
-                    
-                    <!-- 중앙 토글 스위치 -->
-                    <div class="absolute inset-0 flex items-center justify-center z-20">
+                    <!-- 상단: 상태 텍스트/아이콘 (초기값: 미도착) -->
+                    <div id="checkin-status" class="mb-8 text-3xl font-bold text-red-500 dark:text-red-400 transition-all duration-300 flex items-center">
+                        <span class="mr-2 text-4xl">❌</span> 장소 미도착
+                    </div>
+
+                    <!-- 중앙: 토글 스위치 -->
+                    <div class="relative z-20">
                         <input type="checkbox" id="checkin-toggle" hidden>
                         <label for="checkin-toggle" class="toggleSwitch">
                             <span class="toggleButton"></span>
                         </label>
                     </div>
+
+                    <!-- 하단: 설명 텍스트 -->
+                    <div id="checkin-desc" class="mt-8 text-lg text-gray-500 dark:text-gray-400 font-medium transition-all duration-300">
+                        약속장소 도착 후 체크하기!
+                    </div>
                 </div>
 
+                <!-- 오른쪽 설명 -->
                 <div>
                     <div class="text-5xl mb-4 text-green-600">✅</div>
                     <h4 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">체크인 & 페널티</h4>
@@ -370,53 +391,66 @@
             const monthlyImages = monthlyCalendarGroup.querySelectorAll('img');
             
             let calendarInterval = null;
+            let calendarTimeout = null; // [추가] 초기 딜레이를 제어할 타임아웃 변수
             let currentMonthIndex = 0;
 
             const startCalendarAnim = () => {
-                if(calendarInterval) return;
+                if(calendarInterval || calendarTimeout) return; // 중복 실행 방지
 
                 monthlyCalendarGroup.classList.remove('opacity-0'); 
                 monthlyCalendarGroup.classList.add('opacity-100');
-                imgMainCalendar.classList.add('opacity-0'); 
+                
+                // [수정] 시작 시 표지 이미지를 확실하게 보여줌
+                imgMainCalendar.classList.remove('opacity-0', '-z-10'); 
+                imgMainCalendar.classList.add('opacity-100', 'z-10'); 
 
                 monthlyImages.forEach(img => {
                     img.classList.remove('opacity-100', 'flip-scale-up-exit');
                     img.classList.add('opacity-0');
                     img.style.zIndex = ''; 
                 });
-                monthlyImages[0].classList.remove('opacity-0');
-                monthlyImages[0].classList.add('opacity-100');
-                currentMonthIndex = 0;
 
-                calendarInterval = setInterval(() => {
-                    if (currentMonthIndex >= 13) {
-                        clearInterval(calendarInterval);
-                        calendarInterval = null;
-                        return;
-                    }
-                    const currentImg = monthlyImages[currentMonthIndex];
-                    const nextImg = monthlyImages[currentMonthIndex + 1];
+                // [수정] 1.5초 뒤에 표지를 숨기고 애니메이션 루프 시작
+                calendarTimeout = setTimeout(() => {
+                    // 표지 숨김
+                    imgMainCalendar.classList.remove('opacity-100', 'z-10');
+                    imgMainCalendar.classList.add('opacity-0', '-z-10');
+
+                    // 1월 보이기
+                    monthlyImages[0].classList.remove('opacity-0');
+                    monthlyImages[0].classList.add('opacity-100');
+                    currentMonthIndex = 0;
+
+                    calendarInterval = setInterval(() => {
+                        if (currentMonthIndex >= 11) { // 11(12월)에 도달하면 정지
+                            clearInterval(calendarInterval);
+                            calendarInterval = null;
+                            return;
+                        }
+                        const currentImg = monthlyImages[currentMonthIndex];
+                        const nextImg = monthlyImages[currentMonthIndex + 1];
+                        
+                        if(nextImg) {
+                            nextImg.style.zIndex = '10';
+                            nextImg.classList.remove('opacity-0');
+                            nextImg.classList.add('opacity-100');
+                        }
+                        if(currentImg) {
+                            currentImg.style.zIndex = '20';
+                            currentImg.classList.add('flip-scale-up-exit');
+
+                            setTimeout(() => {
+                                currentImg.classList.remove('flip-scale-up-exit', 'opacity-100');
+                                currentImg.classList.add('opacity-0');
+                                currentImg.style.zIndex = '';
+                                if(nextImg) nextImg.style.zIndex = '';
+                            }, 600);
+                        }
+                        currentMonthIndex++;
+                    }, 1200);
                     
-                    if(nextImg) {
-                        nextImg.style.zIndex = '10';
-                        nextImg.classList.remove('opacity-0');
-                        nextImg.classList.add('opacity-100');
-                    }
-
-                    if(currentImg) {
-                        currentImg.style.zIndex = '20';
-                        currentImg.classList.add('flip-scale-up-exit');
-
-                        setTimeout(() => {
-                            currentImg.classList.remove('flip-scale-up-exit', 'opacity-100');
-                            currentImg.classList.add('opacity-0');
-                            currentImg.style.zIndex = '';
-                            if(nextImg) nextImg.style.zIndex = '';
-                        }, 600);
-                    }
-
-                    currentMonthIndex++;
-                }, 1200);
+                    calendarTimeout = null;
+                }, 1500); // 1.5초 딜레이
             };
 
             const stopCalendarAnim = () => {
@@ -424,9 +458,18 @@
                     clearInterval(calendarInterval);
                     calendarInterval = null;
                 }
+                if (calendarTimeout) {
+                    clearTimeout(calendarTimeout);
+                    calendarTimeout = null;
+                }
+
+                // 초기화 상태로 복구
                 monthlyCalendarGroup.classList.remove('opacity-100');
                 monthlyCalendarGroup.classList.add('opacity-0');
-                imgMainCalendar.classList.remove('opacity-0');
+                
+                imgMainCalendar.classList.remove('opacity-0', '-z-10');
+                imgMainCalendar.classList.add('opacity-100', 'z-10');
+
                 monthlyImages.forEach(img => {
                     img.classList.remove('opacity-100', 'flip-scale-up-exit');
                     img.classList.add('opacity-0');
@@ -501,7 +544,7 @@
             if(sectionPromise) promiseObserver.observe(sectionPromise);
 
 
-            // [SECTION 3] 11.26 추가 사항. D-Day 카운트다운 애니메이션 로직 (색상 변경 수정됨)
+            // [SECTION 3] 11.26 추가 사항. D-Day 카운트다운 애니메이션 로직
             const sectionDday = document.getElementById('section-dday');
             const ddayDisplay = document.getElementById('dday-display');
             const ddaySequence = ['D-7', 'D-6', 'D-5', 'D-4', 'D-3', 'D-2', 'D-1', 'D-Day'];
@@ -513,7 +556,7 @@
 
                 ddayIndex = 0;
                 ddayDisplay.innerText = ddaySequence[0];
-                // 초기화 시 빨간색 클래스 제거 및 기본 인디고색 복구
+                // 초기화 시 색상 리셋
                 ddayDisplay.classList.remove('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300'); 
                 ddayDisplay.classList.add('text-indigo-600', 'dark:text-indigo-400');
                 
@@ -523,7 +566,7 @@
                         clearInterval(ddayInterval);
                         ddayInterval = null;
                         ddayDisplay.innerText = "D-Day";
-                        // D-Day 도달 시: 인디고 제거 -> 레드 추가
+                        // D-Day 도달 시 빨간색 강조 적용
                         ddayDisplay.classList.remove('text-indigo-600', 'dark:text-indigo-400');
                         ddayDisplay.classList.add('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300');
                         return;
@@ -541,6 +584,7 @@
                     ddayInterval = null;
                 }
                 ddayDisplay.innerText = "D-7";
+                // 정지 시 색상 초기화
                 ddayDisplay.classList.remove('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300');
                 ddayDisplay.classList.add('text-indigo-600', 'dark:text-indigo-400');
             };
@@ -554,28 +598,42 @@
             if (sectionDday) ddayObserver.observe(sectionDday);
 
             
-            // [SECTION 4] 11.26 추가 사항. 체크인 토글 스위치 로직
+            // [SECTION 4] 11.26 추가 사항. 체크인 토글 스위치 로직 (텍스트/아이콘 교체 방식)
             const checkinToggle = document.getElementById('checkin-toggle');
-            const imgFailed = document.getElementById('img-checkin-failed');
-            const imgSuccess = document.getElementById('img-checkin-success');
+            const checkinStatus = document.getElementById('checkin-status');
+            const checkinDesc = document.getElementById('checkin-desc');
+            const checkinContainer = document.getElementById('checkin-container');
 
             if (checkinToggle) {
                 checkinToggle.addEventListener('change', (e) => {
-                    if (e.target.checked) {
-                        // Toggle ON: Show Success (Check) BG
-                        imgFailed.classList.remove('opacity-100');
-                        imgFailed.classList.add('opacity-0');
-                        
-                        imgSuccess.classList.remove('opacity-0');
-                        imgSuccess.classList.add('opacity-100');
-                    } else {
-                        // Toggle OFF: Show Failed BG
-                        imgSuccess.classList.remove('opacity-100');
-                        imgSuccess.classList.add('opacity-0');
-                        
-                        imgFailed.classList.remove('opacity-0');
-                        imgFailed.classList.add('opacity-100');
-                    }
+                    checkinStatus.style.opacity = '0';
+                    checkinDesc.style.opacity = '0';
+
+                    setTimeout(() => {
+                        if (e.target.checked) {
+                            // ON: 도착 상태
+                            checkinStatus.innerHTML = '<span class="mr-2 text-4xl">✅</span> 장소 도착';
+                            checkinStatus.className = "mb-8 text-3xl font-bold text-green-600 dark:text-green-400 transition-all duration-300 flex items-center";
+                            
+                            checkinDesc.innerText = "체크 완료로 페널티 피하기!";
+                            checkinDesc.className = "mt-8 text-lg text-green-600 dark:text-green-400 font-medium transition-all duration-300";
+                            
+                            checkinContainer.classList.remove('bg-gray-100', 'dark:bg-gray-800');
+                            checkinContainer.classList.add('bg-green-50', 'dark:bg-green-900/20');
+                        } else {
+                            // OFF: 미도착 상태
+                            checkinStatus.innerHTML = '<span class="mr-2 text-4xl">❌</span> 장소 미도착';
+                            checkinStatus.className = "mb-8 text-3xl font-bold text-red-500 dark:text-red-400 transition-all duration-300 flex items-center";
+                            
+                            checkinDesc.innerText = "약속장소 도착 후 체크하기!";
+                            checkinDesc.className = "mt-8 text-lg text-gray-500 dark:text-gray-400 font-medium transition-all duration-300";
+
+                            checkinContainer.classList.add('bg-gray-100', 'dark:bg-gray-800');
+                            checkinContainer.classList.remove('bg-green-50', 'dark:bg-green-900/20');
+                        }
+                        checkinStatus.style.opacity = '1';
+                        checkinDesc.style.opacity = '1';
+                    }, 200);
                 });
             }
 
