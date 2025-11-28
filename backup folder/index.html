@@ -19,112 +19,21 @@
                     colors: {
                         // 다크 모드 전용 커스텀 컬러 팔레트
                         darkbg: '#1a202c',
-                    }
+                    },
+                    // 11.28 추가 사항. Tailwind에 경복궁 폰트 등록
+                    fontFamily: {
+                        'gyeongbok': ['GyeongbokgungSumunjangBodyText', 'sans-serif'],
+                        'boardmark' : ['SchoolSafeBoardMarker', 'sans-serif']
+                        // font-gyeongbok 클래스로 사용 가능
                 }
             }
         }
+    }
     </script>
 
-    <!-- Google Fonts -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
-        @import "tailwindcss";
-
-        body { font-family: 'Inter', sans-serif; }
-        html { scroll-behavior: smooth; }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-
-        /* 이미지 컨테이너 기본 스타일 */
-        .feature-visual-box {
-            position: relative;
-            width: 100%;
-            height: 400px; 
-            overflow: hidden;
-            border-radius: 1rem;
-        }
-
-        /* 11.25 수정 사항. visual-box 크기 높이 조절 500px -> 350px */
-        @media (min-width: 768px) {
-            .feature-visual-box { height: 350px; } 
-        }
-
-        /* 11.24 수정 사항. (기존 이미지 공통 스타일을 이쪽으로 이관함) */
-        .feature-visual-box img, .feature-visual-box .mock-ui {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: opacity 0.8s ease-in-out;
-        }
-
-        /* 11.23 유지: 달력 플립 애니메이션 */
-        .flip-scale-up-exit {
-            animation: flip-scale-up-exit 1.5s linear both;
-            transform-origin: 50% 0%; 
-            z-index: 50;
-        }
-
-        @keyframes flip-scale-up-exit {
-            0% { transform: translateY(0) rotateX(0) scale(1); opacity: 1; }
-            50% { transform: translateY(-50%) rotateX(90deg) scale(2); opacity: 0.5; }
-            100% { transform: translateY(-100%) rotateX(180deg) scale(1); opacity: 0; }
-        }
-
-        /* 11.26 추가 사항. D-Day 텍스트 팝업(Pop-in) 애니메이션 CSS */
-        .pop-in {
-            animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes pop-in {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* 11.26 추가 사항. [SECTION 4] 토글 스위치 커스텀 CSS */
-        .toggleSwitch {
-            width: 100px;
-            height: 50px;
-            display: block;
-            position: relative;
-            border-radius: 30px;
-            background-color: #fff;
-            box-shadow: 0 0 16px 3px rgba(0, 0, 0, 0.15);
-            cursor: pointer;
-            /* margin 제거 (Flex 중앙 정렬 사용) */
-        }
-
-        .toggleSwitch .toggleButton {
-            width: 40px;
-            height: 40px;
-            position: absolute;
-            top: 50%;
-            left: 5px; /* 미세 조정 */
-            transform: translateY(-50%);
-            border-radius: 50%;
-            background: #f03d3d; /* 기본 빨간색 버튼 */
-            transition: all 0.2s ease-in;
-        }
-
-        /* 토글 체크되었을 때 스타일 */
-        #checkin-toggle:checked + .toggleSwitch {
-            background: #f03d3d; /* 배경이 빨개짐 */
-        }
-
-        #checkin-toggle:checked + .toggleSwitch .toggleButton {
-            left: calc(100% - 45px); /* 버튼 오른쪽 이동 */
-            background: #fff; /* 버튼이 하얗게 변함 */
-        }
-
-        /* 스텝 연결선 클래스 정의 */
-        .step-connector { position: relative; }
-        .step-connector::after {
-            content: '→'; position: absolute; right: -30px; top: 50%; transform: translateY(-50%); font-size: 24px; color: #667eea; font-weight: bold;
-        }
-        @media (max-width: 768px) {
-            .step-connector::after { content: '↓'; right: auto; top: auto; bottom: -30px; left: 50%; transform: translateX(-50%); }
-        }
-    </style>
+     <!-- 11.28 변경 사항. <style>분리 이후 → main.css 링크 코드 추가 -->
+    <link rel="stylesheet" href="/backup folder/main.css">
+    <!-- 11.28 추가 사항. 현재 font를 더 추가해보고 싶은데 맞는지에 대한 코드 확인을 원함.-->
 </head>
 
 <!-- 11.24 수정 사항. 다크 모드 클래스 적용 -->
@@ -136,7 +45,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
                     <span class="text-4xl">⏰</span>
-                    <h1 class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">꼬옥!</h1>
+                    <h1 class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 font-boardmark">꼬옥!</h1>
                 </div>
                 <div class="flex items-center space-x-3">
                     <!-- 11.24 추가 사항. 다크 모드 토글 버튼 -->
@@ -145,8 +54,8 @@
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                     </button>
                     <!-- 백업 폴더 경로 유지 -->
-                    <a href="/backup folder/login.html" class="px-4 py-2 text-gray-700 font-semibold hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition duration-200">로그인</a>
-                    <a href="/backup folder/signup.html" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md">회원가입</a>
+                    <a href="/backup folder/login.html" class="px-4 py-2 text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition duration-200 font-boardmark">로그인</a>
+                    <a href="/backup folder/signup.html" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md font-boardmark">회원가입</a>
                 </div>
             </div>
         </nav>
@@ -154,11 +63,11 @@
 
     <section class="gradient-bg text-white py-20 px-4">
         <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">약속을 지키는 습관,<br><span class="text-yellow-300">꼬옥!</span></h2>
-            <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto">지각 패널티 관리로 친구들과의 약속을 더 즐겁고 공정하게!</p>
+            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight font-gyeongbok">약속을 지키는 습관,<br><span class="text-yellow-300">꼬옥!</span></h2>
+            <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto font-gyeongbok">지각 패널티 관리로 친구들과의 약속을 더 즐겁고 공정하게!</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
-                <a href="/backup folder/signup.html" class="px-8 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl shadow-2xl hover:shadow-xl">무료로 시작하기 →</a>
-                <a href="#features" class="px-8 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl shadow-lg">기능 둘러보기</a>
+                <a href="/backup folder/signup.html" class="px-8 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl shadow-2xl hover:shadow-xl font-boardmark">무료로 시작하기 →</a>
+                <a href="#features" class="px-8 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl shadow-lg font-boardmark">기능 둘러보기</a>
             </div>
         </div>
     </section>
@@ -307,11 +216,11 @@
     <!-- CTA Section -->
     <section class="gradient-bg text-white py-20 px-4">
         <div class="max-w-4xl mx-auto text-center">
-            <h3 class="text-4xl md:text-5xl font-extrabold mb-6">지금 바로 시작하세요</h3>
-            <p class="text-xl mb-10 text-indigo-100">무료로 가입하고 친구들과 약속을 더 즐겁게 지켜보세요!</p>
+            <h3 class="text-4xl md:text-5xl font-extrabold mb-6 font-gyeongbok">지금 바로 시작하세요</h3>
+            <p class="text-xl mb-10 text-indigo-100 font-gyeongbok">무료로 가입하고 친구들과 약속을 더 즐겁게 지켜보세요!</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="/backup folder/signup.html" class="px-10 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl">회원가입하기</a>
-                <a href="/backup folder/login.html" class="px-10 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg border-2 border-white">로그인하기</a>
+                <a href="/backup folder/signup.html" class="px-10 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl font-boardmark">회원가입하기</a>
+                <a href="/backup folder/login.html" class="px-10 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg border-2 border-white font-boardmark">로그인하기</a>
             </div>
         </div>
     </section>
@@ -345,301 +254,7 @@
         </div>
     </footer>
 
-    <script>
-        // --- 1. 다크 모드 토글 로직 ---
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-
-        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            themeToggleLightIcon.classList.remove('hidden');
-        } else {
-            document.documentElement.classList.remove('dark');
-            themeToggleDarkIcon.classList.remove('hidden');
-        }
-
-        themeToggleBtn.addEventListener('click', function() {
-            themeToggleDarkIcon.classList.toggle('hidden');
-            themeToggleLightIcon.classList.toggle('hidden');
-            if (localStorage.getItem('color-theme')) {
-                if (localStorage.getItem('color-theme') === 'light') {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                }
-            } else {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                }
-            }
-        });
-
-        // --- 2. 개별 섹션 애니메이션 로직 ---
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // [SECTION 1] 달력 애니메이션 로직
-            const sectionCalendar = document.getElementById('section-calendar');
-            const imgMainCalendar = document.getElementById('img-main-calendar');
-            const monthlyCalendarGroup = document.getElementById('monthly-calendar-group');
-            const monthlyImages = monthlyCalendarGroup.querySelectorAll('img');
-            
-            let calendarInterval = null;
-            let calendarTimeout = null; // [추가] 초기 딜레이를 제어할 타임아웃 변수
-            let currentMonthIndex = 0;
-
-            const startCalendarAnim = () => {
-                if(calendarInterval || calendarTimeout) return; // 중복 실행 방지
-
-                monthlyCalendarGroup.classList.remove('opacity-0'); 
-                monthlyCalendarGroup.classList.add('opacity-100');
-                
-                // [수정] 시작 시 표지 이미지를 확실하게 보여줌
-                imgMainCalendar.classList.remove('opacity-0', '-z-10'); 
-                imgMainCalendar.classList.add('opacity-100', 'z-10'); 
-
-                monthlyImages.forEach(img => {
-                    img.classList.remove('opacity-100', 'flip-scale-up-exit');
-                    img.classList.add('opacity-0');
-                    img.style.zIndex = ''; 
-                });
-
-                // [수정] 1.5초 뒤에 표지를 숨기고 애니메이션 루프 시작
-                calendarTimeout = setTimeout(() => {
-                    // 표지 숨김
-                    imgMainCalendar.classList.remove('opacity-100', 'z-10');
-                    imgMainCalendar.classList.add('opacity-0', '-z-10');
-
-                    // 1월 보이기
-                    monthlyImages[0].classList.remove('opacity-0');
-                    monthlyImages[0].classList.add('opacity-100');
-                    currentMonthIndex = 0;
-
-                    calendarInterval = setInterval(() => {
-                        if (currentMonthIndex >= 11) { // 11(12월)에 도달하면 정지
-                            clearInterval(calendarInterval);
-                            calendarInterval = null;
-                            return;
-                        }
-                        const currentImg = monthlyImages[currentMonthIndex];
-                        const nextImg = monthlyImages[currentMonthIndex + 1];
-                        
-                        if(nextImg) {
-                            nextImg.style.zIndex = '10';
-                            nextImg.classList.remove('opacity-0');
-                            nextImg.classList.add('opacity-100');
-                        }
-                        if(currentImg) {
-                            currentImg.style.zIndex = '20';
-                            currentImg.classList.add('flip-scale-up-exit');
-
-                            setTimeout(() => {
-                                currentImg.classList.remove('flip-scale-up-exit', 'opacity-100');
-                                currentImg.classList.add('opacity-0');
-                                currentImg.style.zIndex = '';
-                                if(nextImg) nextImg.style.zIndex = '';
-                            }, 600);
-                        }
-                        currentMonthIndex++;
-                    }, 1200);
-                    
-                    calendarTimeout = null;
-                }, 1500); // 1.5초 딜레이
-            };
-
-            const stopCalendarAnim = () => {
-                if (calendarInterval) {
-                    clearInterval(calendarInterval);
-                    calendarInterval = null;
-                }
-                if (calendarTimeout) {
-                    clearTimeout(calendarTimeout);
-                    calendarTimeout = null;
-                }
-
-                // 초기화 상태로 복구
-                monthlyCalendarGroup.classList.remove('opacity-100');
-                monthlyCalendarGroup.classList.add('opacity-0');
-                
-                imgMainCalendar.classList.remove('opacity-0', '-z-10');
-                imgMainCalendar.classList.add('opacity-100', 'z-10');
-
-                monthlyImages.forEach(img => {
-                    img.classList.remove('opacity-100', 'flip-scale-up-exit');
-                    img.classList.add('opacity-0');
-                });
-            };
-
-            const calendarObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) startCalendarAnim();
-                    else stopCalendarAnim();
-                });
-            }, { threshold: 0.5 });
-            if(sectionCalendar) calendarObserver.observe(sectionCalendar);
-
-
-            // [SECTION 2] 약속 등록 애니메이션 로직
-            const sectionPromise = document.getElementById('section-promise');
-            const promiseGroup = document.getElementById('promise-image-group');
-            const promiseImages = promiseGroup ? promiseGroup.querySelectorAll('img') : [];
-            let promiseInterval = null;
-            let currentPromiseIndex = 0;
-
-            const startPromiseAnim = () => {
-                if (promiseInterval) return;
-                promiseImages.forEach((img, idx) => {
-                    if (idx === 0) {
-                        img.classList.remove('opacity-0');
-                        img.classList.add('opacity-100');
-                    } else {
-                        img.classList.remove('opacity-100');
-                        img.classList.add('opacity-0');
-                    }
-                });
-                currentPromiseIndex = 0;
-                promiseInterval = setInterval(() => {
-                    if (currentPromiseIndex >= 3) {
-                        clearInterval(promiseInterval);
-                        promiseInterval = null;
-                        return;
-                    }
-                    promiseImages[currentPromiseIndex].classList.remove('opacity-100');
-                    promiseImages[currentPromiseIndex].classList.add('opacity-0');
-                    currentPromiseIndex++;
-                    promiseImages[currentPromiseIndex].classList.remove('opacity-0');
-                    promiseImages[currentPromiseIndex].classList.add('opacity-100');
-                }, 1200);
-            };
-
-            const stopPromiseAnim = () => {
-                if (promiseInterval) {
-                    clearInterval(promiseInterval);
-                    promiseInterval = null;
-                }
-                currentPromiseIndex = 0;
-                promiseImages.forEach((img, idx) => {
-                    if(idx === 0) {
-                        img.classList.remove('opacity-0');
-                        img.classList.add('opacity-100');
-                    } else {
-                        img.classList.remove('opacity-100');
-                        img.classList.add('opacity-0');
-                    }
-                });
-            };
-
-            const promiseObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) startPromiseAnim();
-                    else stopPromiseAnim();
-                });
-            }, { threshold: 0.5 });
-            if(sectionPromise) promiseObserver.observe(sectionPromise);
-
-
-            // [SECTION 3] 11.26 추가 사항. D-Day 카운트다운 애니메이션 로직
-            const sectionDday = document.getElementById('section-dday');
-            const ddayDisplay = document.getElementById('dday-display');
-            const ddaySequence = ['D-7', 'D-6', 'D-5', 'D-4', 'D-3', 'D-2', 'D-1', 'D-Day'];
-            let ddayInterval = null;
-            let ddayIndex = 0;
-
-            const startDDayAnim = () => {
-                if (ddayInterval) return;
-
-                ddayIndex = 0;
-                ddayDisplay.innerText = ddaySequence[0];
-                // 초기화 시 색상 리셋
-                ddayDisplay.classList.remove('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300'); 
-                ddayDisplay.classList.add('text-indigo-600', 'dark:text-indigo-400');
-                
-                ddayInterval = setInterval(() => {
-                    ddayIndex++;
-                    if (ddayIndex >= ddaySequence.length) {
-                        clearInterval(ddayInterval);
-                        ddayInterval = null;
-                        ddayDisplay.innerText = "D-Day";
-                        // D-Day 도달 시 빨간색 강조 적용
-                        ddayDisplay.classList.remove('text-indigo-600', 'dark:text-indigo-400');
-                        ddayDisplay.classList.add('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300');
-                        return;
-                    }
-                    ddayDisplay.innerText = ddaySequence[ddayIndex];
-                    ddayDisplay.classList.remove('pop-in');
-                    void ddayDisplay.offsetWidth;
-                    ddayDisplay.classList.add('pop-in');
-                }, 1500); // 1.5s
-            };
-
-            const stopDDayAnim = () => {
-                if (ddayInterval) {
-                    clearInterval(ddayInterval);
-                    ddayInterval = null;
-                }
-                ddayDisplay.innerText = "D-7";
-                // 정지 시 색상 초기화
-                ddayDisplay.classList.remove('text-red-600', 'dark:text-red-500', 'scale-125', 'transition-transform', 'duration-300');
-                ddayDisplay.classList.add('text-indigo-600', 'dark:text-indigo-400');
-            };
-
-            const ddayObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) startDDayAnim();
-                    else stopDDayAnim();
-                });
-            }, { threshold: 0.5 });
-            if (sectionDday) ddayObserver.observe(sectionDday);
-
-            
-            // [SECTION 4] 11.26 추가 사항. 체크인 토글 스위치 로직 (텍스트/아이콘 교체 방식)
-            const checkinToggle = document.getElementById('checkin-toggle');
-            const checkinStatus = document.getElementById('checkin-status');
-            const checkinDesc = document.getElementById('checkin-desc');
-            const checkinContainer = document.getElementById('checkin-container');
-
-            if (checkinToggle) {
-                checkinToggle.addEventListener('change', (e) => {
-                    checkinStatus.style.opacity = '0';
-                    checkinDesc.style.opacity = '0';
-
-                    setTimeout(() => {
-                        if (e.target.checked) {
-                            // ON: 도착 상태
-                            checkinStatus.innerHTML = '<span class="mr-2 text-4xl">✅</span> 장소 도착';
-                            checkinStatus.className = "mb-8 text-3xl font-bold text-green-600 dark:text-green-400 transition-all duration-300 flex items-center";
-                            
-                            checkinDesc.innerText = "체크 완료로 페널티 피하기!";
-                            checkinDesc.className = "mt-8 text-lg text-green-600 dark:text-green-400 font-medium transition-all duration-300";
-                            
-                            checkinContainer.classList.remove('bg-gray-100', 'dark:bg-gray-800');
-                            checkinContainer.classList.add('bg-green-50', 'dark:bg-green-900/20');
-                        } else {
-                            // OFF: 미도착 상태
-                            checkinStatus.innerHTML = '<span class="mr-2 text-4xl">❌</span> 장소 미도착';
-                            checkinStatus.className = "mb-8 text-3xl font-bold text-red-500 dark:text-red-400 transition-all duration-300 flex items-center";
-                            
-                            checkinDesc.innerText = "약속장소 도착 후 체크하기!";
-                            checkinDesc.className = "mt-8 text-lg text-gray-500 dark:text-gray-400 font-medium transition-all duration-300";
-
-                            checkinContainer.classList.add('bg-gray-100', 'dark:bg-gray-800');
-                            checkinContainer.classList.remove('bg-green-50', 'dark:bg-green-900/20');
-                        }
-                        checkinStatus.style.opacity = '1';
-                        checkinDesc.style.opacity = '1';
-                    }, 200);
-                });
-            }
-
-            // 초기 로드 시 강제 실행
-            startCalendarAnim();
-        });
-    </script>
+    <!-- 12.28 변경 사항. <script>분리 이후 → index.js 링크-->
+    <script src="/backup folder/index.js" defer></script>
 </body>
 </html>
