@@ -27,7 +27,30 @@
     </script>
 
     <!-- 11.28 변경 사항. <style>분리 이후 → main.css 링크 코드 추가 -->
-    <link rel="stylesheet" href="./main.css">    
+    <link rel="stylesheet" href="./main.css">
+    <!-- 11.28 추가 사항. 현재 font를 더 추가해보고 싶은데 맞는지에 대한 코드 확인을 원함.-->
+    <style>
+    @font-face {
+    font-family: 'GyeongbokgungSumunjangBodyText';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyL.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GyeongbokgungSumunjangBodyText';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyM.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GyeongbokgungSumunjangBodyText';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyB.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+    </style>
     
 </head>
 
@@ -56,6 +79,7 @@
         </nav>
     </header>
 
+    <!-- 11.28 추가 사항. 현재 위의 h2 class, p class의 부분에다가 위의 가져온 font를 적용하는 방식을 원함.-->
     <section class="gradient-bg text-white py-20 px-4">
         <div class="max-w-5xl mx-auto text-center">
             <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">약속을 지키는 습관,<br><span class="text-yellow-300">꼬옥!</span></h2>
