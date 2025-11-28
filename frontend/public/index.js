@@ -282,10 +282,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (e.target.checked) {
                     // ON: 도착 상태
                     checkinStatus.innerHTML = '<span class="mr-2 text-4xl">✅</span> 장소 도착';
-                    checkinStatus.className = "mb-8 text-3xl font-bold text-green-600 dark:text-green-400 transition-all duration-300 flex items-center";
+                    checkinStatus.className = "mb-8 text-3xl font-boardmark font-bold text-green-600 dark:text-green-400 transition-all duration-300 flex items-center";
 
                     checkinDesc.innerText = "체크 완료로 페널티 피하기!";
-                    checkinDesc.className = "mt-8 text-lg text-green-600 dark:text-green-400 font-medium transition-all duration-300";
+                    checkinDesc.className = "mt-8 text-lg text-green-600 font-boardmark dark:text-green-400 font-medium transition-all duration-300";
 
                     // 배경색 변경 (녹색 틴트)
                     checkinContainer.classList.remove('bg-gray-100', 'dark:bg-gray-800');
