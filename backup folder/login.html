@@ -9,18 +9,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-    </style>
+    <link rel="stylesheet" href="/backup folder/main.css">
 </head>
 
 <body class="gradient-bg min-h-screen flex items-center justify-center px-4">
@@ -108,38 +97,7 @@
         
     </div>
 
-    <script>
-        // 로그인 폼 제출 처리
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // localStorage에서 사용자 정보 확인 (간단한 데모 구현) = 사용자 정보를 확인하는 로직
-            const users = JSON.parse(localStorage.getItem('ko_og_users') || '[]');
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                // 로그인 성공
-                localStorage.setItem('ko_og_logged_in', 'true');
-                localStorage.setItem('ko_og_username', user.name);
-                alert(`환영합니다, ${user.name}님!`);
-                window.location.href = '/backup folder/user.html';
-            } else {
-                // 로그인 실패
-                alert('이메일 또는 비밀번호가 일치하지 않습니다.');
-            }
-        });
-        
-        // 이미 로그인된 경우 자동으로 user.html로 이동
-        window.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = localStorage.getItem('ko_og_logged_in');
-            if (isLoggedIn) {
-                window.location.href = '/backup folder/user.html';
-            }
-        });
-    </script>
+    <script src="./auth.js" defer></script>
 
 </body>
 
