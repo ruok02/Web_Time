@@ -292,11 +292,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     checkinContainer.classList.add('bg-green-50', 'dark:bg-green-900/20');
                 } else {
                     // OFF: 미도착 상태
-                    checkinStatus.innerHTML = '<span class="mr-2 text-4xl">❌</span> 장소 미도착';
-                    checkinStatus.className = "mb-8 text-3xl font-bold text-red-500 dark:text-red-400 transition-all duration-300 flex items-center";
+                    checkinStatus.innerHTML = '<span class="mr-2 text-4xl ">❌</span> 장소 미도착';
+                    checkinStatus.className = "mb-8 text-3xl  font-boardmark font-bold text-red-500 dark:text-red-400 transition-all duration-300 flex items-center";
 
                     checkinDesc.innerText = "약속장소 도착 후 체크하기!";
-                    checkinDesc.className = "mt-8 text-lg text-gray-500 dark:text-gray-400 font-medium transition-all duration-300";
+                    checkinDesc.className = "mt-8 text-lg text-gray-500 font-boardmark dark:text-gray-400 font-medium transition-all duration-300";
 
                     // 배경색 복구
                     checkinContainer.classList.add('bg-gray-100', 'dark:bg-gray-800');
