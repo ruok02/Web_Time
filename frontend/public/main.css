@@ -29,6 +29,13 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'YeogiOttaeJalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
+
 
 /* 전역/기반 스타일 : 이 스타일들은 모든 페이지(login.html, user.html)의 기본 폰트와 스크롤 동작을 정의한다. 
    재사용성이 높기 때문에 외부 파일로 분리하여 모든 HTML이 공유하도록 해야한다.*/
