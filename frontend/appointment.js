@@ -3,7 +3,7 @@
 
 // 상수 정의: localStorage 키
 const APPOINTMENTS_KEY = 'ko_og_appointments';
-// HTML 요소 참조
+// HTML 요소 참조 (초기에는 null일 수 있으므로 window.onload에서 안전하게 다시 참조)
 const appointmentList = document.getElementById('appointment-list');
 const emptyMessage = document.getElementById('empty-message');
 const addAppointmentBtn = document.getElementById('addAppointmentBtn');
@@ -21,6 +21,7 @@ function logout() {
 
 // --- 2. 다크 모드 토글 로직 함수 (initializeDarkMode) ---
 function initializeDarkMode() {
+    // 11.29 변경사항. [JS 오류 수정]: DOM 요소를 다시 참조하여 안전성 확보
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
     const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
@@ -66,17 +67,21 @@ function initializeDarkMode() {
  * alert() 대신 사용할 사용자 지정 메시지 모달 함수
  */
 function showMessage(message) {
-    if (modalMessage && messageModal) {
-        modalMessage.textContent = message;
-        messageModal.classList.remove('hidden');
+    // 11.29 변경사항. [모달 오류 수정]: 변수 선언 시점에 null일 수 있으므로 항상 체크
+    const mModal = document.getElementById('message-modal');
+    const mMessage = document.getElementById('modal-message');
+    if (mMessage && mModal) {
+        mMessage.textContent = message;
+        mModal.classList.remove('hidden');
     } else {
         alert(message); // fallback
     }
 }
 
 function closeModal() {
-    if (messageModal) {
-        messageModal.classList.add('hidden');
+    const mModal = document.getElementById('message-modal');
+    if (mModal) {
+        mModal.classList.add('hidden');
     }
 }
 
@@ -114,13 +119,11 @@ function calculateDDay(dateString) {
  * 약속 목록을 화면에 렌더링하는 함수
  */
 function renderAppointments() {
-    
-    // 11.29 변경사항. [논리 오류 수정]: 변수 선언을 시작 시점으로 이동하여 ReferenceError 방지
+    // 11.29 변경사항. [샘플 데이터/목록 오류 수정]: 변수 선언을 시작 시점으로 이동하여 ReferenceError 방지
     let currentAppointments = getAppointments();
     
     // 11.29 추가사항. 샘플 데이터 확인 및 생성
     if (currentAppointments.length === 0) {
-        // 임시 데이터가 없으면 샘플 데이터를 생성하여 localStorage에 저장합니다.
         const sampleData = [{
             id: '1', title: '웹프로젝트 발표 준비', date: '2025-12-05', time: '18:00', place: '제3공학관', penalty: '지각 시 아메리카노 1잔', status: '예정'
         }, {
