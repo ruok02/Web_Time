@@ -9,6 +9,30 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- 11.24 추가 사항. (다크 모드 설정을 위한 Tailwind Config 추가) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // 다크 모드 전용 커스텀 컬러 팔레트
+                        darkbg: '#1a202c',
+                    },
+                    // 11.28 추가 사항. Tailwind에 경복궁 폰트 등록
+                    fontFamily: {
+                        'gyeongbok': ['GyeongbokgungSumunjangBodyText', 'sans-serif'],
+                        'boardmark' : ['SchoolSafeBoardMarker', 'sans-serif'],
+                        'jalnan' : ['YeogiOttaeJalnan', 'sans-serif'],
+                        'gowoon' : ['GowoonDodum', 'sans-serilf']
+                        // font-gyeongbok 클래스로 사용 가능
+                }
+            }
+        }
+    }
+</script>
+
+
     <!-- 11.29 변경 사항. <style>분리 이후 → main.css 링크 코드 추가 -->
     <link rel="stylesheet" href="./main.css">
 </head>
@@ -22,9 +46,9 @@
         <div class="text-center mb-8">
             <div class="flex items-center justify-center space-x-2 mb-4">
                 <span class="text-5xl">⏰</span>
-                <h1 class="text-3xl font-extrabold text-indigo-600">꼬옥!</h1>
+                <h1 class="text-3xl text-indigo-600 text-jalnan">꼬옥!</h1>
             </div>
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">로그인</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2 font-gowon">로그인</h2>
             <p class="text-gray-600 text-sm">약속을 지키는 습관, 다시 만나요!</p>
         </div>
 
