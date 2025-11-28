@@ -122,12 +122,11 @@ function renderAppointments() {
 
 // 로그아웃 함수
 function logout() {
-    if (confirm('로그아웃 하시겠습니까?')) {
-        localStorage.removeItem('ko_og_logged_in');
-        localStorage.removeItem('ko_og_username');
-        alert('로그아웃 되었습니다.');
-        window.location.href = '/index.html'; // 절대 경로 사용
-    }
+    // 11.29 변경사항. 확인창 제거, 메시지 후 즉시 리다이렉트 (사용자 요청 반영)
+    localStorage.removeItem('ko_og_logged_in');
+    localStorage.removeItem('ko_og_username');
+    alert('로그아웃이 완료되었습니다.'); // 사용자 요청 메시지
+    window.location.href = '/index.html'; // 절대 경로 사용
 }
 
 // 초기 화면 로드 및 데이터 렌더링
@@ -146,6 +145,48 @@ window.onload = function () {
 
     renderAppointments();
 
+    // 12.01 추가사항. 다크 모드 로직을 이 시점에 실행하여 DOM 요소를 찾습니다.
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    
+    // 12.01 변경사항. 초기 테마 설정
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+    } else {
+        document.documentElement.classList.remove('dark');
+        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+    }
+
+
+    // 12.01 변경사항. 클릭 이벤트 리스너 설정
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function () {
+            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
+            if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
+            
+            // ... (다크 모드 상태 변경 로직은 그대로 유지) ...
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    }
+    
     // '새 약속 등록' 버튼 클릭 이벤트 (등록 폼으로 이동)
     if (addAppointmentBtn) {
         addAppointmentBtn.addEventListener('click', () => {
