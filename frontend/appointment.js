@@ -19,7 +19,7 @@ function logout() {
     window.location.href = '/index.html'; // 절대 경로 사용
 }
 
-// --- 2. 다크 모드 토글 로직 함수 ---
+// --- 2. 다크 모드 토글 로직 함수 (initializeDarkMode) ---
 function initializeDarkMode() {
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -64,7 +64,6 @@ function initializeDarkMode() {
 
 /**
  * alert() 대신 사용할 사용자 지정 메시지 모달 함수
- * @param {string} message - 표시할 메시지 내용
  */
 function showMessage(message) {
     if (modalMessage && messageModal) {
@@ -83,7 +82,6 @@ function closeModal() {
 
 /**
  * localStorage에서 약속 데이터를 불러오는 함수
- * @returns {Array<Object>} 저장된 약속 객체 배열 (없으면 빈 배열)
  */
 function getAppointments() {
     try {
@@ -97,12 +95,9 @@ function getAppointments() {
 
 /**
  * D-Day를 계산하여 문자열로 반환합니다.
- * @param {string} dateString - 약속 날짜 ('YYYY-MM-DD')
- * @returns {string} D-Day 문자열
  */
 function calculateDDay(dateString) {
     const today = new Date();
-    // 시간 정보를 제거하여 순수 날짜만 비교
     today.setHours(0, 0, 0, 0);
     const appointmentDate = new Date(dateString);
     appointmentDate.setHours(0, 0, 0, 0);
@@ -120,12 +115,12 @@ function calculateDDay(dateString) {
  */
 function renderAppointments() {
     
-    // 11.29 변경사항. [샘플 데이터/목록 오류 수정]: 변수 선언 위치 조정
-    const currentAppointments = getAppointments();
+    // 11.29 변경사항. [논리 오류 수정]: 변수 선언을 시작 시점으로 이동하여 ReferenceError 방지
+    let currentAppointments = getAppointments();
     
     // 11.29 추가사항. 샘플 데이터 확인 및 생성
     if (currentAppointments.length === 0) {
-        // 11.29 변경사항: 임시 데이터가 없으면 샘플 데이터를 생성하여 렌더링 시작
+        // 임시 데이터가 없으면 샘플 데이터를 생성하여 localStorage에 저장합니다.
         const sampleData = [{
             id: '1', title: '웹프로젝트 발표 준비', date: '2025-12-05', time: '18:00', place: '제3공학관', penalty: '지각 시 아메리카노 1잔', status: '예정'
         }, {
@@ -134,7 +129,7 @@ function renderAppointments() {
             id: '3', title: '지난 과제 제출', date: '2025-10-30', time: '23:59', place: '온라인', penalty: '패널티 적용됨', status: '지남'
         }];
         localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
-        // 샘플 데이터가 생성되었으므로, 새로 데이터를 불러옵니다.
+        // 저장 후, 데이터를 새로 불러와 렌더링을 진행합니다.
         currentAppointments = getAppointments();
     }
     
@@ -144,7 +139,7 @@ function renderAppointments() {
     }
 
     if (currentAppointments.length === 0 && emptyMessage) {
-        // 11.29 변경사항: emptyMessage를 표시
+        // emptyMessage를 표시
         emptyMessage.classList.remove('hidden');
         if (appointmentList) appointmentList.appendChild(emptyMessage);
         return;
