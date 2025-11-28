@@ -10,17 +10,75 @@ const addAppointmentBtn = document.getElementById('addAppointmentBtn');
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
 
+// 로그아웃 함수 (전역 함수 - 버튼 작동 보장)
+function logout() {
+    // 11.29 변경사항. [로그아웃 작동 오류 수정]: if(confirm)을 제거하고 즉시 실행
+    localStorage.removeItem('ko_og_logged_in');
+    localStorage.removeItem('ko_og_username');
+    alert('로그아웃이 완료되었습니다.'); // 사용자 요청 메시지
+    window.location.href = '/index.html'; // 절대 경로 사용
+}
+
+// --- 2. 다크 모드 토글 로직 함수 ---
+function initializeDarkMode() {
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    
+    // 초기 로드 시 테마 설정 및 아이콘 표시
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+    } else {
+        document.documentElement.classList.remove('dark');
+        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+    }
+
+    // 클릭 이벤트 리스너 설정
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function () {
+            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
+            if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
+            
+            // 상태 변경 로직
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    }
+}
+
 /**
  * alert() 대신 사용할 사용자 지정 메시지 모달 함수
  * @param {string} message - 표시할 메시지 내용
  */
 function showMessage(message) {
-    modalMessage.textContent = message;
-    messageModal.classList.remove('hidden');
+    if (modalMessage && messageModal) {
+        modalMessage.textContent = message;
+        messageModal.classList.remove('hidden');
+    } else {
+        alert(message); // fallback
+    }
 }
 
 function closeModal() {
-    messageModal.classList.add('hidden');
+    if (messageModal) {
+        messageModal.classList.add('hidden');
+    }
 }
 
 /**
@@ -61,23 +119,43 @@ function calculateDDay(dateString) {
  * 약속 목록을 화면에 렌더링하는 함수
  */
 function renderAppointments() {
+    
+    // 11.29 변경사항. [샘플 데이터/목록 오류 수정]: 변수 선언 위치 조정
+    const currentAppointments = getAppointments();
+    
+    // 11.29 추가사항. 샘플 데이터 확인 및 생성
+    if (currentAppointments.length === 0) {
+        // 11.29 변경사항: 임시 데이터가 없으면 샘플 데이터를 생성하여 렌더링 시작
+        const sampleData = [{
+            id: '1', title: '웹프로젝트 발표 준비', date: '2025-12-05', time: '18:00', place: '제3공학관', penalty: '지각 시 아메리카노 1잔', status: '예정'
+        }, {
+            id: '2', title: '팀원과의 약속 (벌칙: 짜장면)', date: '2025-12-01', time: '12:30', place: '학교 식당', penalty: '벌칙: 짜장면 쏘기', status: '예정'
+        }, {
+            id: '3', title: '지난 과제 제출', date: '2025-10-30', time: '23:59', place: '온라인', penalty: '패널티 적용됨', status: '지남'
+        }];
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
+        // 샘플 데이터가 생성되었으므로, 새로 데이터를 불러옵니다.
+        currentAppointments = getAppointments();
+    }
+    
+    // 목록 초기화 및 상태 체크
+    if (appointmentList) {
+        appointmentList.innerHTML = '';
+    }
 
-    const appointments = getAppointments();
-    appointmentList.innerHTML = ''; // 기존 목록 초기화
-
-    if (appointments.length === 0) {
-        // 11.29 변경사항: hidden 클래스를 제거하고 emptyMessage를 직접 추가 (렌더링 시점에만 처리)
+    if (currentAppointments.length === 0 && emptyMessage) {
+        // 11.29 변경사항: emptyMessage를 표시
         emptyMessage.classList.remove('hidden');
-        appointmentList.appendChild(emptyMessage);
+        if (appointmentList) appointmentList.appendChild(emptyMessage);
         return;
     }
 
-    emptyMessage.classList.add('hidden');
+    if (emptyMessage) emptyMessage.classList.add('hidden');
 
     // 1. 약속 날짜가 가까운 순서로 정렬 (필수 UX)
-    appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+    currentAppointments.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    appointments.forEach(app => {
+    currentAppointments.forEach(app => {
         const dDay = calculateDDay(app.date);
         let statusColor = 'bg-indigo-100 text-indigo-700'; // 예정
 
@@ -116,77 +194,19 @@ function renderAppointments() {
             </p>
         `;
 
-        appointmentList.appendChild(card);
+        if (appointmentList) appointmentList.appendChild(card);
     });
 }
 
-// 로그아웃 함수
-function logout() {
-    // 11.29 변경사항. 확인창 제거, 메시지 후 즉시 리다이렉트 (사용자 요청 반영)
-    localStorage.removeItem('ko_og_logged_in');
-    localStorage.removeItem('ko_og_username');
-    alert('로그아웃이 완료되었습니다.'); // 사용자 요청 메시지
-    window.location.href = '/index.html'; // 절대 경로 사용
-}
 
 // 초기 화면 로드 및 데이터 렌더링
 window.onload = function () {
-    // 11.29 변경사항: 임시 데이터가 없으면 샘플 데이터를 생성하여 렌더링 시작
-    if (getAppointments().length === 0) {
-        const sampleData = [{
-            id: '1', title: '웹프로젝트 발표 준비', date: '2025-12-05', time: '18:00', place: '제3공학관', penalty: '지각 시 아메리카노 1잔', status: '예정'
-        }, {
-            id: '2', title: '팀원과의 약속 (벌칙: 짜장면)', date: '2025-12-01', time: '12:30', place: '학교 식당', penalty: '벌칙: 짜장면 쏘기', status: '예정'
-        }, {
-            id: '3', title: '지난 과제 제출', date: '2025-10-30', time: '23:59', place: '온라인', penalty: '패널티 적용됨', status: '지남'
-        }];
-        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
-    }
+    // 11.29 변경사항. 다크 모드 초기화 실행
+    initializeDarkMode();
 
+    // 목록 렌더링 실행 (샘플 데이터 확인 및 목록 표시)
     renderAppointments();
 
-    // 12.01 추가사항. 다크 모드 로직을 이 시점에 실행하여 DOM 요소를 찾습니다.
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-    
-    // 12.01 변경사항. 초기 테마 설정
-    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-        if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
-    } else {
-        document.documentElement.classList.remove('dark');
-        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
-    }
-
-
-    // 12.01 변경사항. 클릭 이벤트 리스너 설정
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', function () {
-            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
-            if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
-            
-            // ... (다크 모드 상태 변경 로직은 그대로 유지) ...
-            if (localStorage.getItem('color-theme')) {
-                if (localStorage.getItem('color-theme') === 'light') {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                }
-            } else {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                }
-            }
-        });
-    }
-    
     // '새 약속 등록' 버튼 클릭 이벤트 (등록 폼으로 이동)
     if (addAppointmentBtn) {
         addAppointmentBtn.addEventListener('click', () => {
