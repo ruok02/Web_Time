@@ -20,7 +20,11 @@
                     colors: {
                         // 다크 모드 전용 커스텀 컬러 팔레트
                         darkbg: '#1a202c',
-                    }
+                    },
+                    // 11.28 추가 사항. Tailwind에 경복궁 폰트 등록
+                    fontFamily: {
+                        'gyeongbok': ['GyeongbokgungSumunjangBodyText', 'sans-serif'], 
+                        // font-gyeongbok 클래스로 사용 가능
                 }
             }
         }
@@ -29,29 +33,7 @@
     <!-- 11.28 변경 사항. <style>분리 이후 → main.css 링크 코드 추가 -->
     <link rel="stylesheet" href="./main.css">
     <!-- 11.28 추가 사항. 현재 font를 더 추가해보고 싶은데 맞는지에 대한 코드 확인을 원함.-->
-    <style>
-    @font-face {
-    font-family: 'GyeongbokgungSumunjangBodyText';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyL.woff2') format('woff2');
-    font-weight: 300;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'GyeongbokgungSumunjangBodyText';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyM.woff2') format('woff2');
-    font-weight: 500;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'GyeongbokgungSumunjangBodyText';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyB.woff2') format('woff2');
-    font-weight: 700;
-    font-display: swap;
-}
-    </style>
-    
+        
 </head>
 
 <!-- 11.24 수정 사항. 다크 모드 클래스 적용 -->
@@ -82,8 +64,8 @@
     <!-- 11.28 추가 사항. 현재 위의 h2 class, p class의 부분에다가 위의 가져온 font를 적용하는 방식을 원함.-->
     <section class="gradient-bg text-white py-20 px-4">
         <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">약속을 지키는 습관,<br><span class="text-yellow-300">꼬옥!</span></h2>
-            <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto">지각 패널티 관리로 친구들과의 약속을 더 즐겁고 공정하게!</p>
+            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight font-gyeongbok">약속을 지키는 습관,<br><span class="text-yellow-300">꼬옥!</span></h2>
+            <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto font-gyeongbok">지각 패널티 관리로 친구들과의 약속을 더 즐겁고 공정하게!</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
                 <a href="/signup.html" class="px-8 py-4 bg-white text-indigo-600 font-bold text-lg rounded-xl shadow-2xl hover:shadow-xl">무료로 시작하기 →</a>
                 <a href="#features" class="px-8 py-4 bg-indigo-700 text-white font-bold text-lg rounded-xl shadow-lg">기능 둘러보기</a>

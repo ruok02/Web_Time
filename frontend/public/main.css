@@ -1,18 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
 @import "tailwindcss";
 
-/* 전역/기반 스타일 : 이 스타일들은 모든 페이지(login.html, user.html)의 기본 폰트와 스크롤 동작을 정의한다. 
-   재사용성이 높기 때문에 외부 파일로 분리하여 모든 HTML이 공유하도록 해야한다.*/
-body {
-    font-family: 'Inter', sans-serif; /* Inter 폰트가 없을 경우 그 다음 폰트인 sans-serif의 폰트를 사용 */
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-@font-face{
-    @font-face {
+@font-face {
     font-family: 'GyeongbokgungSumunjangBodyText';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyL.woff2') format('woff2');
     font-weight: 300;
@@ -32,7 +21,20 @@ html {
     font-weight: 700;
     font-display: swap;
 }
+
+
+/* 전역/기반 스타일 : 이 스타일들은 모든 페이지(login.html, user.html)의 기본 폰트와 스크롤 동작을 정의한다. 
+   재사용성이 높기 때문에 외부 파일로 분리하여 모든 HTML이 공유하도록 해야한다.*/
+body {
+    font-family: 'Inter', sans-serif;
+    /* Inter 폰트가 없을 경우 그 다음 폰트인 sans-serif의 폰트를 사용 */
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+
 
 .gradient-bg {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
