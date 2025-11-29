@@ -3,16 +3,18 @@
 
 // 상수 정의: localStorage 키
 const APPOINTMENTS_KEY = 'ko_og_appointments';
-// HTML 요소 참조 (초기에는 null일 수 있으므로 window.onload에서 안전하게 다시 참조)
+// HTML 요소 참조
 const appointmentList = document.getElementById('appointment-list');
 const emptyMessage = document.getElementById('empty-message');
 const addAppointmentBtn = document.getElementById('addAppointmentBtn');
+// 11.30 추가사항. 약속 편집 버튼 참조 추가
+const editAppointmentBtn = document.getElementById('editAppointmentBtn'); 
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
 
 // 로그아웃 함수 (전역 함수 - 버튼 작동 보장)
 function logout() {
-    // 11.29 변경사항. [로그아웃 작동 오류 수정]: if(confirm)을 제거하고 즉시 실행
+    // 11.29 변경사항. [로그아웃 작동 오류 수정]: 확인창 제거, 메시지 후 즉시 실행
     localStorage.removeItem('ko_og_logged_in');
     localStorage.removeItem('ko_og_username');
     alert('로그아웃이 완료되었습니다.'); // 사용자 요청 메시지
@@ -59,9 +61,51 @@ function initializeDarkMode() {
                     localStorage.setItem('color-theme', 'dark');
                 }
             }
+            // 11.30 추가사항. 다크 모드 전환 후 동적 요소들의 색상 업데이트
+            updateDynamicStyles();
         });
     }
 }
+
+/**
+ * 11.30 추가사항. 다크 모드 전환 시 동적 요소들의 스타일을 업데이트합니다.
+ * (목록 카드, 모달 콘텐츠 등)
+ */
+function updateDynamicStyles() {
+    // renderAppointments를 호출하여 목록 카드 전체를 다시 렌더링하면 폰트/배경 색상 클래스가 업데이트됩니다.
+    renderAppointments(); 
+    
+    // 11.30 추가사항. [모달 배경 색상 반전]
+    // user.html에 'modal-content' ID가 추가되었으므로 이를 사용합니다.
+    const modalContent = document.getElementById('modal-content'); 
+    const modalMessageText = document.getElementById('modal-message');
+    
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    
+    if (modalContent) {
+        if (isDarkMode) {
+            // 다크 모드일 때 (흰색 -> 어두운색)
+            modalContent.classList.remove('bg-white');
+            modalContent.classList.add('dark:bg-gray-900');
+        } else {
+             // 라이트 모드일 때 (어두운색 -> 흰색)
+            modalContent.classList.remove('dark:bg-gray-900');
+            modalContent.classList.add('bg-white');
+        }
+    }
+    
+    // 11.30 추가사항. [모달 메시지 텍스트 색상 반전]
+    if (modalMessageText) {
+        if (isDarkMode) {
+            modalMessageText.classList.remove('text-gray-700');
+            modalMessageText.classList.add('dark:text-gray-300');
+        } else {
+            modalMessageText.classList.remove('dark:text-gray-300');
+            modalMessageText.classList.add('text-gray-700');
+        }
+    }
+}
+
 
 /**
  * alert() 대신 사용할 사용자 지정 메시지 모달 함수
@@ -120,8 +164,11 @@ function calculateDDay(dateString) {
  */
 function renderAppointments() {
     
-    // 11.29 변경사항. [강제 샘플 데이터 업데이트 로직 추가]:
-    // 개발 테스트를 위해 이 함수가 호출될 때마다 최신 샘플 데이터로 강제 덮어씁니다.
+    // 11.29 변경사항. [샘플 데이터/목록 오류 수정]: 변수 선언을 시작 시점으로 이동하여 ReferenceError 방지
+    let currentAppointments = getAppointments();
+    
+    // 11.29 추가사항. 샘플 데이터 확인 및 생성
+    // 11.30 변경사항. [강제 덮어쓰기 유지]: 최신 샘플 데이터로 강제 업데이트합니다.
     const sampleData = [{
         id: '1', title: '조별 과제', date: '2025-11-20', time: '13:00', place: '건축공학관', penalty: '지각 시 아메리카노 1잔', status: '지남'
     },{
@@ -130,11 +177,8 @@ function renderAppointments() {
         id: '3', title: '부산 약속', date: '2025-12-21', time: '17:00', place: '부산 서면', penalty: '저녁 쏘기', status: '예정'
     }];
     
-    // 1. localStorage에 최신 샘플 데이터로 강제 덮어쓰기
     localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
-    
-    // 2. 덮어쓴 데이터를 다시 불러옵니다.
-    let currentAppointments = getAppointments(); // let으로 변수 선언 유지
+    currentAppointments = getAppointments();
     
     
     // 목록 초기화 및 상태 체크
@@ -142,14 +186,13 @@ function renderAppointments() {
         appointmentList.innerHTML = '';
     }
 
-    // 11.29 추가사항. (덮어쓰기로 인해 이 조건문은 항상 false가 됩니다.)
     if (currentAppointments.length === 0 && emptyMessage) {
         // emptyMessage를 표시
         emptyMessage.classList.remove('hidden');
         if (appointmentList) appointmentList.appendChild(emptyMessage);
         return;
     }
-    
+
     if (emptyMessage) emptyMessage.classList.add('hidden');
 
     // 1. 약속 날짜가 가까운 순서로 정렬 (필수 UX)
@@ -165,11 +208,16 @@ function renderAppointments() {
         } else if (dDay.includes('약속 지남')) {
             statusColor = 'bg-red-100 text-red-700 opacity-70';
         }
-
+        
+        // 11.30 추가사항. 다크 모드 폰트/배경색 클래스 설정
+        const cardBgClass = 'bg-white dark:bg-gray-700 dark:text-gray-200';
+        const titleTextClass = 'text-gray-900 dark:text-white';
+        const bodyTextClass = 'text-gray-600 dark:text-gray-300';
+        
         // 약속 카드 생성 (DOM 조작)
         const card = document.createElement('div');
-        // 11.29 변경사항: 카드 디자인에 폰트 스타일 추가 (index.html과 동일한 패턴)
-        card.className = `p-4 border-l-4 shadow-lg rounded-xl transition duration-300 hover:shadow-xl cursor-pointer font-gowoon ${statusColor.includes('indigo') ? 'border-indigo-500' : statusColor.includes('yellow') ? 'border-yellow-500' : 'border-red-500'}`;
+        // 11.30 수정사항. 카드에 다크 모드 배경/폰트 클래스 및 굵기 적용
+        card.className = `p-4 border-l-4 shadow-lg rounded-xl transition duration-300 hover:shadow-xl cursor-pointer font-gowoon ${cardBgClass} ${statusColor.includes('indigo') ? 'border-indigo-500' : statusColor.includes('yellow') ? 'border-yellow-500' : 'border-red-500'}`;
         card.setAttribute('data-id', app.id);
 
         // 클릭 시 상세 페이지로 이동 (register.html을 임시로 사용)
@@ -180,16 +228,16 @@ function renderAppointments() {
 
         card.innerHTML = `
             <div class="flex justify-between items-center mb-2">
-                <h3 class="text-lg font-semibold text-gray-900 truncate font-jalnan">${app.title}</h3>
-                <span class="px-3 py-1 text-xs font-bold rounded-full ${statusColor} font-boardmark">${dDay}</span>
+                <h3 class="text-lg font-semibold ${titleTextClass} truncate font-jalnan font-bold">${app.title}</h3>
+                <span class="px-3 py-1 text-xs font-bold rounded-full ${statusColor} font-boardmark font-bold">${dDay}</span>
             </div>
-            <p class="text-sm text-gray-600 mb-1">
+            <p class="text-sm ${bodyTextClass} mb-1">
                 <span class="font-medium">장소:</span> ${app.place || '미정'}
             </p>
-            <p class="text-sm text-gray-600 mb-1">
+            <p class="text-sm ${bodyTextClass} mb-1">
                 <span class="font-medium">일시:</span> ${app.date} ${app.time}
             </p>
-            <p class="text-sm text-gray-600">
+            <p class="text-sm ${bodyTextClass}">
                 <span class="font-medium text-red-500">페널티:</span> ${app.penalty}
             </p>
         `;
@@ -205,9 +253,11 @@ window.onload = function () {
     initializeDarkMode();
 
     // 목록 렌더링 실행 (샘플 데이터 확인 및 목록 표시)
-    renderAppointments();
-
+    // 11.30 변경사항. 다크 모드 초기화 후, 동적 스타일 업데이트와 목록 렌더링을 한번에 처리
+    // renderAppointments()를 개별적으로 호출하지 않고, 아래 이벤트 리스너를 설정
+    
     // '새 약속 등록' 버튼 클릭 이벤트 (등록 폼으로 이동)
+    const addAppointmentBtn = document.getElementById('addAppointmentBtn');
     if (addAppointmentBtn) {
         addAppointmentBtn.addEventListener('click', () => {
             // 실제 구현 시 window.location.href = 'register.html';
@@ -215,9 +265,20 @@ window.onload = function () {
         });
     }
 
+    // 11.30 추가사항. 약속 편집 버튼 이벤트 리스너 추가
+    const editAppointmentBtn = document.getElementById('editAppointmentBtn');
+     if (editAppointmentBtn) {
+        editAppointmentBtn.addEventListener('click', () => {
+             showMessage("약속 편집 기능은 향후 구현될 예정입니다.");
+        });
+    }
+
+
     // 11.29 추가사항. 하단 네비게이션 바 버튼 클릭 이벤트 핸들러 (향후 기능 확장 대비)
     document.getElementById('nav-calendar').onclick = () => showMessage('달력 기능은 향후 구현될 예정입니다.');
     document.getElementById('nav-home').onclick = () => showMessage('홈 (약속 목록) 화면입니다.');
     document.getElementById('nav-schedule').onclick = () => showMessage('약속 조율 기능은 향후 구현될 예정입니다.');
-
+    
+    // 11.30 추가사항. 초기 렌더링 및 스타일 적용
+    renderAppointments(); 
 };
