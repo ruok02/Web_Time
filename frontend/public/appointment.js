@@ -119,35 +119,37 @@ function calculateDDay(dateString) {
  * 약속 목록을 화면에 렌더링하는 함수
  */
 function renderAppointments() {
-    // 11.29 변경사항. [샘플 데이터/목록 오류 수정]: 변수 선언을 시작 시점으로 이동하여 ReferenceError 방지
-    let currentAppointments = getAppointments();
     
-    // 11.29 추가사항. 샘플 데이터 확인 및 생성
-    if (currentAppointments.length === 0) {
-        const sampleData = [{
-            id: '3', title: '조별 과제', date: '2025-11-20', time: '13:00', place: '건축공학관', penalty: '지각 시 아메리카노 1잔', status: '지남'
-        },{
-            id: '2', title: '웹프로젝트 발표 준비', date: '2025-12-03', time: '10:00', place: 'ICT 1관', penalty: '지각 시 아메리카노 1잔', status: '예정'
-        },{
-            id: '1', title: '부산 약속', date: '2025-12-21', time: '17:00', place: '부산 서면', penalty: '저녁 쏘기', status: '예정'
-        }];
-        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
-        // 저장 후, 데이터를 새로 불러와 렌더링을 진행합니다.
-        currentAppointments = getAppointments();
-    }
+    // 11.29 변경사항. [강제 샘플 데이터 업데이트 로직 추가]:
+    // 개발 테스트를 위해 이 함수가 호출될 때마다 최신 샘플 데이터로 강제 덮어씁니다.
+    const sampleData = [{
+        id: '1', title: '조별 과제', date: '2025-11-20', time: '13:00', place: '건축공학관', penalty: '지각 시 아메리카노 1잔', status: '지남'
+    },{
+        id: '2', title: '웹프로젝트 발표 준비', date: '2025-12-03', time: '10:00', place: 'ICT 1관', penalty: '지각 시 아메리카노 1잔', status: '예정'
+    },{
+        id: '3', title: '부산 약속', date: '2025-12-21', time: '17:00', place: '부산 서면', penalty: '저녁 쏘기', status: '예정'
+    }];
+    
+    // 1. localStorage에 최신 샘플 데이터로 강제 덮어쓰기
+    localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
+    
+    // 2. 덮어쓴 데이터를 다시 불러옵니다.
+    let currentAppointments = getAppointments(); // let으로 변수 선언 유지
+    
     
     // 목록 초기화 및 상태 체크
     if (appointmentList) {
         appointmentList.innerHTML = '';
     }
 
+    // 11.29 추가사항. (덮어쓰기로 인해 이 조건문은 항상 false가 됩니다.)
     if (currentAppointments.length === 0 && emptyMessage) {
         // emptyMessage를 표시
         emptyMessage.classList.remove('hidden');
         if (appointmentList) appointmentList.appendChild(emptyMessage);
         return;
     }
-
+    
     if (emptyMessage) emptyMessage.classList.add('hidden');
 
     // 1. 약속 날짜가 가까운 순서로 정렬 (필수 UX)
