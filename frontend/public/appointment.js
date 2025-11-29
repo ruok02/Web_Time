@@ -130,7 +130,7 @@ function renderAppointments() {
             id: '2', title: '웹프로젝트 발표 준비', date: '2025-12-03', time: '10:00', place: 'ICT 1관', penalty: '지각 시 아메리카노 1잔', status: '예정'
         },{
             id: '3', title: '부산 약속', date: '2025-12-21', time: '17:00', place: '부산 서면', penalty: '저녁 쏘기', status: '예정'
-        },];
+        }];
         localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
         // 저장 후, 데이터를 새로 불러와 렌더링을 진행합니다.
         currentAppointments = getAppointments();
