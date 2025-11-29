@@ -125,12 +125,12 @@ function renderAppointments() {
     // 11.29 추가사항. 샘플 데이터 확인 및 생성
     if (currentAppointments.length === 0) {
         const sampleData = [{
-            id: '1', title: '웹프로젝트 발표 준비', date: '2025-12-05', time: '18:00', place: '제3공학관', penalty: '지각 시 아메리카노 1잔', status: '예정'
-        }, {
-            id: '2', title: '팀원과의 약속 (벌칙: 짜장면)', date: '2025-12-01', time: '12:30', place: '학교 식당', penalty: '벌칙: 짜장면 쏘기', status: '예정'
-        }, {
-            id: '3', title: '지난 과제 제출', date: '2025-10-30', time: '23:59', place: '온라인', penalty: '패널티 적용됨', status: '지남'
-        }];
+            id: '1', title: '조별 과제', date: '2025-11-20', time: '13:00', place: '건축공학관', penalty: '지각 시 아메리카노 1잔', status: '지남'
+        },{
+            id: '2', title: '웹프로젝트 발표 준비', date: '2025-12-03', time: '10:00', place: 'ICT 1관', penalty: '지각 시 아메리카노 1잔', status: '예정'
+        },{
+            id: '3', title: '부산 약속', date: '2025-12-21', time: '17:00', place: '부산 서면', penalty: '저녁 쏘기', status: '예정'
+        },];
         localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
         // 저장 후, 데이터를 새로 불러와 렌더링을 진행합니다.
         currentAppointments = getAppointments();
