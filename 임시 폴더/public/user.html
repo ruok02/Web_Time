@@ -59,13 +59,14 @@
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
-                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 1 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
                                 fill-rule="evenodd" clip-rule="evenodd"></path>
                         </svg>
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                         </svg>
                     </button>
+                    
                     <button onclick="logout()"
                         class="bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 py-2 px-4 rounded-xl shadow-md transition duration-300 text-sm font-gowoon">
                         로그아웃
@@ -75,12 +76,22 @@
             <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm font-gowoon">회원 전용 약속 관리 페이지</p>
         </header>
 
+
         <main>
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 font-gowoon">다가오는 약속 목록</h2>
-            <button id="addAppointmentBtn"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-xl shadow-md transition duration-300 transform hover:scale-105 active:scale-95 text-sm font-boardmark">
-                        약속 등록
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white font-gowoon">다가오는 약속 목록</h2>
+                <div class="flex gap-2">
+                    <button id="addAppointmentBtn"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition duration-300 text-base font-boardmark">
+                        등록
                     </button>
+                    <button id="editAppointmentBtn"
+                        class="bg-red-300 hover:bg-red-400 text-red-900 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 text-base font-boardmark">
+                        편집
+                    </button>
+                </div>
+            </div>
+
             <div id="appointment-list" class="space-y-4">
                 <p id="empty-message"
                     class="text-center text-gray-500 p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700/50 font-gowoon">
@@ -92,10 +103,10 @@
         <div id="message-modal"
             class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4"
             onclick="closeModal()">
-            <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100"
+            <div id="modal-content" class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100"
                 onclick="event.stopPropagation()">
                 <h3 class="text-xl font-bold mb-3 text-red-600 font-jalnan">알림</h3>
-                <p id="modal-message" class="text-gray-700 mb-4 font-gowoon"></p>
+                <p id="modal-message" class="text-gray-700 dark:text-gray-300 mb-4 font-gowoon"></p>
                 <button onclick="closeModal()"
                     class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-semibold transition font-boardmark">확인</button>
             </div>
@@ -103,7 +114,6 @@
 
     </div>
 
-    
     <div
         class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 z-40">
         <nav class="flex justify-around items-center h-16">
