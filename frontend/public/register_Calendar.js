@@ -52,7 +52,8 @@ function renderCalendar(dateToDisplay) {
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day);
         const todayAtMidnight = new Date(TODAY.setHours(0, 0, 0, 0)); // 오늘 자정
-        const dateAtMidnight = new Date(date.setHours(0, 0, 0, 0)); // 해당 날짜 자정
+        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        span.setAttribute('data-date', dateString);
 
         const span = document.createElement('span');
         span.classList.add('p-2', 'cursor-pointer', 'rounded-full', 'hover:bg-gray-200');
@@ -62,15 +63,20 @@ function renderCalendar(dateToDisplay) {
         // 12.01 수정사항. [과거 날짜 비활성화 및 오늘 날짜 강조]
         if (dateAtMidnight.getTime() < todayAtMidnight.getTime()) {
              // 과거 날짜: 비활성화 및 회색 처리
-             span.classList.add('text-gray-400', 'cursor-default', 'opacity-60', 'hover:bg-transparent');
-             span.onclick = (e) => e.stopPropagation(); // 클릭 방지
+             span.classList.add('bg-green-500', 'text-white', 'font-bold', 'today-fixed');
         } else {
              // 미래 및 오늘 날짜: 선택 가능
              // 12.01 수정사항. [오늘 날짜 강조]: 오늘 날짜에 초록색 강조
              if (dateAtMidnight.getTime() === todayAtMidnight.getTime()) {
-                 span.classList.add('bg-green-500', 'text-white', 'font-bold', 'selected-date');
-                 // 12.01 수정: 임시 데이터에 오늘 날짜를 기본값으로 설정
-                 tempAppointmentData.schedule_date = span.getAttribute('data-date');
+                 span.classList.add('bg-green-500', 'text-white', 'font-bold', 'today-fixed');
+             }
+             // 12.01 수정사항. [이전에 선택된 날짜 빨간색으로 복원]
+             if (tempAppointmentData.schedule_date === dateString) {
+                  // 오늘 날짜가 아니면서, 선택된 경우 빨간색으로 표시
+                  if (dateAtMidnight.getTime() !== todayAtMidnight.getTime()) {
+                      span.classList.add('bg-red-500', 'text-white', 'font-bold', 'selected-date');
+                  }
+                  span.setAttribute('selected', 'true');
              }
 
              span.classList.add('date-cell'); // 이벤트 리스너를 위한 클래스 추가
@@ -102,20 +108,30 @@ function handleMonthChange(direction) {
  * 12.01 추가사항. [단일 날짜 선택 로직]
  */
 function handleDateSelection(e) {
-    // 12.01 수정사항. [클릭 기능만 유지]: 선택 가능한 날짜 셀만 처리
-    if (e.target.classList.contains('date-cell')) {
-        // 모든 선택 상태 초기화
-        document.querySelectorAll('.date-cell').forEach(span => {
-            span.classList.remove('bg-green-500', 'bg-indigo-500', 'text-white', 'font-bold');
+    const selectedCell = e.target;
+    if (selectedCell.classList.contains('date-cell')) {
+        // 모든 이전 선택 상태 제거 (오늘 고정 초록색은 제거하지 않음)
+        document.querySelectorAll('.date-cell[selected]').forEach(span => {
+            span.classList.remove('bg-red-500', 'text-white', 'font-bold', 'selected');
             span.removeAttribute('selected');
         });
+
+        const dateAtMidnight = new Date(selectedCell.getAttribute('data-date')).setHours(0, 0, 0, 0);
+        const todayAtMidnight = new Date(TODAY.setHours(0, 0, 0, 0));
+
+        // 12.01 수정사항. [오늘 날짜와 분리]: 오늘이 아닌 날짜를 클릭하면 빨간색으로 강조
+        if (dateAtMidnight !== todayAtMidnight) {
+             selectedCell.classList.add('bg-red-500', 'text-white', 'font-bold', 'selected-date');
+        } else {
+             // 오늘 날짜를 클릭한 경우, 고정 초록색을 유지하고 추가적인 색상 변경은 하지 않음
+             selectedCell.classList.add('today-fixed'); // 이미 renderCalendar에서 적용됨
+        }
         
         // 선택 상태 적용 (초록색으로 통일)
-        e.target.classList.add('bg-green-500', 'text-white', 'font-bold', 'selected-date');
-        e.target.setAttribute('selected', 'true');
+        selectedCell.setAttribute('selected', 'true');
 
         // 임시 데이터에 선택 날짜 저장
-        tempAppointmentData.schedule_date = e.target.getAttribute('data-date');
+        tempAppointmentData.schedule_date = selectedCell.getAttribute('data-date');
         localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempAppointmentData));
     }
 }
