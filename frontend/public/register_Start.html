@@ -29,7 +29,8 @@
     </script>
 
     <link rel="stylesheet" href="./main.css">
-    <script src="./register_Start.js" defer></script>
+    <script src="./register.Start.js" defer></script>
+    <script src="./theme.js" defer></script> 
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen pb-20">
@@ -53,12 +54,12 @@
             </div>
         </header>
 
-        <section class="gradient-bg h-48 sm:h-56 p-6 flex flex-col justify-end text-white relative overflow-hidden">
+        <section class="gradient-bg h-64 p-6 flex flex-col justify-end text-white relative overflow-hidden">
             <h1 class="text-3xl font-extrabold font-jalnan leading-tight">
                 쉽고 빠른 약속 정하기<br>
                 모두의 시간
             </h1>
-            </section>
+        </section>
 
         <main class="p-4 space-y-8 -mt-12 bg-white dark:bg-gray-800 rounded-t-xl z-20 relative">
             
@@ -74,12 +75,12 @@
                 <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 font-gowoon">약속 참여 인원을 알려주세요</label>
                     <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg">
-                        <button type="button" id="decrement-btn" class="p-3 bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 font-bold text-xl rounded-l-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                        <button type="button" id="decrement-btn" class="p-4 bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 font-extrabold text-2xl rounded-l-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
                             -
                         </button>
-                        <input type="number" id="participant-count" name="participants_count" value="4" min="1" readonly
+                        <input type="number" id="participant-count" name="participants_count" value="0" min="0" readonly
                                class="flex-grow text-center text-lg font-bold bg-white dark:bg-gray-800 dark:text-white border-x border-gray-300 dark:border-gray-600 py-3 appearance-none font-jalnan">
-                        <button type="button" id="increment-btn" class="p-3 bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 font-bold text-xl rounded-r-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                        <button type="button" id="increment-btn" class="p-4 bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 font-extrabold text-2xl rounded-r-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
                             +
                         </button>
                     </div>
