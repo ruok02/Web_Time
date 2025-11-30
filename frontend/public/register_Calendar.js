@@ -2,6 +2,7 @@
 
 // 상수 정의
 const TEMP_APPOINTMENT_KEY = 'ko_og_temp_appt';
+// HTML 요소 참조
 const calendarGrid = document.getElementById('calendar-grid');
 const skipTimeAdjustCheckbox = document.getElementById('skip-time-adjust');
 const nextStepBtn = document.getElementById('nextStepBtn');
@@ -21,16 +22,20 @@ let displayedDate = new Date(currentYear, currentMonth, 1); // 현재 화면에 
 
 // --- 1. 달력 동적 생성 로직 ---
 
+/**
+ * 12.01 추가사항. [핵심 기능]: 현재 월의 달력 그리드를 동적으로 생성하고 렌더링합니다.
+ * @param {Date} dateToDisplay - 표시할 월의 Date 객체 (1일 기준)
+ */
 function renderCalendar(dateToDisplay) {
     const year = dateToDisplay.getFullYear();
     const month = dateToDisplay.getMonth(); // 0-11
     
     // 현재 월 표시 업데이트
     currentMonthDisplay.textContent = `${year}년 ${month + 1}월`;
-    calendarGrid.innerHTML = ''; // 그리드 초기화
+    calendarGrid.innerHTML = ''; // 12.01 수정사항. [오류 수정]: 그리드 초기화
     
-    const firstDayOfMonth = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 (일) ~ 6 (토)
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // 해당 월의 마지막 날짜
 
     // 12.01 수정사항. [과거 월 이동 비활성화]: 오늘 월 이전으로 이동하지 못하게 막기
     if (year === currentYear && month === currentMonth) {
