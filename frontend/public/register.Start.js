@@ -3,6 +3,8 @@
 // 상수 정의
 const TEMP_APPOINTMENT_KEY = 'ko_og_temp_appt';
 const participantCountInput = document.getElementById('participant-count');
+// 12.01 추가사항. 약속 장소 입력 요소 참조
+const apptPlaceInput = document.getElementById('appt-place'); 
 const nextStepBtn = document.getElementById('nextStepBtn');
 const noCountCheckbox = document.getElementById('no-count');
 
@@ -55,8 +57,15 @@ nextStepBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
     const titleInput = document.getElementById('appt-name');
+    const placeInput = document.getElementById('appt-place'); // 12.01 추가
+    
     if (!titleInput.value.trim()) {
         alert('약속 이름을 입력해주세요.');
+        return;
+    }
+    // 12.01 추가사항. 장소 입력 검사
+    if (!placeInput.value.trim()) {
+        alert('약속 장소를 입력해주세요.');
         return;
     }
     
@@ -66,6 +75,7 @@ nextStepBtn.addEventListener('click', (e) => {
     // 11.30 추가사항. 임시 데이터 구조 생성 및 localStorage 저장
     const tempData = {
         title: titleInput.value.trim(),
+        place: placeInput.value.trim(), // 12.01 추가
         participants_count: participantCount,
         no_count: noCountCheckbox.checked,
         schedule: null, 
@@ -93,6 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const existingData = JSON.parse(localStorage.getItem(TEMP_APPOINTMENT_KEY));
     if (existingData) {
         document.getElementById('appt-name').value = existingData.title || '';
+        document.getElementById('appt-place').value = existingData.place || ''; // 12.01 추가
         document.getElementById('no-count').checked = existingData.no_count || false;
 
         // 카운트 복원
