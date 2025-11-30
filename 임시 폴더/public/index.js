@@ -1,37 +1,5 @@
-// --- 1. 다크 모드 토글 로직 ---
-const themeToggleBtn = document.getElementById('theme-toggle');
-const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-
-if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark');
-    themeToggleLightIcon.classList.remove('hidden');
-} else {
-    document.documentElement.classList.remove('dark');
-    themeToggleDarkIcon.classList.remove('hidden');
-}
-
-themeToggleBtn.addEventListener('click', function () {
-    themeToggleDarkIcon.classList.toggle('hidden');
-    themeToggleLightIcon.classList.toggle('hidden');
-    if (localStorage.getItem('color-theme')) {
-        if (localStorage.getItem('color-theme') === 'light') {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('color-theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('color-theme', 'light');
-        }
-    } else {
-        if (document.documentElement.classList.contains('dark')) {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('color-theme', 'light');
-        } else {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('color-theme', 'dark');
-        }
-    }
-});
+// 11.30 수정사항. [다크 모드 로직 삭제]: 다크 모드 관련 코드는 theme.js로 이관되었습니다.
+// 이 파일은 이제 메인 페이지 애니메이션 로직만 담당합니다.
 
 // --- 2. 개별 섹션 애니메이션 로직 ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -293,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     // OFF: 미도착 상태
                     checkinStatus.innerHTML = '<span class="mr-2 text-4xl ">❌</span> 장소 미도착';
-                    checkinStatus.className = "mb-8 text-3xl  font-boardmark font-bold text-red-500 dark:text-red-400 transition-all duration-300 flex items-center";
+                    checkinStatus.className = "mb-8 text-3xl font-boardmark font-bold text-red-500 dark:text-red-400 transition-all duration-300 flex items-center";
 
                     checkinDesc.innerText = "약속장소 도착 후 체크하기!";
                     checkinDesc.className = "mt-8 text-lg text-gray-500 font-boardmark dark:text-gray-400 font-medium transition-all duration-300";
@@ -309,6 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 초기 로드 시 강제 실행
+    // 초기 로드 시 강제 실행 (theme.js에 초기화 로직이 있으므로, 이 부분은 애니메이션 시작용으로만 사용)
     startCalendarAnim();
 });

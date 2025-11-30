@@ -11,6 +11,7 @@ const addAppointmentBtn = document.getElementById('addAppointmentBtn');
 const editAppointmentBtn = document.getElementById('editAppointmentBtn'); 
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
+// 11.30 추가사항. 약속 편집 버튼 참조 추가
 
 // 로그아웃 함수 (전역 함수 - 버튼 작동 보장)
 function logout() {
@@ -261,7 +262,7 @@ window.onload = function () {
     if (addAppointmentBtn) {
         addAppointmentBtn.addEventListener('click', () => {
             // 실제 구현 시 window.location.href = 'register.html';
-            showMessage("약속 등록 폼 (register.html) 페이지로 이동합니다. \n(다음 단계에서 구현 예정)");
+            window.location.href = '/register_Start.html';
         });
     }
 
