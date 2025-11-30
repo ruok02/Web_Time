@@ -124,7 +124,7 @@ function handleDateSelection(e) {
     // 'date-cell'이며 'today-fixed'(오늘 날짜)가 아닌 셀만 처리
     if (selectedCell.classList.contains('date-cell') && !selectedCell.classList.contains('today-fixed')) {
         
-        // 12.01 수정사항. [클릭 로직]: 모든 이전 선택 상태 제거
+        // ... (모든 이전 선택 상태 제거 로직 유지) ...
         document.querySelectorAll('.date-cell[selected]').forEach(span => {
             span.classList.remove('bg-red-500', 'text-white', 'font-bold', 'selected', 'selected-date');
             span.removeAttribute('selected');
@@ -139,7 +139,7 @@ function handleDateSelection(e) {
         localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempAppointmentData));
         
         // 12.01 추가사항. 선택 날짜 요약 업데이트
-        updateDateSummary();
+        updateDateSummary(); // 여기서 요약을 업데이트합니다.
     }
 }
 
@@ -147,18 +147,28 @@ function handleDateSelection(e) {
  * 12.01 추가사항. [날짜 요약 업데이트 기능]
  */
 function updateDateSummary() {
-    // 12.01 수정사항. DOM 요소를 load 시점에 참조
-    const selectedDateSummary = document.getElementById('selected-date-summary');
-    const selectedDateElement = document.querySelector('.selected-date, .today-fixed');
+    // 12.01 최종 수정: [선택된 빨간색 셀]을 먼저 찾고, 없으면 [오늘의 초록색 셀]을 찾습니다.
+    const selectedRedElement = document.querySelector('.selected-date'); // 빨간색 (사용자가 클릭한)
+    const todayGreenElement = document.querySelector('.today-fixed');    // 초록색 (오늘 날짜)
     
-    if (selectedDateElement && selectedDateSummary) {
-        const dateString = selectedDateElement.getAttribute('data-date');
+    // 12.01 수정사항. [요약 텍스트에 사용할 최종 요소 결정]
+    const finalSelectedElement = selectedRedElement || todayGreenElement;
+    
+    const selectedDateSummary = document.getElementById('selected-date-summary');
+    
+    if (finalSelectedElement && selectedDateSummary) {
+        const dateString = finalSelectedElement.getAttribute('data-date');
         selectedDateSummary.textContent = `🗓️ 선택된 날짜: ${dateString}`;
+        
+        // 12.01 추가사항. (handleDateSelection 외에서 호출될 경우 대비)
+        // tempAppointmentData에도 최종 선택된 날짜를 반영합니다.
+        tempAppointmentData.schedule_date = dateString;
+        localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempAppointmentData));
+        
     } else if (selectedDateSummary) {
          selectedDateSummary.textContent = `🗓️ 날짜를 선택해주세요.`;
     }
 }
-
 
 /**
  * 12.01 추가사항. [데이터 가드]: 1단계 데이터 누락 시 리다이렉트
@@ -224,7 +234,7 @@ window.addEventListener('load', () => {
     nextMonthBtn.addEventListener('click', () => handleMonthChange('next'));
     calendarGrid.addEventListener('click', handleDateSelection);
     
-    // 12.01 최종 수정: nextStepBtn 이벤트 리스너를 load 이벤트 안에 배치
+    // 12.01 최종 수정: nextStepBtn 이벤트 리스너를 함수로 정의하여 확실하게 연결
     nextStepBtn.addEventListener('click', handleNextStepClick);
     
     // 3. 임시 데이터에서 시간 복원 (뒤로가기 시)
