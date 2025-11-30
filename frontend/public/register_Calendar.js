@@ -11,6 +11,8 @@ const currentMonthDisplay = document.getElementById('current-month-display');
 const prevMonthBtn = document.getElementById('prev-month-btn');
 const nextMonthBtn = document.getElementById('next-month-btn');
 const arrivalTimeInput = document.getElementById('arrival-time-input'); 
+// 12.01 추가사항. [선택 날짜 요약 표시 요소]
+const selectedDateSummary = document.getElementById('selected-date-summary');
 
 // 임시 데이터 로드
 let tempAppointmentData = JSON.parse(localStorage.getItem(TEMP_APPOINTMENT_KEY));
@@ -135,8 +137,28 @@ function handleDateSelection(e) {
         // 임시 데이터에 선택 날짜 저장
         tempAppointmentData.schedule_date = selectedCell.getAttribute('data-date');
         localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempAppointmentData));
+        
+        // 12.01 추가사항. 선택 날짜 요약 업데이트
+        updateDateSummary();
     }
 }
+
+/**
+ * 12.01 추가사항. [날짜 요약 업데이트 기능]
+ */
+function updateDateSummary() {
+    // 12.01 수정사항. DOM 요소를 load 시점에 참조
+    const selectedDateSummary = document.getElementById('selected-date-summary');
+    const selectedDateElement = document.querySelector('.selected-date, .today-fixed');
+    
+    if (selectedDateElement && selectedDateSummary) {
+        const dateString = selectedDateElement.getAttribute('data-date');
+        selectedDateSummary.textContent = `🗓️ 선택된 날짜: ${dateString}`;
+    } else if (selectedDateSummary) {
+         selectedDateSummary.textContent = `🗓️ 날짜를 선택해주세요.`;
+    }
+}
+
 
 /**
  * 12.01 추가사항. [데이터 가드]: 1단계 데이터 누락 시 리다이렉트
@@ -153,7 +175,7 @@ function checkDataGuard() {
 }
 
 
-// --- 3. 폼 제출 로직 (다음 단계 이동) ---
+// --- 3. フォーム 제출 로직 (다음 단계 이동) ---
 
 /**
  * 12.01 최종 수정: [버튼 작동 보장] '다음' 버튼 클릭 시 실행되는 핵심 로직 함수
@@ -209,4 +231,7 @@ window.addEventListener('load', () => {
     if (tempAppointmentData.schedule && tempAppointmentData.schedule.time_arrival) {
         arrivalTimeInput.value = tempAppointmentData.schedule.time_arrival;
     }
+    
+    // 12.01 추가사항. 초기 로드 시 데이터 요약 업데이트
+    updateDateSummary(); 
 });
