@@ -119,6 +119,7 @@ function handleMonthChange(direction) {
  */
 function handleDateSelection(e) {
     const selectedCell = e.target;
+    // 'date-cell'이며 'today-fixed'(오늘 날짜)가 아닌 셀만 처리
     if (selectedCell.classList.contains('date-cell') && !selectedCell.classList.contains('today-fixed')) {
         
         // 12.01 수정사항. [클릭 로직]: 모든 이전 선택 상태 제거
@@ -152,12 +153,48 @@ function checkDataGuard() {
 }
 
 
+// --- 3. 폼 제출 로직 (다음 단계 이동) ---
+
+/**
+ * 12.01 최종 수정: [버튼 작동 보장] '다음' 버튼 클릭 시 실행되는 핵심 로직 함수
+ */
+function handleNextStepClick(e) {
+    e.preventDefault();
+    
+    const selectedDateElement = document.querySelector('.selected-date, .today-fixed'); // 오늘 날짜 또는 선택된 날짜
+    const arrivalTime = arrivalTimeInput.value; // HTML5 input[type="time"]에서 값 가져옴
+    
+    if (!selectedDateElement) {
+        alert("약속 날짜를 선택해주세요.");
+        return;
+    }
+    if (!arrivalTime) {
+        alert("약속 도착 시간을 설정해주세요.");
+        return;
+    }
+
+    // 최종 스케줄 데이터 업데이트
+    const finalSchedule = {
+        date: selectedDateElement.getAttribute('data-date'), 
+        time_arrival: arrivalTime,
+        skip_adjust: skipTimeAdjustCheckbox.checked
+    };
+    
+    tempAppointmentData.schedule = finalSchedule;
+    // 1단계 데이터와 2단계 데이터(날짜, 시간)를 최종적으로 LocalStorage에 저장
+    localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempAppointmentData));
+    
+    // 3단계 페이지로 이동
+    window.location.href = '/register_Penalty.html';
+}
+
+
 // --- 4. 초기화 실행 ---
 
 window.addEventListener('load', () => {
     if (!checkDataGuard()) return;
 
-    // 1. 달력 초기 렌더링 (오늘 날짜 기준으로 시작)
+    // 1. 달력 초기 렌더링
     renderCalendar(displayedDate);
     
     // 2. 이벤트 리스너 설정
@@ -165,37 +202,8 @@ window.addEventListener('load', () => {
     nextMonthBtn.addEventListener('click', () => handleMonthChange('next'));
     calendarGrid.addEventListener('click', handleDateSelection);
     
-    // 12.01 최종 수정: nextStepBtn 이벤트 리스너를 load 이벤트 안으로 옮겨 요소 로드 보장
-    // --- 3. 폼 제출 로직 (다음 단계 이동) ---
-    nextStepBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        const selectedDateElement = document.querySelector('.selected-date, .today-fixed'); // 오늘 날짜 또는 선택된 날짜
-        const arrivalTime = arrivalTimeInput.value;
-        
-        if (!selectedDateElement) {
-            alert("약속 날짜를 선택해주세요.");
-            return;
-        }
-        if (!arrivalTime) {
-            alert("약속 도착 시간을 설정해주세요.");
-            return;
-        }
-
-        // 최종 스케줄 데이터 업데이트
-        const finalSchedule = {
-            date: selectedDateElement.getAttribute('data-date'), 
-            time_arrival: arrivalTime,
-            skip_adjust: skipTimeAdjustCheckbox.checked
-        };
-        
-        tempAppointmentData.schedule = finalSchedule;
-        // 1단계 데이터와 2단계 데이터(날짜, 시간)를 최종적으로 LocalStorage에 저장
-        localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempAppointmentData));
-        
-        // 3단계 페이지로 이동
-        window.location.href = '/register_Penalty.html';
-    });
+    // 12.01 최종 수정: nextStepBtn 이벤트 리스너를 load 이벤트 안에 배치
+    nextStepBtn.addEventListener('click', handleNextStepClick);
     
     // 3. 임시 데이터에서 시간 복원 (뒤로가기 시)
     if (tempAppointmentData.schedule && tempAppointmentData.schedule.time_arrival) {
