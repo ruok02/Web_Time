@@ -1,10 +1,11 @@
-// 11.30 수정사항. 약속 등록 1단계 (register_Start.html) 로직
+// 11.30 추가사항. 약속 등록 1단계 (register_Start.html) 로직
 
 // 상수 정의
 const TEMP_APPOINTMENT_KEY = 'ko_og_temp_appt';
 const participantCountInput = document.getElementById('participant-count');
 const nextStepBtn = document.getElementById('nextStepBtn');
 const noCountCheckbox = document.getElementById('no-count');
+
 
 // --- 1. 유틸리티 함수 (버튼 작동 문제 해결) ---
 
@@ -16,18 +17,20 @@ function setupParticipantCounter() {
     const decrementBtn = document.getElementById('decrement-btn');
     const incrementBtn = document.getElementById('increment-btn');
     
-    // 11.30 수정사항. [오류 수정]: input 값을 숫자로 파싱하여 유효성 검사 후 증감
+    // 11.30 수정사항. [증감 로직 수정]: 기본값 0, 0 미만으로 감소 불가
     decrementBtn.addEventListener('click', () => {
         let count = parseInt(participantCountInput.value);
-        if (isNaN(count)) count = 1; // 값이 없으면 1로 시작
-        if (count > 1) {
+        if (isNaN(count)) count = 0;
+        if (count > 0) {
             participantCountInput.value = count - 1;
+        } else {
+            participantCountInput.value = 0;
         }
     });
 
     incrementBtn.addEventListener('click', () => {
         let count = parseInt(participantCountInput.value);
-        if (isNaN(count)) count = 1; // 값이 없으면 1로 시작
+        if (isNaN(count)) count = 0;
         participantCountInput.value = count + 1;
     });
 
@@ -40,59 +43,13 @@ function setupParticipantCounter() {
         if (e.target.checked) {
             participantCountInput.value = ''; // 인원수 미정 시 값 비움
         } else if (!participantCountInput.value) {
-            participantCountInput.value = '2'; // 다시 활성화 시 기본값
+            participantCountInput.value = '0'; // 다시 활성화 시 기본값
         }
     });
 }
 
 
-// --- 2. 다크 모드 로직 (register_Calendar, register_Penalty 재사용 예정) ---
-// 11.30 추가사항. 다크 모드 로직을 별도로 정의합니다.
-
-function initializeDarkMode() {
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-    
-    // 초기 로드 시 테마 설정 및 아이콘 표시
-    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-        if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
-    } else {
-        document.documentElement.classList.remove('dark');
-        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
-    }
-
-    // 클릭 이벤트 리스너 설정
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', function () {
-            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
-            if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
-            
-            // 상태 변경 로직
-            if (localStorage.getItem('color-theme')) {
-                if (localStorage.getItem('color-theme') === 'light') {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                }
-            } else {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                }
-            }
-        });
-    }
-}
-
-
-// --- 3. 폼 제출 로직 (다음 단계 이동 및 임시 저장) ---
+// --- 2. 폼 제출 로직 (다음 단계 이동 및 임시 저장) ---
 
 nextStepBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -104,7 +61,6 @@ nextStepBtn.addEventListener('click', (e) => {
     }
     
     // 데이터 수집
-    // 11.30 수정사항. 카테고리 로직 제거에 따른 수정
     const participantCount = noCountCheckbox.checked ? null : parseInt(participantCountInput.value);
     
     // 11.30 추가사항. 임시 데이터 구조 생성 및 localStorage 저장
@@ -127,14 +83,13 @@ nextStepBtn.addEventListener('click', (e) => {
 });
 
 
-// --- 4. 초기화 ---
+// --- 3. 초기화 ---
 
 window.addEventListener('DOMContentLoaded', () => {
-    // 11.30 추가사항. 다크 모드 초기화
-    initializeDarkMode(); 
+    // 11.30 수정사항. setupParticipantCounter 호출 (버튼 이벤트 리스너 설정)
     setupParticipantCounter();
     
-    // 11.30 수정사항. [데이터 복원 로직 간소화]: 카테고리 복원 로직 제거
+    // 데이터 복원 로직 (뒤로가기 시 이전 내용 복원)
     const existingData = JSON.parse(localStorage.getItem(TEMP_APPOINTMENT_KEY));
     if (existingData) {
         document.getElementById('appt-name').value = existingData.title || '';
@@ -144,7 +99,8 @@ window.addEventListener('DOMContentLoaded', () => {
         if (existingData.no_count) {
              participantCountInput.readOnly = true;
         } else {
-             participantCountInput.value = existingData.participants_count || '2';
+             // 11.30 수정사항. 기본값 0으로 복원 (min="0" 반영)
+             participantCountInput.value = existingData.participants_count >= 0 ? existingData.participants_count : '0';
         }
     }
 });
