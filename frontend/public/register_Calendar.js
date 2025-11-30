@@ -124,7 +124,7 @@ function handleDateSelection(e) {
     // 'date-cell'이며 'today-fixed'(오늘 날짜)가 아닌 셀만 처리
     if (selectedCell.classList.contains('date-cell') && !selectedCell.classList.contains('today-fixed')) {
         
-        // ... (모든 이전 선택 상태 제거 로직 유지) ...
+        // 12.01 수정사항. (모든 이전 선택 상태 제거 로직 유지)
         document.querySelectorAll('.date-cell[selected]').forEach(span => {
             span.classList.remove('bg-red-500', 'text-white', 'font-bold', 'selected', 'selected-date');
             span.removeAttribute('selected');
