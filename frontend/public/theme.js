@@ -1,7 +1,8 @@
-// 11.30 추가사항. [공통 UI 로직 분리]: 다크 모드 토글 기능을 담당합니다.
+// 11.30 추가사항. [공통 UI 로직]: 다크 모드 토글 기능을 담당합니다.
+// 이 코드는 index.html, user.html, login.html, signup.html 등 모든 페이지에서 참조됩니다.
 
 function initializeDarkMode() {
-    // DOM 요소를 안전하게 참조
+    // DOM 요소를 안전하게 참조 (이 시점에는 HTML에 SVG가 존재한다고 가정)
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
     const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
@@ -39,7 +40,7 @@ function initializeDarkMode() {
                     localStorage.setItem('color-theme', 'dark');
                 }
             }
-            // 11.30 추가사항. 테마 변경 시 동적 스타일 업데이트 (모든 페이지에서 호출 가능)
+            // 테마 변경 시 동적 스타일 업데이트 (모든 페이지에서 호출 가능)
             if (typeof updateDynamicStyles === 'function') {
                 updateDynamicStyles();
             }
