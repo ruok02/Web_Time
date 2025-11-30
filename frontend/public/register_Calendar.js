@@ -73,9 +73,9 @@ function renderCalendar(dateToDisplay) {
              span.onclick = (e) => e.stopPropagation(); // 클릭 방지
         } else {
              
-             // 12.01 수정사항. [오늘 날짜 강조 고정]: 초록색 고정
+             // 12.01 수정사항. [오늘 날짜 초기 강조]: 초록색 고정
              if (dateAtMidnight === todayAtMidnight) {
-                 span.classList.add('bg-green-500', 'text-white', 'font-bold', 'today-fixed', 'selected-date'); // today-fixed는 항상 selected-date 클래스를 가지게 합니다.
+                 span.classList.add('bg-green-500', 'text-white', 'font-bold', 'today-fixed', 'selected-date'); 
                  span.setAttribute('selected', 'true');
                  
                  // 12.01 수정: 임시 데이터에 오늘 날짜가 없으면 기본값으로 설정
@@ -88,6 +88,7 @@ function renderCalendar(dateToDisplay) {
              // 12.01 수정사항. [이전에 선택된 날짜 빨간색으로 복원]
              // 단, 오늘 날짜가 아니어야 빨간색으로 표시 (오늘 날짜는 위에서 초록색 고정)
              if (tempAppointmentData.schedule_date === dateString && dateAtMidnight !== todayAtMidnight) {
+                  span.classList.remove('bg-green-500', 'today-fixed'); // 이전에 초록색이었더라도 빨간색으로 덮어씀
                   span.classList.add('bg-red-500', 'text-white', 'font-bold', 'selected-date');
                   span.setAttribute('selected', 'true');
              }
@@ -118,37 +119,32 @@ function handleMonthChange(direction) {
 }
 
 /**
- * 12.01 최종 수정: [오늘 날짜 클릭 허용 및 선택 색상 관리]
+ * 12.01 최종 수정: [오늘 날짜 클릭 시 빨간색으로 변경]
  */
 function handleDateSelection(e) {
     const selectedCell = e.target;
     // 'date-cell'이며 과거 날짜가 아닌 셀은 모두 처리
     if (selectedCell.classList.contains('date-cell') && !selectedCell.classList.contains('cursor-default')) {
         
-        // 1. 모든 이전 선택 상태 제거 (오늘 고정 초록색은 제거하지 않음)
+        // 1. 모든 이전 선택 상태 제거
         document.querySelectorAll('.date-cell[selected]').forEach(span => {
-            // 빨간색, selected 속성 제거
+            // 선택 상태를 제거하고, 오늘 날짜가 아닌 경우 빨간색/selected 클래스를 제거
             span.classList.remove('bg-red-500', 'text-white', 'font-bold', 'selected', 'selected-date');
             span.removeAttribute('selected');
             
-            // 오늘 날짜인 경우 초록색을 다시 고정
-            if (span.classList.contains('today-fixed')) {
-                 span.classList.add('bg-green-500', 'text-white', 'font-bold', 'selected-date');
-                 span.setAttribute('selected', 'true');
-            }
+            // 오늘 날짜인 경우, 초록색 클래스는 유지 (renderCalendar에서 다시 처리됨)
         });
         
-        // 2. 새로운 셀에 선택 상태 적용
-        const isToday = selectedCell.classList.contains('today-fixed');
-
-        if (!isToday) {
-            // 오늘이 아닌 경우: 빨간색으로 선택 강조
-            selectedCell.classList.add('bg-red-500', 'text-white', 'font-bold', 'selected-date');
-        } 
-        // 오늘인 경우 (isToday): 초록색은 유지되고 아래 selected 마크만 적용됨
+        // 2. 새로운 셀에 선택 상태 적용 (오늘이든 아니든 빨간색 적용)
         
+        // **12.01 핵심 수정:** 오늘 날짜인 경우, 고정된 초록색을 먼저 제거하고 빨간색을 적용합니다.
+        if (selectedCell.classList.contains('today-fixed')) {
+            selectedCell.classList.remove('bg-green-500', 'today-fixed');
+        }
+        
+        // 모든 선택은 빨간색으로 통일하여 가시성을 높임
+        selectedCell.classList.add('bg-red-500', 'text-white', 'font-bold', 'selected-date');
         selectedCell.setAttribute('selected', 'true');
-        selectedCell.classList.add('selected-date'); // 데이터 쿼리를 위해 클래스 추가
 
         // 3. 임시 데이터에 선택 날짜 저장
         tempAppointmentData.schedule_date = selectedCell.getAttribute('data-date');
@@ -163,11 +159,8 @@ function handleDateSelection(e) {
  * 12.01 추가사항. [날짜 요약 업데이트 기능]: 빨간색 선택 날짜를 최우선으로 반영합니다.
  */
 function updateDateSummary() {
-    const selectedRedElement = document.querySelector('.selected-date:not(.today-fixed)'); // 사용자가 클릭한 빨간색 셀
-    const todayGreenElement = document.querySelector('.today-fixed');    // 오늘 날짜 (초록색)
-    
-    // 12.01 수정사항. [요약 텍스트에 사용할 최종 요소 결정]: 빨간색이 있으면 빨간색 우선, 없으면 초록색
-    const finalSelectedElement = selectedRedElement || todayGreenElement;
+    // 12.01 수정사항. [선택된 날짜(빨간색 또는 초록색)를 최우선으로 찾음]
+    const finalSelectedElement = document.querySelector('.selected-date');
     
     const selectedDateSummary = document.getElementById('selected-date-summary');
     
@@ -200,7 +193,7 @@ function checkDataGuard() {
 }
 
 
-// --- 3. フォーム 제출 로직 (다음 단계 이동) ---
+// --- 3. 제출 로직 (다음 단계 이동) ---
 
 /**
  * 12.01 최종 수정: [버튼 작동 보장] '다음' 버튼 클릭 시 실행되는 핵심 로직 함수
@@ -208,7 +201,7 @@ function checkDataGuard() {
 function handleNextStepClick(e) {
     e.preventDefault();
     
-    const selectedDateElement = document.querySelector('.selected-date, .today-fixed'); // 오늘 날짜 또는 선택된 날짜
+    const selectedDateElement = document.querySelector('.selected-date'); // 선택된 날짜 (빨간색 또는 초록색)
     const arrivalTime = arrivalTimeInput.value; // HTML5 input[type="time"]에서 값 가져옴
     
     if (!selectedDateElement) {
