@@ -1,25 +1,21 @@
-// 11.30 추가사항. 약속 등록 1단계 (register_Start.html) 로직
-
-// 상수 정의
+// 11.30 수정사항. 약속 등록 1단계 (register_Start.html) 로직
 const TEMP_APPOINTMENT_KEY = 'ko_og_temp_appt';
-// HTML 요소 참조 (전역 변수로 선언 - 기존 방식 유지)
-const participantCountInput = document.getElementById('participant-count');
-const nextStepBtn = document.getElementById('nextStepBtn');
-const noCountCheckbox = document.getElementById('no-count');
 
-
-// --- 1. 유틸리티 함수 (버튼 작동 문제 해결) ---
-
-/**
- * 11.30 수정사항. [버튼 작동 오류 해결]: 참여 인원수 컨트롤러 (증가/감소)
- * - 버튼의 클릭 이벤트 리스너를 추가하여 input 값을 직접 변경합니다.
- */
-function setupParticipantCounter() {
+// 안전한 실행을 위해 모든 로직을 DOMContentLoaded 안에 넣습니다.
+window.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. HTML 요소 참조
+    const participantCountInput = document.getElementById('participant-count');
     const decrementBtn = document.getElementById('decrement-btn');
     const incrementBtn = document.getElementById('increment-btn');
+    const noCountCheckbox = document.getElementById('no-count');
+    const nextStepBtn = document.getElementById('nextStepBtn');
     
-    // 11.30 수정사항. [증감 로직 수정]: 기본값 0, 0 미만으로 감소 불가
-    if (decrementBtn) {
+    const titleInput = document.getElementById('appt-name');
+    const placeInput = document.getElementById('appt-place');
+
+    // 2. 카운터 버튼 로직
+    if (decrementBtn && incrementBtn && participantCountInput) {
         decrementBtn.addEventListener('click', () => {
             let count = parseInt(participantCountInput.value);
             if (isNaN(count)) count = 0;
@@ -29,9 +25,7 @@ function setupParticipantCounter() {
                 participantCountInput.value = 0;
             }
         });
-    }
 
-    if (incrementBtn) {
         incrementBtn.addEventListener('click', () => {
             let count = parseInt(participantCountInput.value);
             if (isNaN(count)) count = 0;
@@ -39,92 +33,79 @@ function setupParticipantCounter() {
         });
     }
 
-    // 체크박스 상태 변경 시 카운터 활성화/비활성화
-    if (noCountCheckbox) {
+    // 3. 체크박스 로직
+    if (noCountCheckbox && participantCountInput) {
         noCountCheckbox.addEventListener('change', (e) => {
             participantCountInput.readOnly = e.target.checked;
             if (decrementBtn) decrementBtn.disabled = e.target.checked;
             if (incrementBtn) incrementBtn.disabled = e.target.checked;
             
             if (e.target.checked) {
-                participantCountInput.value = ''; // 인원수 미정 시 값 비움
-            } else if (!participantCountInput.value) {
-                participantCountInput.value = '0'; // 다시 활성화 시 기본값
+                participantCountInput.value = ''; 
+            } else {
+                participantCountInput.value = '0'; 
             }
         });
     }
-}
 
+    // 4. 다음 버튼 클릭 (저장 및 이동)
+    if (nextStepBtn) {
+        nextStepBtn.addEventListener('click', (e) => {
+            e.preventDefault();
 
-// --- 2. 폼 제출 로직 (다음 단계 이동 및 임시 저장) ---
+            // 유효성 검사
+            if (!titleInput.value.trim()) {
+                alert('약속 이름을 입력해주세요.');
+                return;
+            }
+            // 🚨 장소 입력 검사 추가
+            if (!placeInput.value.trim()) {
+                alert('약속 장소를 입력해주세요.');
+                return;
+            }
+            
+            // 데이터 수집
+            let participantCount = 0;
+            if (!noCountCheckbox.checked) {
+                participantCount = parseInt(participantCountInput.value);
+                if (isNaN(participantCount)) participantCount = 0;
+            } else {
+                participantCount = null;
+            }
+            
+            // 임시 데이터 저장
+            const tempData = {
+                title: titleInput.value.trim(),
+                place: placeInput.value.trim(), // 장소 저장
+                participants_count: participantCount,
+                no_count: noCountCheckbox.checked,
+                schedule: null, 
+                penalty: null
+            };
 
-if (nextStepBtn) {
-    nextStepBtn.addEventListener('click', (e) => {
-        e.preventDefault();
+            try {
+                localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempData));
+                // 다음 단계로 이동
+                window.location.href = '/register_Calendar.html'; 
+            } catch (error) {
+                alert("데이터 저장 실패: " + error);
+            }
+        });
+    }
 
-        const titleInput = document.getElementById('appt-name');
-        // 12.01 추가사항. 장소 입력값 가져오기
-        const placeInput = document.getElementById('appt-place'); 
-
-        if (!titleInput.value.trim()) {
-            alert('약속 이름을 입력해주세요.');
-            return;
-        }
-        // 12.01 추가사항. 장소 입력 확인
-        if (!placeInput.value.trim()) {
-            alert('약속 장소를 입력해주세요.');
-            return;
-        }
-        
-        // 데이터 수집
-        const participantCount = noCountCheckbox.checked ? null : parseInt(participantCountInput.value);
-        
-        // 11.30 추가사항. 임시 데이터 구조 생성 및 localStorage 저장
-        const tempData = {
-            title: titleInput.value.trim(),
-            place: placeInput.value.trim(), // 12.01 추가: 장소 데이터 저장
-            participants_count: participantCount,
-            no_count: noCountCheckbox.checked,
-            schedule: null, 
-            penalty: null
-        };
-
-        try {
-            localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempData));
-            // 11.30 수정사항. 2단계 페이지 파일명 변경 반영
-            window.location.href = '/register_Calendar.html'; 
-        } catch (error) {
-            alert("데이터 저장에 실패했습니다. (Local Storage 문제)");
-            console.error(error);
-        }
-    });
-}
-
-
-// --- 3. 초기화 ---
-
-window.addEventListener('DOMContentLoaded', () => {
-    // 11.30 수정사항. setupParticipantCounter 호출 (버튼 이벤트 리스너 설정)
-    setupParticipantCounter();
-    
-    // 데이터 복원 로직 (뒤로가기 시 이전 내용 복원)
+    // 5. 데이터 복원 (뒤로가기 시)
     const existingData = JSON.parse(localStorage.getItem(TEMP_APPOINTMENT_KEY));
     if (existingData) {
-        const titleInput = document.getElementById('appt-name');
-        const placeInput = document.getElementById('appt-place'); // 12.01 추가
-
         if (titleInput) titleInput.value = existingData.title || '';
-        // 12.01 추가: 장소 데이터 복원
-        if (placeInput) placeInput.value = existingData.place || ''; 
+        if (placeInput) placeInput.value = existingData.place || ''; // 장소 복원
         
-        if (noCountCheckbox) noCountCheckbox.checked = existingData.no_count || false;
-
-        // 카운트 복원
-        if (existingData.no_count) {
-             participantCountInput.readOnly = true;
-        } else {
-             // 11.30 수정사항. 기본값 0으로 복원 (min="0" 반영)
-             participantCountInput.value = existingData.participants_count >= 0 ? existingData.participants_count : '0';
+        if (noCountCheckbox) {
+            noCountCheckbox.checked = existingData.no_count || false;
+            if (existingData.no_count) {
+                if (participantCountInput) participantCountInput.readOnly = true;
+            } else {
+                if (participantCountInput) participantCountInput.value = existingData.participants_count >= 0 ? existingData.participants_count : '0';
+            }
         }
     }
 });
