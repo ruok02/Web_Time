@@ -66,7 +66,7 @@
             
             <h3 class="text-2xl font-bold text-gray-800 dark:text-white font-jalnan">어떤 약속인가요?</h3>
 
-            <form id="step1Form" class="space-y-6">
+            <div id="step1Form" class="space-y-6"> 
                 <div class="space-y-2">
                     <label for="appt-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 font-gowoon">약속 이름을 알려주세요</label>
                     <input type="text" id="appt-name" name="title" placeholder="약속 제목" required
@@ -98,11 +98,11 @@
                 </div>
 
                 <div class="h-10"></div>
-            </form>
+            </div>
         </main>
 
         <div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto p-4 bg-white dark:bg-gray-800 shadow-t-lg border-t dark:border-gray-700 z-40">
-             <button id="nextStepBtn" type="submit" form="step1Form"
+             <button id="nextStepBtn" type="button" 
                     class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg font-boardmark text-base">
                 다음
             </button>
