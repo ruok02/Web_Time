@@ -1,24 +1,25 @@
-// 11.30 추가사항. 약속 등록 1단계 (register_Start.html) 로직
+// 11.30 수정사항. 약속 등록 1단계 (register_Start.html) 로직
 
 // 상수 정의
 const TEMP_APPOINTMENT_KEY = 'ko_og_temp_appt';
 const participantCountInput = document.getElementById('participant-count');
 const nextStepBtn = document.getElementById('nextStepBtn');
 const noCountCheckbox = document.getElementById('no-count');
-const categoryButtons = document.querySelectorAll('.category-btn');
-let selectedCategory = 'team'; // 기본값 설정
 
-// --- 1. 유틸리티 함수 ---
+// --- 1. 유틸리티 함수 (버튼 작동 문제 해결) ---
 
 /**
- * 참여 인원수 컨트롤러 (증가/감소)
+ * 11.30 수정사항. [버튼 작동 오류 해결]: 참여 인원수 컨트롤러 (증가/감소)
+ * - 버튼의 클릭 이벤트 리스너를 추가하여 input 값을 직접 변경합니다.
  */
 function setupParticipantCounter() {
     const decrementBtn = document.getElementById('decrement-btn');
     const incrementBtn = document.getElementById('increment-btn');
     
+    // 11.30 수정사항. [오류 수정]: input 값을 숫자로 파싱하여 유효성 검사 후 증감
     decrementBtn.addEventListener('click', () => {
         let count = parseInt(participantCountInput.value);
+        if (isNaN(count)) count = 1; // 값이 없으면 1로 시작
         if (count > 1) {
             participantCountInput.value = count - 1;
         }
@@ -26,6 +27,7 @@ function setupParticipantCounter() {
 
     incrementBtn.addEventListener('click', () => {
         let count = parseInt(participantCountInput.value);
+        if (isNaN(count)) count = 1; // 값이 없으면 1로 시작
         participantCountInput.value = count + 1;
     });
 
@@ -43,28 +45,54 @@ function setupParticipantCounter() {
     });
 }
 
-/**
- * 카테고리 버튼 선택 로직
- */
-function setupCategorySelection() {
-    categoryButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // 모든 버튼 초기화
-            categoryButtons.forEach(btn => {
-                btn.classList.remove('bg-indigo-500', 'text-white', 'shadow');
-                btn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
-            });
 
-            // 선택된 버튼 활성화
-            button.classList.add('bg-indigo-500', 'text-white', 'shadow');
-            button.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
-            selectedCategory = button.getAttribute('data-category');
+// --- 2. 다크 모드 로직 (register_Calendar, register_Penalty 재사용 예정) ---
+// 11.30 추가사항. 다크 모드 로직을 별도로 정의합니다.
+
+function initializeDarkMode() {
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    
+    // 초기 로드 시 테마 설정 및 아이콘 표시
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+    } else {
+        document.documentElement.classList.remove('dark');
+        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+    }
+
+    // 클릭 이벤트 리스너 설정
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function () {
+            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
+            if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
+            
+            // 상태 변경 로직
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
         });
-    });
+    }
 }
 
 
-// --- 2. 폼 제출 로직 (다음 단계 이동 및 임시 저장) ---
+// --- 3. 폼 제출 로직 (다음 단계 이동 및 임시 저장) ---
 
 nextStepBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -76,37 +104,37 @@ nextStepBtn.addEventListener('click', (e) => {
     }
     
     // 데이터 수집
+    // 11.30 수정사항. 카테고리 로직 제거에 따른 수정
     const participantCount = noCountCheckbox.checked ? null : parseInt(participantCountInput.value);
     
     // 11.30 추가사항. 임시 데이터 구조 생성 및 localStorage 저장
     const tempData = {
-        category: selectedCategory,
         title: titleInput.value.trim(),
         participants_count: participantCount,
         no_count: noCountCheckbox.checked,
-        // 이 단계에서는 달력/시간 데이터는 아직 비어있음
         schedule: null, 
         penalty: null
     };
 
     try {
         localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempData));
-        // 2단계 페이지로 이동 (register_Calendar.html)
+        // 11.30 수정사항. 2단계 페이지 파일명 변경 반영
         window.location.href = '/register_Calendar.html'; 
     } catch (error) {
-        alert("데이터 저장에 실패했습니다. (Local Storage 용량 초과 등)");
+        alert("데이터 저장에 실패했습니다. (Local Storage 문제)");
         console.error(error);
     }
 });
 
 
-// --- 3. 초기화 ---
+// --- 4. 초기화 ---
 
 window.addEventListener('DOMContentLoaded', () => {
+    // 11.30 추가사항. 다크 모드 초기화
+    initializeDarkMode(); 
     setupParticipantCounter();
-    setupCategorySelection();
     
-    // 11.30 추가사항. 임시 데이터 로드 (뒤로가기 시 이전에 입력한 내용 복원)
+    // 11.30 수정사항. [데이터 복원 로직 간소화]: 카테고리 복원 로직 제거
     const existingData = JSON.parse(localStorage.getItem(TEMP_APPOINTMENT_KEY));
     if (existingData) {
         document.getElementById('appt-name').value = existingData.title || '';
@@ -116,11 +144,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (existingData.no_count) {
              participantCountInput.readOnly = true;
         } else {
-             participantCountCountInput.value = existingData.participants_count || '2';
+             participantCountInput.value = existingData.participants_count || '2';
         }
-
-        // 카테고리 복원
-        const categoryToRestore = existingData.category || 'team';
-        document.querySelector(`.category-btn[data-category="${categoryToRestore}"]`).click(); // 클릭 이벤트 실행
     }
 });
