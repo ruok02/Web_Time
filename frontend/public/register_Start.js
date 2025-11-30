@@ -83,7 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // 임시 데이터 객체 생성
             const tempData = {
                 title: titleVal,
-                place: placeVal, 
+                place: placeInput.value.trim(), // 12.01 장소 저장 안되서 수정 
                 participants_count: participantCount,
                 no_count: noCountCheckbox ? noCountCheckbox.checked : false,
                 schedule: null, 

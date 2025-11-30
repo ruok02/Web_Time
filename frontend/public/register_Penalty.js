@@ -34,7 +34,7 @@ function finalizeAppointment(penaltyText) {
         title: tempAppointmentData.title || "새 약속",
         date: tempAppointmentData.schedule.date,
         time: tempAppointmentData.schedule.time_arrival,
-        place: "미정 (추후 편집)", // 1단계에서 장소 정보가 없었으므로 기본값 설정
+        place: tempAppointmentData.place || "장소 미정", // 1단계에서 장소 정보가 없었으므로 기본값 설정
         penalty: penaltyText,
         participants: tempAppointmentData.participants_count || 1, // 인원수 또는 기본값 1
         status: "예정"
