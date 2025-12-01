@@ -381,12 +381,6 @@ window.onload = function () {
         showMessage('조율 기능은 곧 찾아올게요!');
     };
 
-    // ESC 키로도 모달 닫기
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeMessageModal();
-        }
-    });
     
     // 11.30 추가사항. 초기 렌더링 및 스타일 적용
     renderAppointments(); 
