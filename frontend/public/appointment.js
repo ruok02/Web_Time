@@ -369,9 +369,17 @@ window.onload = function () {
     }
 
     // 11.29 추가사항. 하단 네비게이션 바 버튼 클릭 이벤트 핸들러 (향후 기능 확장 대비)
-    document.getElementById('nav-calendar').onclick = () => showMessage('달력 기능은 향후 구현될 예정입니다.');
-    document.getElementById('nav-home').onclick = () => showMessage('홈 (약속 목록) 화면입니다.');
-    document.getElementById('nav-schedule').onclick = () => showMessage('약속 조율 기능은 향후 구현될 예정입니다.');
+    document.getElementById('nav-calendar').onclick = () => {
+        window.location.href = 'calendar.html';
+    };
+
+    document.getElementById('nav-home').onclick = () => {
+        window.location.href = 'user.html';
+    };
+
+    document.getElementById('nav-schedule').onclick = () => {
+        showMessage('조율 기능은 곧 찾아올게요!');
+    };
     
     // 11.30 추가사항. 초기 렌더링 및 스타일 적용
     renderAppointments(); 
