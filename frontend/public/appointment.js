@@ -368,11 +368,11 @@ window.onload = function () {
 
     // 11.29 추가사항. 하단 네비게이션 바 버튼 클릭 이벤트 핸들러 (향후 기능 확장 대비)
     document.getElementById('nav-calendar').onclick = () => {
-        window.location.href = 'calendar.html';  // 새로 만든 달력 페이지로 이동!
+        window.location.href = '/calendar.html';  // 새로 만든 달력 페이지로 이동!
     };
 
     document.getElementById('nav-home').onclick = () => {
-        window.location.href = 'user.html';      // 지금 이 페이지니까 홈으로 이동 (새로고침 느낌)
+        window.location.href = '/user.html';      // 지금 이 페이지니까 홈으로 이동 (새로고침 느낌)
     };
 
     document.getElementById('nav-schedule').onclick = () => {
