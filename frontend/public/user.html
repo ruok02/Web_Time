@@ -101,16 +101,21 @@
         </main>
 
         <div id="message-modal"
-            class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4"
-            onclick="closeModal()">
-            <div id="modal-content" class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100"
-                onclick="event.stopPropagation()">
-                <h3 class="text-xl font-bold mb-3 text-red-600 font-jalnan">알림</h3>
-                <p id="modal-message" class="text-gray-700 dark:text-gray-300 mb-4 font-gowoon"></p>
-                <button onclick="closeModal()"
-                    class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-semibold transition font-boardmark">확인</button>
-            </div>
-        </div>
+     class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4"
+     onclick="closeMessageModal()">
+    <div id="modal-content" 
+         class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100"
+         onclick="event.stopPropagation()">
+        <h3 class="text-xl font-bold mb-3 text-red-600 font-jalnan">알림</h3>
+        <p id="modal-message" class="text-gray-700 dark:text-gray-300 mb-6 font-gowoon text-center"></p>
+        <button onclick="closeMessageModal()"
+                class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-bold transition font-boardmark shadow-lg">
+            확인
+        </button>
+    </div>
+</div>
+
+        
 
     </div>
 
