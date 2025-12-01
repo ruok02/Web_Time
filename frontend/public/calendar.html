@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>약속 달력 - 꼬옥!</title>
     
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -25,32 +24,44 @@
     <link rel="stylesheet" href="./main.css">
     <script src="./calendar.js" defer></script>
     <script src="./theme.js" defer></script>
+
+    <!-- 달력 부분은 무조건 흰색으로 고정 (다크모드여도!) -->
+    <style>
+        .calendar-card {
+            background-color: white !important;
+            border: 1px solid #e5e7eb;
+        }
+        .dark .calendar-card {
+            background-color: white !important;
+            border-color: #e5e7eb;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen pb-20">
 
     <div class="max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-xl min-h-screen">
         
-        <!-- 헤더: 뒤로가기 + 제목 + 다크모드 토글 (우측 상단) -->
+        <!-- 헤더 -->
         <header class="py-4 px-4 border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-30">
             <div class="flex items-center justify-between">
-                <!-- 뒤로가기 -->
                 <button onclick="history.back()" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
                 </button>
 
-                <!-- 제목 -->
                 <h2 class="text-xl font-bold font-jalnan text-indigo-600 dark:text-indigo-400">약속 달력</h2>
 
-                <!-- 다크모드 토글 버튼 (user.html과 똑같은 코드!) -->
+                <!-- 다크모드 토글 버튼 (user.html과 100% 동일한 아이콘!) -->
                 <button id="theme-toggle"
                     class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition">
-                    <!-- 빛 아이콘 (다크모드일 때 보임) -->
-                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                    
+                    <!-- 태양 아이콘 (라이트 모드일 때 보임) -->
+                    <svg id="theme-toggle-light-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" clip-rule="evenodd"></path>
                     </svg>
-                    <!-- 달 아이콘 (라이트모드일 때 보임) -->
+
+                    <!-- 달 아이콘 (다크 모드일 때 보임) -->
                     <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                     </svg>
@@ -58,16 +69,16 @@
             </div>
         </header>
 
-        <!-- 메인 달력 -->
+        <!-- 메인 달력 (흰색 고정!) -->
         <main class="p-6">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+            <div class="calendar-card rounded-2xl shadow-lg p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <button id="prev-month-btn" class="text-3xl font-bold text-gray-400 hover:text-gray-600 transition">‹</button>
-                    <h3 id="current-month-display" class="text-2xl font-bold font-gowoon"></h3>
-                    <button id="next-month-btn" class="text-3xl font-bold text-gray-400 hover:text-gray-600 transition">›</button>
+                    <button id="prev-month-btn" class="text-3xl font-bold text-gray-400 hover:text-gray-700 transition">‹</button>
+                    <h3 id="current-month-display" class="text-2xl font-bold font-gowoon text-gray-800"></h3>
+                    <button id="next-month-btn" class="text-3xl font-bold text-gray-400 hover:text-gray-700 transition">›</button>
                 </div>
 
-                <div class="grid grid-cols-7 text-center text-sm font-bold mb-4 text-gray-600 dark:text-gray-400 font-gowoon">
+                <div class="grid grid-cols-7 text-center text-sm font-bold mb-4 text-gray-600 font-gowoon">
                     <div class="text-red-500">일</div>
                     <div>월</div>
                     <div>화</div>
@@ -77,18 +88,18 @@
                     <div class="text-blue-500">토</div>
                 </div>
 
-                <div id="calendar-grid" class="grid grid-cols-7 text-center text-lg font-medium font-gowoon">
-                    <!-- JS에서 자동 생성 -->
+                <div id="calendar-grid" class="grid grid-cols-7 text-center text-lg font-medium font-gowoon text-gray-800">
+                    <!-- JS에서 생성 -->
                 </div>
             </div>
 
-            <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400 font-gowoon">
+            <div class="mt-8 text-center text-sm text-gray-600 font-gowoon">
                 <span class="inline-block w-4 h-4 bg-red-500 rounded-full mr-2 align-middle"></span>
                 <span>약속 있는 날</span>
             </div>
         </main>
 
-        <!-- 하단 네비게이션 (user.html과 100% 동일) -->
+        <!-- 하단 네비 (user.html과 동일) -->
         <div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 z-50">
             <nav class="flex justify-around items-center h-16">
                 <button id="nav-calendar" class="text-indigo-600 dark:text-indigo-400 flex flex-col items-center text-xs font-gowoon">
