@@ -7,12 +7,25 @@ const APPOINTMENTS_KEY = 'ko_og_appointments';
 const TEMP_APPOINTMENT_KEY = 'ko_og_temp_appt';
 const EDIT_ID_KEY = 'ko_og_edit_id';
 
+
+
 // HTML 요소 참조
 const appointmentList = document.getElementById('appointment-list');
 const emptyMessage = document.getElementById('empty-message');
 const addAppointmentBtn = document.getElementById('addAppointmentBtn');
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
+
+
+// 1. 삭제 확인 모달 관련 변수 추가 (파일 상단 전역 변수 영역에 추가)
+let deleteTargetId = null; // 삭제할 약속의 ID를 임시 저장
+
+// 2. 삭제 확인 모달 참조 (HTML 요소들)
+const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+const deleteAppointmentTitle = document.getElementById('delete-appointment-title');
+const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+
 
 // 12.01 추가사항. 간편 수정용 전역 변수 및 모달 참조
 let currentEditingId = null;
@@ -186,6 +199,49 @@ function saveSimpleEdit() {
     }
 }
 
+// 3. 삭제 함수 수정 - 확인 모달을 띄우도록 변경
+function deleteAppointment(id) {
+    const appointments = getAppointments();
+    const targetAppt = appointments.find(app => app.id === id);
+    
+    if (!targetAppt) {
+        alert("오류: 약속 정보를 찾을 수 없습니다.");
+        return;
+    }
+    
+    // 삭제할 약속 ID 저장 및 모달에 제목 표시
+    deleteTargetId = id;
+    deleteAppointmentTitle.textContent = targetAppt.title;
+    
+    // 삭제 확인 모달 열기
+    deleteConfirmModal.classList.remove('hidden');
+}
+
+// 4. 실제 삭제 실행 함수
+function executeDelete() {
+    if (!deleteTargetId) return;
+    
+    const appointments = getAppointments();
+    const filteredAppointments = appointments.filter(app => app.id !== deleteTargetId);
+    
+    // localStorage에 저장
+    localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(filteredAppointments));
+    
+    // 성공 메시지 표시
+    showMessage("약속이 삭제되었습니다.");
+    
+    // 모달 닫기 및 목록 새로고침
+    closeDeleteModal();
+    renderAppointments();
+}
+
+// 5. 삭제 모달 닫기 함수
+function closeDeleteModal() {
+    deleteConfirmModal.classList.add('hidden');
+    deleteTargetId = null;
+}
+
+
 /**
  * 약속 목록을 화면에 렌더링하는 함수
  */
@@ -283,6 +339,26 @@ function renderAppointments() {
                 deleteAppointment(app.id);
             };
         }
+
+        // 6. window.onload에 이벤트 리스너 추가 (기존 window.onload 함수 내부에 추가)
+// 삭제 확인 버튼
+if (confirmDeleteBtn) {
+    confirmDeleteBtn.addEventListener('click', executeDelete);
+}
+
+// 삭제 취소 버튼
+if (cancelDeleteBtn) {
+    cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+}
+
+// 모달 외부 클릭 시 닫기
+if (deleteConfirmModal) {
+    deleteConfirmModal.addEventListener('click', (e) => {
+        if (e.target === deleteConfirmModal) {
+            closeDeleteModal();
+        }
+    });
+}
 
         if (appointmentList) appointmentList.appendChild(card);
     });
