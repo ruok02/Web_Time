@@ -269,13 +269,7 @@ function renderAppointments() {
             };
         }
 
-        // 클릭 시 상세 페이지로 이동 (register.html을 임시로 사용)
-        card.onclick = (e) => {
-             // 버튼 클릭 시 상세 보기 이벤트 방지 (2중 안전장치)
-             if(e.target.classList.contains('edit-btn-action') || e.target.classList.contains('del-btn-action')) return;
-            // 실제 구현 시 window.location.href = `detail.html?id=${app.id}`;
-            showMessage(`[${app.title}] 약속 상세 페이지로 이동합니다. (ID: ${app.id})`);
-        };
+        
 
         if (appointmentList) appointmentList.appendChild(card);
     });
