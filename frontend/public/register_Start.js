@@ -79,9 +79,6 @@ window.addEventListener('DOMContentLoaded', () => {
             } else {
                 participantCount = null; // 인원수 미정
             }
-
-            // 12.01 수정사항. [데이터 보존]: 기존 데이터를 불러와서 스케줄/페널티 정보 유지
-            const currentData = JSON.parse(localStorage.getItem(TEMP_APPOINTMENT_KEY));
             
             // 임시 데이터 객체 생성
             const tempData = {
@@ -89,9 +86,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 place: placeInput.value.trim(), // 12.01 장소 저장 안되서 수정 
                 participants_count: participantCount,
                 no_count: noCountCheckbox ? noCountCheckbox.checked : false,
-                // 중요: 기존 데이터가 있으면 유지, 없으면 null (수정 모드 데이터 날림 방지)
-                schedule: currentData ? currentData.schedule : null, 
-                penalty: currentData ? currentData.penalty : null
+                schedule: null, 
+                penalty: null
             };
 
             // 저장 및 이동
