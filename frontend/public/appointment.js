@@ -3,11 +3,16 @@
 
 // 상수 정의: localStorage 키
 const APPOINTMENTS_KEY = 'ko_og_appointments';
+// 12.01 추가사항. 편집 및 임시 저장용 키 정의
+const TEMP_APPOINTMENT_KEY = 'ko_og_temp_appt';
+const EDIT_ID_KEY = 'ko_og_edit_id';
+
 // HTML 요소 참조
 const appointmentList = document.getElementById('appointment-list');
 const emptyMessage = document.getElementById('empty-message');
 const addAppointmentBtn = document.getElementById('addAppointmentBtn');
-// 11.30 변경사항. 편집 버튼 삭제
+// 11.30 변경사항. 편집 버튼 삭제 (user.html에서 버튼 제거됨)
+// const editAppointmentBtn = document.getElementById('editAppointmentBtn'); 
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
 
@@ -75,19 +80,15 @@ function updateDynamicStyles() {
     renderAppointments(); 
     
     // 11.30 추가사항. [모달 배경 색상 반전]
-    // user.html에 'modal-content' ID가 추가되었으므로 이를 사용합니다.
     const modalContent = document.getElementById('modal-content'); 
     const modalMessageText = document.getElementById('modal-message');
-    
     const isDarkMode = document.documentElement.classList.contains('dark');
     
     if (modalContent) {
         if (isDarkMode) {
-            // 다크 모드일 때 (흰색 -> 어두운색)
             modalContent.classList.remove('bg-white');
             modalContent.classList.add('dark:bg-gray-900');
         } else {
-             // 라이트 모드일 때 (어두운색 -> 흰색)
             modalContent.classList.remove('dark:bg-gray-900');
             modalContent.classList.add('bg-white');
         }
@@ -158,6 +159,50 @@ function calculateDDay(dateString) {
     return '약속 지남 🗓️';
 }
 
+// 12.01 추가사항. [약속 삭제 기능]: ID를 받아 해당 약속을 삭제하고 목록을 갱신합니다.
+function deleteAppointment(id) {
+    if (confirm("정말로 이 약속을 삭제하시겠습니까?")) {
+        const appointments = getAppointments();
+        const updatedAppointments = appointments.filter(app => app.id !== id);
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(updatedAppointments));
+        renderAppointments(); // 목록 갱신
+    }
+}
+
+// 12.01 추가사항. [수정 모드 진입 기능]: 
+// 선택한 약속의 데이터를 불러와 3단계 등록 프로세스용 임시 데이터 형식(Mapping)으로 변환하여 저장한 후, 
+// 1단계 페이지(register_Start.html)로 이동합니다.
+function startEditMode(id) {
+    const appointments = getAppointments();
+    const targetAppt = appointments.find(app => app.id === id);
+
+    if (!targetAppt) {
+        alert("약속 정보를 찾을 수 없습니다.");
+        return;
+    }
+
+    // 1. 편집할 ID 저장 (이 값이 있으면 Penalty 단계에서 '수정'으로 처리됨)
+    localStorage.setItem(EDIT_ID_KEY, id);
+
+    // 2. 기존 데이터를 3단계 프로세스용 Temp 포맷으로 변환 (Mapping)
+    const tempData = {
+        title: targetAppt.title,
+        place: targetAppt.place,
+        participants_count: targetAppt.participants,
+        no_count: (targetAppt.participants === null), // 인원 미정이면 true
+        schedule: {
+            date: targetAppt.date,
+            time_arrival: targetAppt.time,
+            skip_adjust: false
+        },
+        penalty: targetAppt.penalty
+    };
+
+    // 3. Temp 데이터 저장 후 1단계 페이지로 이동
+    localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempData));
+    window.location.href = '/register_Start.html';
+}
+
 /**
  * 약속 목록을 화면에 렌더링하는 함수
  */
@@ -204,14 +249,18 @@ function renderAppointments() {
         
         // 약속 카드 생성 (DOM 조작)
         const card = document.createElement('div');
+        
+        // 12.01 변경사항. [스크롤 오류 해결]: class에 'relative' 추가
+        // 버튼이 스크롤 시 둥둥 뜨는 문제를 해결하기 위해 카드를 기준점(relative)으로 설정합니다.
         // 11.30 수정사항. 카드에 다크 모드 배경/폰트 클래스 및 굵기 적용
-        card.className = `p-4 border-l-4 shadow-lg rounded-xl transition duration-300 hover:shadow-xl cursor-pointer font-gowoon ${cardBgClass} ${statusColor.includes('indigo') ? 'border-indigo-500' : statusColor.includes('yellow') ? 'border-yellow-500' : 'border-red-500'}`;
+        card.className = `relative p-4 border-l-4 shadow-lg rounded-xl transition duration-300 hover:shadow-xl cursor-pointer font-gowoon ${cardBgClass} ${statusColor.includes('indigo') ? 'border-indigo-500' : statusColor.includes('yellow') ? 'border-yellow-500' : 'border-red-500'}`;
         card.setAttribute('data-id', app.id);
 
         // 12.01 추가사항. [인원수 표시]: 장소 밑에 인원수 추가
         const participantsText = app.participants ? `${app.participants}명` : '인원 미정';
 
         // 12.01 변경사항. [카드 내용]: 하단에 수정/삭제 버튼 영역 추가
+        // 버튼 영역에 Flexbox(justify-end)를 사용하여 스크롤 시 카드와 함께 자연스럽게 이동하도록 수정 (fixed/absolute 미사용)
         card.innerHTML = `
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-lg font-semibold ${titleTextClass} truncate font-jalnan font-bold">${app.title}</h3>
@@ -231,33 +280,35 @@ function renderAppointments() {
             </p>
             
             <div class="flex justify-end gap-2 mt-2 pt-2 border-t border-gray-100 dark:border-gray-600">
-                <button class="edit-btn-card bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition z-10">수정</button>
-                <button class="delete-btn-card bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition z-10">삭제</button>
+                <button class="edit-btn-action bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition z-10">수정</button>
+                <button class="delete-btn-action bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition z-10">삭제</button>
             </div>
         `;
 
         // 12.01 추가사항. [버튼 이벤트 리스너]: 카드 클릭과 분리
-        const editBtn = card.querySelector('.edit-btn-card');
-        const deleteBtn = card.querySelector('.delete-btn-card');
+        const editBtn = card.querySelector('.edit-btn-action');
+        const deleteBtn = card.querySelector('.delete-btn-action');
 
         if(editBtn) {
             editBtn.onclick = (e) => {
                 e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
-                showMessage("수정 기능은 구현 대기중입니다.");
+                // 12.01 추가사항. 수정 모드 진입 함수 호출
+                startEditMode(app.id);
             };
         }
 
         if(deleteBtn) {
             deleteBtn.onclick = (e) => {
                 e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
-                showMessage("삭제 기능은 구현 대기중입니다.");
+                // 12.01 추가사항. 삭제 함수 호출
+                deleteAppointment(app.id);
             };
         }
 
         // 클릭 시 상세 페이지로 이동 (register.html을 임시로 사용)
         card.onclick = (e) => {
              // 버튼 클릭 시 상세 보기 이벤트 방지 (2중 안전장치)
-             if(e.target.classList.contains('edit-btn-card') || e.target.classList.contains('delete-btn-card')) return;
+             if(e.target.classList.contains('edit-btn-action') || e.target.classList.contains('delete-btn-action')) return;
             // 실제 구현 시 window.location.href = `detail.html?id=${app.id}`;
             showMessage(`[${app.title}] 약속 상세 페이지로 이동합니다. (ID: ${app.id})`);
         };
@@ -278,13 +329,22 @@ window.onload = function () {
     // '새 약속 등록' 버튼 클릭 이벤트 (등록 폼으로 이동)
     if (addAppointmentBtn) {
         addAppointmentBtn.addEventListener('click', () => {
+            // 12.01 추가사항. [등록 모드 초기화]: 편집 중이던 ID가 있다면 삭제하여 '새 등록' 모드로 설정
+            localStorage.removeItem(EDIT_ID_KEY);
+            localStorage.removeItem(TEMP_APPOINTMENT_KEY);
+            
             // 11.30 변경사항. 파일명 변경 반영 (register_Start.html로 이동)
             window.location.href = '/register_Start.html';
         });
     }
 
-    // 11.30 변경사항. editAppointmentBtn 삭제
-  
+    // 11.30 추가사항. 약속 편집 버튼 이벤트 리스너 추가
+    // (12.01: 상단 버튼은 제거되었으므로 관련 로직은 작동하지 않지만, 코드 보존을 위해 남겨둠)
+    if (editAppointmentBtn) {
+        editAppointmentBtn.addEventListener('click', () => {
+             showMessage("약속 편집 기능은 향후 구현될 예정입니다.");
+        });
+    }
 
 
     // 11.29 추가사항. 하단 네비게이션 바 버튼 클릭 이벤트 핸들러 (향후 기능 확장 대비)
