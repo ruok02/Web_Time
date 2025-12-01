@@ -14,6 +14,10 @@ const addAppointmentBtn = document.getElementById('addAppointmentBtn');
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
 
+// 12.01 추가사항. 간편 수정용 전역 변수 및 모달 참조
+let currentEditingId = null;
+const simpleEditModal = document.getElementById('simple-edit-modal');
+
 // 로그아웃 함수 (전역 함수 - 버튼 작동 보장)
 function logout() {
     // 11.29 변경사항. [로그아웃 작동 오류 수정]: if(confirm)을 제거하고 즉시 실행
@@ -120,10 +124,66 @@ function deleteAppointment(id) {
     showMessage("삭제 기능은 구현 대기중입니다.");
 }
 
-// 12.01 추가사항. [수정 모드 진입 기능]: 
-function startEditMode(id) {
-    // 12.01 수정사항: 실제 수정 로직 미구현, 알림만 표시
-    showMessage("수정 기능은 구현 대기중입니다.");
+// --- [NEW] 12.01 간편 수정 모달 열기 ---
+function openSimpleEditModal(id) {
+    const appointments = getAppointments();
+    const targetAppt = appointments.find(app => app.id === id);
+
+    if (!targetAppt) {
+        alert("오류: 약속 정보를 찾을 수 없습니다.");
+        return;
+    }
+
+    currentEditingId = id; // 수정할 ID 저장
+
+    // 모달 입력창에 기존 값 채워넣기
+    document.getElementById('edit-title').value = targetAppt.title;
+    document.getElementById('edit-place').value = targetAppt.place || '';
+    document.getElementById('edit-participants').value = targetAppt.participants || 0;
+    document.getElementById('edit-date').value = targetAppt.date;
+    document.getElementById('edit-time').value = targetAppt.time;
+    document.getElementById('edit-penalty').value = targetAppt.penalty || '';
+
+    simpleEditModal.classList.remove('hidden'); // 모달 보이기
+}
+
+// --- [NEW] 12.01 간편 수정 모달 닫기 ---
+function closeSimpleEditModal() {
+    simpleEditModal.classList.add('hidden');
+    currentEditingId = null;
+}
+
+// --- [NEW] 12.01 간편 수정 저장 로직 ---
+function saveSimpleEdit() {
+    if (!currentEditingId) return;
+
+    const appointments = getAppointments();
+    const index = appointments.findIndex(app => app.id === currentEditingId);
+
+    if (index !== -1) {
+        // 수정된 값 가져오기
+        const updatedAppt = {
+            ...appointments[index], // 기존 ID 유지
+            title: document.getElementById('edit-title').value,
+            place: document.getElementById('edit-place').value,
+            participants: document.getElementById('edit-participants').value,
+            date: document.getElementById('edit-date').value,
+            time: document.getElementById('edit-time').value,
+            penalty: document.getElementById('edit-penalty').value
+        };
+
+        if (!updatedAppt.title || !updatedAppt.date || !updatedAppt.time) {
+            alert("제목, 날짜, 시간은 필수입니다.");
+            return;
+        }
+
+        appointments[index] = updatedAppt;
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments)); // 저장
+        
+        alert("수정이 완료되었습니다.");
+        closeSimpleEditModal();
+        renderAppointments(); // 목록 새로고침
+    }
 }
 
 /**
@@ -213,7 +273,7 @@ function renderAppointments() {
         if(editBtn) {
             editBtn.onclick = (e) => {
                 e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
-                startEditMode(app.id);
+               openSimpleEditModal(app.id);
             };
         }
 
