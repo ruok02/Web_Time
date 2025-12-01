@@ -261,8 +261,8 @@ function renderAppointments() {
             </p>
             
             <div class="flex justify-end gap-2 mt-2 pt-2 border-t border-gray-100 dark:border-gray-600">
-                <button class="edit-btn-card bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition">수정</button>
-                <button class="delete-btn-card bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition">삭제</button>
+                <button class="edit-btn-action bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition">수정</button>
+                <button class="delete-btn-action bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition">삭제</button>
             </div>
         `;
 
