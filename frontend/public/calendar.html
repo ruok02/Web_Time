@@ -100,37 +100,78 @@
         </main>
 
         <!-- 하단 네비 (user.html과 동일) -->
-        <div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 z-50">
-            <nav class="flex justify-around items-center h-16">
-                <button id="nav-calendar" class="text-indigo-600 dark:text-indigo-400 flex flex-col items-center text-xs font-gowoon">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    달력
-                </button>
-
-                <!-- 홈 버튼 → user.html로 이동 (이게 핵심!) -->
-                <button onclick="window.location.href='/user.html'"
-                    class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex flex-col items-center text-xs font-gowoon">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        <!-- 하단 네비게이션 (id 없애고 텍스트로만 동작하게) -->
+<div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 z-50">
+    <nav class="flex justify-around items-center h-16">
+        <button class="text-indigo-600 dark:text-indigo-400 flex flex-col items-center text-xs font-gowoon">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            홈
+            <span>달력</span>
         </button>
 
-                <!-- 조율 버튼 -->
-        <button onclick="showMessage('조율 기능은 곧 찾아올게요!')" 
-                class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex flex-col items-center text-xs font-gowoon">
+        <button class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex flex-col items-center text-xs font-gowoon">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            <span>홈</span>
+        </button>
+
+        <button class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex flex-col items-center text-xs font-gowoon">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            조율
+            <span>조율</span>
         </button>
-            </nav>
-        </div>
+    </nav>
+</div>
     </div>
 
+    
+<!-- 예쁜 메시지 모달 (user.html과 동일하게!) -->
+<div id="message-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-sm mx-4">
+        <p id="modal-message" class="text-center text-lg font-gowoon text-gray-800 dark:text-gray-200"></p>
+        <button onclick="document.getElementById('message-modal').classList.add('hidden')"
+                class="mt-6 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition font-gowoon">
+            확인
+        </button>
+    </div>
+</div>
+
+<!-- calendar.html 전용 showMessage + 네비게이션 클릭 이벤트 -->
+<script>
+    // 진짜 showMessage 함수 정의 (appointment.js와 동일!)
+    function showMessage(message) {
+        const mModal = document.getElementById('message-modal');
+        const mMessage = document.getElementById('modal-message');
+        if (mMessage && mModal) {
+            mMessage.textContent = message;
+            mModal.classList.remove('hidden');
+        } else {
+            alert(message); // fallback
+        }
+    }
+
+    // 페이지 로드 후 네비게이션 버튼에 이벤트 강제 연결
+    document.addEventListener('DOMContentLoaded', function() {
+        // 홈 버튼
+        const homeBtn = Array.from(document.querySelectorAll('nav button')).find(btn => 
+            btn.textContent.includes('홈')
+        );
+        if (homeBtn) {
+            homeBtn.onclick = () => window.location.href = 'user.html';
+        }
+
+        // 조율 버튼
+        const scheduleBtn = Array.from(document.querySelectorAll('nav button')).find(btn => 
+            btn.textContent.includes('조율')
+        );
+        if (scheduleBtn) {
+            scheduleBtn.onclick = () => showMessage('조율 기능은 곧 찾아올게요!');
+        }
+    });
+</script>
     
 </body>
 </html>
