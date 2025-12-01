@@ -11,8 +11,6 @@ const EDIT_ID_KEY = 'ko_og_edit_id';
 const appointmentList = document.getElementById('appointment-list');
 const emptyMessage = document.getElementById('empty-message');
 const addAppointmentBtn = document.getElementById('addAppointmentBtn');
-// 11.30 변경사항. 편집 버튼 삭제 (user.html에서 버튼 제거됨)
-// const editAppointmentBtn = document.getElementById('editAppointmentBtn'); 
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
 
@@ -25,51 +23,8 @@ function logout() {
     window.location.href = '/index.html'; // 절대 경로 사용
 }
 
-// --- 2. 다크 모드 토글 로직 함수 (initializeDarkMode) ---
-function initializeDarkMode() {
-    // 11.29 변경사항. [JS 오류 수정]: DOM 요소를 다시 참조하여 안전성 확보
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-    
-    // 초기 로드 시 테마 설정 및 아이콘 표시
-    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-        if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
-    } else {
-        document.documentElement.classList.remove('dark');
-        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
-    }
+// --- 2. 다크 모드 토글 로직 함수 (initializeDarkMode) theme.js로 이관 ---
 
-    // 클릭 이벤트 리스너 설정
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', function () {
-            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
-            if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
-            
-            // 상태 변경 로직
-            if (localStorage.getItem('color-theme')) {
-                if (localStorage.getItem('color-theme') === 'light') {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                }
-            } else {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                }
-            }
-            // 11.30 추가사항. 다크 모드 전환 후 동적 요소들의 색상 업데이트
-            updateDynamicStyles();
-        });
-    }
-}
 
 /**
  * 11.30 추가사항. 다크 모드 전환 시 동적 요소들의 스타일을 업데이트합니다.
