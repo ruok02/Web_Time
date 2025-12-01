@@ -236,6 +236,13 @@ function closeDeleteModal() {
     deleteTargetId = null;
 }
 
+if (confirmDeleteBtn) confirmDeleteBtn.onclick = executeDelete;
+if (cancelDeleteBtn) cancelDeleteBtn.onclick = closeDeleteModal;
+
+// 모달 바깥 클릭해도 닫히게
+deleteConfirmModal.onclick = (e) => {
+    if (e.target === deleteConfirmModal) closeDeleteModal();
+};
 
 /**
  * 약속 목록을 화면에 렌더링하는 함수
