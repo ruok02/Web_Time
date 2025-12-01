@@ -128,47 +128,61 @@
     </div>
 
     
-<!-- 예쁜 메시지 모달 (user.html과 동일하게!) -->
-<div id="message-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center z-50">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-sm mx-4">
-        <p id="modal-message" class="text-center text-lg font-gowoon text-gray-800 dark:text-gray-200"></p>
-        <button onclick="document.getElementById('message-modal').classList.add('hidden')"
-                class="mt-6 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition font-gowoon">
+<div id="message-modal"
+     class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4"
+     onclick="closeMessageModal()">
+    <div id="modal-content" 
+         class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100"
+         onclick="event.stopPropagation()">
+        <h3 class="text-xl font-bold mb-3 text-red-600 font-jalnan">알림</h3>
+        <p id="modal-message" class="text-gray-700 dark:text-gray-300 mb-6 font-gowoon text-center"></p>
+        <button onclick="closeMessageModal()"
+                class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-bold transition font-boardmark shadow-lg">
             확인
         </button>
     </div>
 </div>
 
-<!-- calendar.html 전용 showMessage + 네비게이션 클릭 이벤트 -->
 <script>
-    // 진짜 showMessage 함수 정의 (appointment.js와 동일!)
+    // 진짜 showMessage 함수 (appointment.js와 완전 동일!)
     function showMessage(message) {
-        const mModal = document.getElementById('message-modal');
-        const mMessage = document.getElementById('modal-message');
-        if (mMessage && mModal) {
-            mMessage.textContent = message;
-            mModal.classList.remove('hidden');
+        const modal = document.getElementById('message-modal');
+        const msgElement = document.getElementById('modal-message');
+        if (modal && msgElement) {
+            msgElement.textContent = message;
+            modal.classList.remove('hidden');
         } else {
-            alert(message); // fallback
+            alert(message);
         }
     }
 
-    // 페이지 로드 후 네비게이션 버튼에 이벤트 강제 연결
-    document.addEventListener('DOMContentLoaded', function() {
-        // 홈 버튼
-        const homeBtn = Array.from(document.querySelectorAll('nav button')).find(btn => 
-            btn.textContent.includes('홈')
-        );
-        if (homeBtn) {
-            homeBtn.onclick = () => window.location.href = 'user.html';
+    // 모달 닫기 함수
+    function closeMessageModal() {
+        const modal = document.getElementById('message-modal');
+        if (modal) {
+            modal.classList.add('hidden');
         }
+    }
 
-        // 조율 버튼
-        const scheduleBtn = Array.from(document.querySelectorAll('nav button')).find(btn => 
-            btn.textContent.includes('조율')
-        );
-        if (scheduleBtn) {
-            scheduleBtn.onclick = () => showMessage('조율 기능은 곧 찾아올게요!');
+    // 페이지 로드 후 네비게이션 버튼 이벤트 강제 연결
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('nav button');
+        buttons.forEach(btn => {
+            const text = btn.textContent.trim();
+            
+            if (text.includes('홈')) {
+                btn.onclick = () => window.location.href = 'user.html';
+            }
+            if (text.includes('조율')) {
+                btn.onclick = () => showMessage('조율 기능은 곧 찾아올게요!');
+            }
+        });
+    });
+
+    // ESC 키로도 모달 닫기 (프로 느낌!)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeMessageModal();
         }
     });
 </script>
