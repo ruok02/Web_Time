@@ -7,8 +7,7 @@ const APPOINTMENTS_KEY = 'ko_og_appointments';
 const appointmentList = document.getElementById('appointment-list');
 const emptyMessage = document.getElementById('empty-message');
 const addAppointmentBtn = document.getElementById('addAppointmentBtn');
-// 11.30 추가사항. 약속 편집 버튼 참조 추가
-const editAppointmentBtn = document.getElementById('editAppointmentBtn'); 
+// 11.30 변경사항. 편집 버튼 삭제
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
 
@@ -284,12 +283,8 @@ window.onload = function () {
         });
     }
 
-    // 11.30 추가사항. 약속 편집 버튼 이벤트 리스너 추가 (상단 버튼 - 필요 시 유지)
-    if (editAppointmentBtn) {
-        editAppointmentBtn.addEventListener('click', () => {
-             showMessage("약속 편집 기능은 향후 구현될 예정입니다.");
-        });
-    }
+    // 11.30 변경사항. editAppointmentBtn 삭제
+  
 
 
     // 11.29 추가사항. 하단 네비게이션 바 버튼 클릭 이벤트 핸들러 (향후 기능 확장 대비)
