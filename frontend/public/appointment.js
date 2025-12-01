@@ -131,11 +131,6 @@ function calculateDDay(dateString) {
     return '약속 지남 🗓️';
 }
 
-// 12.01 추가사항. [약속 삭제 기능]: ID를 받아 해당 약속을 삭제하고 목록을 갱신합니다.
-function deleteAppointment(id) {
-    // 12.01 수정사항: 실제 삭제 로직 미구현, 알림만 표시
-    showMessage("삭제 기능은 구현 대기중입니다.");
-}
 
 // --- [NEW] 12.01 간편 수정 모달 열기 ---
 function openSimpleEditModal(id) {
@@ -378,6 +373,11 @@ window.onload = function () {
     document.getElementById('nav-schedule').onclick = () => {
         showMessage('조율 기능은 준비 중이에요 준비되면 알려드릴게요!');
     };
+
+    // 위의 기능들 안되면 다시 복구
+    //document.getElementById('nav-calendar').onclick = () => showMessage('달력 기능은 향후 구현될 예정입니다.');
+    //document.getElementById('nav-home').onclick = () => showMessage('홈 (약속 목록) 화면입니다.');
+    //document.getElementById('nav-schedule').onclick = () => showMessage('약속 조율 기능은 향후 구현될 예정입니다.');
     
     // 11.30 추가사항. 초기 렌더링 및 스타일 적용
     renderAppointments(); 
