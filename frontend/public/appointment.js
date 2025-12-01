@@ -209,15 +209,10 @@ function renderAppointments() {
         card.className = `p-4 border-l-4 shadow-lg rounded-xl transition duration-300 hover:shadow-xl cursor-pointer font-gowoon ${cardBgClass} ${statusColor.includes('indigo') ? 'border-indigo-500' : statusColor.includes('yellow') ? 'border-yellow-500' : 'border-red-500'}`;
         card.setAttribute('data-id', app.id);
 
-        // 클릭 시 상세 페이지로 이동 (register.html을 임시로 사용)
-        card.onclick = () => {
-            // 실제 구현 시 window.location.href = `detail.html?id=${app.id}`;
-            showMessage(`[${app.title}] 약속 상세 페이지로 이동합니다. (ID: ${app.id})`);
-        };
-        
         // 12.01 추가사항. [인원수 표시]: 장소 밑에 인원수 추가
         const participantsText = app.participants ? `${app.participants}명` : '인원 미정';
 
+        // 12.01 변경사항. [카드 내용]: 하단에 수정/삭제 버튼 영역 추가
         card.innerHTML = `
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-lg font-semibold ${titleTextClass} truncate font-jalnan font-bold">${app.title}</h3>
@@ -232,10 +227,41 @@ function renderAppointments() {
             <p class="text-sm ${bodyTextClass} mb-1">
                 <span class="font-medium">일시:</span> ${app.date} ${app.time}
             </p>
-            <p class="text-sm ${bodyTextClass}">
+            <p class="text-sm ${bodyTextClass} mb-2">
                 <span class="font-medium text-red-500">페널티:</span> ${app.penalty}
             </p>
+            
+            <div class="flex justify-end gap-2 mt-2 pt-2 border-t border-gray-100 dark:border-gray-600">
+                <button class="edit-btn-card bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition z-10">수정</button>
+                <button class="delete-btn-card bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-lg text-xs font-bold font-boardmark transition z-10">삭제</button>
+            </div>
         `;
+
+        // 12.01 추가사항. [버튼 이벤트 리스너]: 카드 클릭과 분리
+        const editBtn = card.querySelector('.edit-btn-card');
+        const deleteBtn = card.querySelector('.delete-btn-card');
+
+        if(editBtn) {
+            editBtn.onclick = (e) => {
+                e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
+                showMessage("수정 기능은 구현 대기중입니다.");
+            };
+        }
+
+        if(deleteBtn) {
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
+                showMessage("삭제 기능은 구현 대기중입니다.");
+            };
+        }
+
+        // 클릭 시 상세 페이지로 이동 (register.html을 임시로 사용)
+        card.onclick = (e) => {
+             // 버튼 클릭 시 상세 보기 이벤트 방지 (2중 안전장치)
+             if(e.target.classList.contains('edit-btn-card') || e.target.classList.contains('delete-btn-card')) return;
+            // 실제 구현 시 window.location.href = `detail.html?id=${app.id}`;
+            showMessage(`[${app.title}] 약속 상세 페이지로 이동합니다. (ID: ${app.id})`);
+        };
 
         if (appointmentList) appointmentList.appendChild(card);
     });
@@ -258,7 +284,7 @@ window.onload = function () {
         });
     }
 
-    // 11.30 추가사항. 약속 편집 버튼 이벤트 리스너 추가
+    // 11.30 추가사항. 약속 편집 버튼 이벤트 리스너 추가 (상단 버튼 - 필요 시 유지)
     if (editAppointmentBtn) {
         editAppointmentBtn.addEventListener('click', () => {
              showMessage("약속 편집 기능은 향후 구현될 예정입니다.");
