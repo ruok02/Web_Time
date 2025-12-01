@@ -9,14 +9,12 @@ const nextMonthBtn = document.getElementById('next-month-btn');
 let displayedDate = new Date();
 let appointments = [];
 
-// 저장된 약속 불러오기
 function loadAppointments() {
     const data = localStorage.getItem(APPOINTMENTS_KEY);
     appointments = data ? JSON.parse(data) : [];
 }
 
-// 약속 있는 날짜들만 빨간색 동그라미 표시용
-function hasAppointmentOnDate(dateStr) {
+function hasAppointment(dateStr) {
     return appointments.some(app => app.date === dateStr);
 }
 
@@ -31,45 +29,49 @@ function renderCalendar() {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
 
     // 공백
     for (let i = 0; i < firstDay; i++) {
-        calendarGrid.innerHTML += `<span></span>`;
+        calendarGrid.innerHTML += '<div></div>';
     }
 
-    // 날짜 채우기
+    // 날짜들
     for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = `${year}-${String(month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-        const dateObj = new Date(year, month, day);
-        dateObj.setHours(0,0,0,0);
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const thisDate = new Date(year, month, day);
+        thisDate.setHours(0, 0, 0, 0);
 
-        let classes = "p-3 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition text-center";
-        let style = "";
+        let classList = "w-12 h-12 mx-auto flex items-center justify-center rounded-full transition";
 
-        if (hasAppointmentOnDate(dateStr)) {
-            classes += " bg-red-500 text-white font-bold"; // 약속 있으면 빨간 동그라미
-        } else if (dateObj.getTime() === today.getTime()) {
-            classes += " bg-green-500 text-white font-bold";
+        if (hasAppointment(dateStr)) {
+            classList += " bg-red-500 text-white font-bold shadow-lg";
+        } else if (thisDate.getTime() === today.getTime()) {
+            classList += " bg-green-500 text-white font-bold";
+        } else {
+            classList += " hover:bg-gray-200 dark:hover:bg-gray-700";
         }
 
-        if (dateObj < today) {
-            classes += " text-gray-400 cursor-default";
+        if (thisDate < today) {
+            classList += " text-gray-400";
         }
 
-        calendarGrid.innerHTML += `<span class="${classes}" onclick="showAppointments('${dateStr}')">${day}</span>`;
+        calendarGrid.innerHTML += `
+            <div class="${classList}" onclick="showDayAppointments('${dateStr}')">
+                ${day}
+            </div>
+        `;
     }
 }
 
-// 날짜 클릭하면 그 날짜에 어떤 약속 있는지 간단히 alert
-function showAppointments(dateStr) {
-    const apps = appointments.filter(app => app.date === dateStr);
-    if (apps.length === 0) {
-        alert(`${dateStr}에는 약속이 없어요!`);
+function showDayAppointments(dateStr) {
+    const dayApps = appointments.filter(app => app.date === dateStr);
+    if (dayApps.length === 0) {
+        alert(`${dateStr}\n\n약속이 없어요!`);
         return;
     }
-    const titles = apps.map(app => `• ${app.title}`).join('\n');
-    alert(`${dateStr} 약속 목록\n\n${titles}`);
+    const list = dayApps.map(app => `• ${app.title} (${app.time})`).join('\n');
+    alert(`${dateStr} 약속 목록\n\n${list}`);
 }
 
 prevMonthBtn.onclick = () => {
@@ -82,7 +84,4 @@ nextMonthBtn.onclick = () => {
     renderCalendar();
 };
 
-// 초기화
-window.onload = () => {
-    renderCalendar();
-};
+window.onload = renderCalendar;

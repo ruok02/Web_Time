@@ -29,52 +29,57 @@
         
         <header class="py-4 px-4 border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-30">
             <div class="flex items-center justify-between">
-                <button onclick="window.location.href='/user.html'" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <button onclick="history.back()" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </button>
-                <h2 class="text-lg font-bold font-gowoon">약속 달력</h2>
-                <button id="theme-toggle" class="p-2 rounded-lg">
-                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                </button>
+                <h2 class="text-xl font-bold font-jalnan text-indigo-600 dark:text-indigo-400">약속 달력</h2>
+                <div class="w-10"></div>
             </div>
         </header>
 
-        <main class="p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-5 border border-gray-300 dark:border-gray-700 rounded-lg">
-                <div class="flex justify-between items-center mb-4">
-                    <button id="prev-month-btn" class="text-2xl font-bold text-gray-500"><</button>
-                    <h3 id="current-month-display" class="text-xl font-bold font-gowoon"></h3>
-                    <button id="next-month-btn" class="text-2xl font-bold text-gray-500">></button>
+        <main class="p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center mb-6">
+                    <button id="prev-month-btn" class="text-3xl font-bold text-gray-400 hover:text-gray-600">‹</button>
+                    <h3 id="current-month-display" class="text-2xl font-bold font-gowoon"></h3>
+                    <button id="next-month-btn" class="text-3xl font-bold text-gray-400 hover:text-gray-600">›</button>
                 </div>
 
-                <div class="grid grid-cols-7 text-center text-sm font-semibold mb-2 font-gowoon text-gray-700 dark:text-gray-300">
-                    <span class="text-red-500">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="text-blue-500">토</span>
+                <div class="grid grid-cols-7 text-center text-sm font-bold mb-3 text-gray-600 dark:text-gray-400 font-gowoon">
+                    <div class="text-red-500">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div class="text-blue-500">토</div>
                 </div>
 
-                <div id="calendar-grid" class="grid grid-cols-7 text-center text-lg font-medium font-gowoon mt-3">
+                <div id="calendar-grid" class="grid grid-cols-7 text-center text-lg font-medium font-gowoon">
                     <!-- JS로 채워짐 -->
                 </div>
             </div>
 
-            <div class="mt-8"></div>
+            <div class="mt-8 text-center text-sm text-gray-500 font-gowoon">
+                <span class="inline-block w-4 h-4 bg-red-500 rounded-full mr-2"></span> 약속 있는 날
+            </div>
         </main>
 
-        <!-- 하단 네비게이션 (모두 동일하게 유지) -->
-        <div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-2xl border-t dark:border-gray-700 z-40">
+        <!-- 하단 네비게이션 (user.html과 완전 동일) -->
+        <div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 z-50">
             <nav class="flex justify-around items-center h-16">
-                <button onclick="location.href='calendar.html'" class="text-indigo-600 dark:text-indigo-400 flex flex-col items-center text-xs font-gowoon">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <button id="nav-calendar" class="text-indigo-600 dark:text-indigo-400 flex flex-col items-center text-xs font-gowoon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
                     달력
                 </button>
 
-                <button onclick="location.href='user.html'" class="text-gray-500 dark:text-gray-400 flex flex-col items-center text-xs font-gowoon">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <button id="nav-home" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex flex-col items-center text-xs font-gowoon">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
                     홈
                 </button>
 
-                <button onclick="alert('조율 기능은 준비 중이에요!')" class="text-gray-500 hover:text-indigo-600 flex flex-col items-center text-xs font-gowoon">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <button id="nav-schedule" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex flex-col items-center text-xs font-gowoon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
                     조율
                 </button>
             </nav>
