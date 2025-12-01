@@ -48,7 +48,7 @@
                 
                 <h2 class="text-lg font-bold text-gray-800 dark:text-white font-gowoon">날짜/시간대 선택 (2/3)</h2>
 
-                <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none">
+                <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
                     <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                     <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                 </button>
@@ -58,20 +58,24 @@
         <main class="p-4 space-y-6">
             <h3 id="appt-title-display" class="text-xl font-bold text-indigo-600 dark:text-indigo-400 font-jalnan"></h3>
             
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border dark:border-gray-700">
+            <p id="selected-date-summary" class="text-base text-gray-800 dark:text-white font-boardmark">
+                🗓️ 날짜를 선택해주세요.
+            </p>
+            
+            <div id="calendar-container" class="bg-white rounded-lg shadow p-4 border border-gray-300 text-gray-900">
                 
-                <div class="flex justify-between items-center mb-4">
-                    <button class="text-gray-500 dark:text-gray-400 font-bold hover:text-gray-700 transition text-2xl">
+                <div class="flex justify-between items-center mb-4 text-gray-900">
+                    <button id="prev-month-btn" class="text-gray-500 font-bold hover:text-gray-700 transition text-2xl">
                         <
                     </button>
-                    <span id="current-month" class="text-xl font-bold text-gray-800 dark:text-white font-gowoon">12월</span>
-                    <button class="text-gray-500 dark:text-gray-400 font-bold hover:text-gray-700 transition text-2xl">
+                    <span id="current-month-display" class="text-xl font-bold font-gowoon"></span>
+                    <button id="next-month-btn" class="text-gray-500 font-bold hover:text-gray-700 transition text-2xl">
                         >
                     </button>
-                    <span class="text-indigo-600 dark:text-indigo-400 text-sm font-boardmark">기간</span>
+                    <span class="text-indigo-600 text-sm font-boardmark">하나씩</span>
                 </div>
 
-                <div class="grid grid-cols-7 text-center text-sm font-semibold mb-2 font-gowoon">
+                <div class="grid grid-cols-7 text-center text-sm font-semibold mb-2 font-gowoon text-gray-900">
                     <span class="text-red-500">일</span>
                     <span>월</span>
                     <span>화</span>
@@ -81,52 +85,19 @@
                     <span class="text-blue-500">토</span>
                 </div>
 
-                <div id="calendar-grid" class="grid grid-cols-7 text-center text-sm font-medium font-gowoon">
-                    <span class="p-2"></span>
-                    <span class="p-2">1</span>
-                    <span class="p-2">2</span>
-                    <span class="p-2">3</span>
-                    <span class="p-2">4</span>
-                    <span class="p-2">5</span>
-                    <span class="p-2">6</span>
-                    
-                    <span data-date="2025-12-07" class="p-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded">7</span>
-                    <span data-date="2025-12-08" class="p-2 cursor-pointer bg-indigo-500 text-white rounded font-bold">8</span>
-                    <span data-date="2025-12-09" class="p-2 cursor-pointer bg-indigo-500 text-white rounded font-bold">9</span>
-                    <span data-date="2025-12-10" class="p-2 cursor-pointer bg-indigo-500 text-white rounded font-bold">10</span>
-                    <span data-date="2025-12-11" class="p-2 cursor-pointer bg-indigo-500 text-white rounded font-bold">11</span>
-                    <span data-date="2025-12-12" class="p-2 cursor-pointer bg-indigo-500 text-white rounded font-bold">12</span>
-                    <span data-date="2025-12-13" class="p-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded">13</span>
-                    
-                    <span class="p-2">14</span>
-                    <span class="p-2">15</span>
-                    <span class="p-2">16</span>
-                    <span class="p-2">17</span>
-                    <span class="p-2">18</span>
-                    <span class="p-2">19</span>
-                    <span class="p-2">20</span>
-
-                    <span class="p-2">21</span>
-                    <span class="p-2">22</span>
-                    <span class="p-2">23</span>
-                    <span class="p-2">24</span>
-                    <span class="p-2">25</span>
-                    <span class="p-2">26</span>
-                    <span class="p-2">27</span>
-                    
-                    <span class="p-2">28</span>
-                    <span class="p-2">29</span>
-                    <span class="p-2">30</span>
-                    <span class="p-2">31</span>
-                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 text-center text-sm font-medium font-gowoon text-gray-900">
+                    </div>
 
             </div>
 
             <div class="space-y-4 pt-4">
-                <p class="text-sm text-gray-700 dark:text-gray-300 font-gowoon">시간 범위를 선택하세요:</p>
-                <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-3">
-                    <span class="text-lg text-indigo-600 dark:text-indigo-400 font-boardmark">09:00 부터</span>
-                    <span class="text-lg text-indigo-600 dark:text-indigo-400 font-boardmark">18:00 까지</span>
+                <p class="text-sm text-gray-700 dark:text-gray-300 font-gowoon">약속 도착 시간을 선택하세요:</p>
+                <div class="flex justify-start items-center border-b border-gray-200 dark:border-gray-700 pb-3">
+                    
+                    <input type="time" id="arrival-time-input" value="18:00" 
+                           class="text-lg text-indigo-600 dark:text-indigo-400 font-boardmark cursor-pointer bg-transparent border-none focus:outline-none" 
+                           style="width: 120px;">
+                    <span class="text-lg text-indigo-600 dark:text-indigo-400 font-boardmark">까지</span>
                 </div>
                 
                 <div class="flex items-center">

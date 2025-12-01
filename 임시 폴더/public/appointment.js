@@ -11,11 +11,10 @@ const addAppointmentBtn = document.getElementById('addAppointmentBtn');
 const editAppointmentBtn = document.getElementById('editAppointmentBtn'); 
 const messageModal = document.getElementById('message-modal');
 const modalMessage = document.getElementById('modal-message');
-// 11.30 추가사항. 약속 편집 버튼 참조 추가
 
 // 로그아웃 함수 (전역 함수 - 버튼 작동 보장)
 function logout() {
-    // 11.29 변경사항. [로그아웃 작동 오류 수정]: 확인창 제거, 메시지 후 즉시 실행
+    // 11.29 변경사항. [로그아웃 작동 오류 수정]: if(confirm)을 제거하고 즉시 실행
     localStorage.removeItem('ko_og_logged_in');
     localStorage.removeItem('ko_og_username');
     alert('로그아웃이 완료되었습니다.'); // 사용자 요청 메시지
@@ -168,19 +167,8 @@ function renderAppointments() {
     // 11.29 변경사항. [샘플 데이터/목록 오류 수정]: 변수 선언을 시작 시점으로 이동하여 ReferenceError 방지
     let currentAppointments = getAppointments();
     
-    // 11.29 추가사항. 샘플 데이터 확인 및 생성
-    // 11.30 변경사항. [강제 덮어쓰기 유지]: 최신 샘플 데이터로 강제 업데이트합니다.
-    const sampleData = [{
-        id: '1', title: '조별 과제', date: '2025-11-20', time: '13:00', place: '건축공학관', penalty: '지각 시 아메리카노 1잔', status: '지남'
-    },{
-        id: '2', title: '웹프로젝트 발표 준비', date: '2025-12-03', time: '10:00', place: 'ICT 1관', penalty: '지각 시 아메리카노 1잔', status: '예정'
-    },{
-        id: '3', title: '부산 약속', date: '2025-12-21', time: '17:00', place: '부산 서면', penalty: '저녁 쏘기', status: '예정'
-    }];
-    
-    localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleData));
-    currentAppointments = getAppointments();
-    
+    // 12.01 수정사항. [샘플 데이터 제거]: 
+    // 사용자 요청에 따라 데이터가 없어도 샘플 데이터를 생성하지 않습니다. (빈 목록 유지)
     
     // 목록 초기화 및 상태 체크
     if (appointmentList) {
@@ -226,6 +214,9 @@ function renderAppointments() {
             // 실제 구현 시 window.location.href = `detail.html?id=${app.id}`;
             showMessage(`[${app.title}] 약속 상세 페이지로 이동합니다. (ID: ${app.id})`);
         };
+        
+        // 12.01 추가사항. [인원수 표시]: 장소 밑에 인원수 추가
+        const participantsText = app.participants ? `${app.participants}명` : '인원 미정';
 
         card.innerHTML = `
             <div class="flex justify-between items-center mb-2">
@@ -234,6 +225,9 @@ function renderAppointments() {
             </div>
             <p class="text-sm ${bodyTextClass} mb-1">
                 <span class="font-medium">장소:</span> ${app.place || '미정'}
+            </p>
+            <p class="text-sm ${bodyTextClass} mb-1">
+                <span class="font-medium">인원:</span> ${participantsText}
             </p>
             <p class="text-sm ${bodyTextClass} mb-1">
                 <span class="font-medium">일시:</span> ${app.date} ${app.time}
@@ -255,20 +249,17 @@ window.onload = function () {
 
     // 목록 렌더링 실행 (샘플 데이터 확인 및 목록 표시)
     // 11.30 변경사항. 다크 모드 초기화 후, 동적 스타일 업데이트와 목록 렌더링을 한번에 처리
-    // renderAppointments()를 개별적으로 호출하지 않고, 아래 이벤트 리스너를 설정
     
     // '새 약속 등록' 버튼 클릭 이벤트 (등록 폼으로 이동)
-    const addAppointmentBtn = document.getElementById('addAppointmentBtn');
     if (addAppointmentBtn) {
         addAppointmentBtn.addEventListener('click', () => {
-            // 실제 구현 시 window.location.href = 'register.html';
+            // 11.30 변경사항. 파일명 변경 반영 (register_Start.html로 이동)
             window.location.href = '/register_Start.html';
         });
     }
 
     // 11.30 추가사항. 약속 편집 버튼 이벤트 리스너 추가
-    const editAppointmentBtn = document.getElementById('editAppointmentBtn');
-     if (editAppointmentBtn) {
+    if (editAppointmentBtn) {
         editAppointmentBtn.addEventListener('click', () => {
              showMessage("약속 편집 기능은 향후 구현될 예정입니다.");
         });
