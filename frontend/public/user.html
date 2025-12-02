@@ -237,7 +237,7 @@
     </div>
 
     <script>
-        // ESC 키로도 모달 닫기 → 학교 수업시간에 배웠던 내용으로 'keydown'으로 창 끄게 하기
+        // ESC 키로도 모달 닫기 → 학교 수업시간에 배웠던 내용으로 'keydown'으로 창 끄게 하기 → calendar.html과는 함수가 다르기 때문에 closeModal()로 사용해야 꺼짐.
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeModal();
