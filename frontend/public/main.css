@@ -87,7 +87,7 @@ html {
 
 /*커스텀 컴포넌트/애니메이션*/
 /* 11.25 수정 사항. visual-box 크기 높이 조절 500px -> 350px */
-/* 애니메이션 모듈: 이는 페이지의 특수 효과를 정의하는 로직입니다. CSS 애니메이션은 HTML이나 JS와 분리되어야 관심사의 분리(Separation of Concerns) 원칙을 따릅니다. */
+/* 애니메이션 모듈: 이는 페이지의 특수 효과를 정의하는 로직이기 떄문에 중요. CSS 애니메이션은 HTML이나 JS와 분리되어야 관심사의 분리(Separation of Concerns) 원칙을 따릅니다. → tailwindcss와 분리하는 이유에 대해서 해결완료 */
 @media (min-width: 768px) {
     .feature-visual-box {
         height: 350px;
@@ -112,6 +112,8 @@ html {
     z-index: 50;
 }
 
+/*@keyframes*/
+/* https://velog.io/@ye-ji/CSS-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98keyframes <- @keyframes 사용방법 매우 상세하게 잘나와있어서 도움 됨.*/
 @keyframes flip-scale-up-exit {
     0% {
         transform: translateY(0) rotateX(0) scale(1);

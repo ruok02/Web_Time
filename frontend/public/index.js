@@ -1,7 +1,7 @@
-// 11.30 수정사항. [다크 모드 로직 삭제]: 다크 모드 관련 코드는 theme.js로 이관되었습니다.
-// 이 파일은 이제 메인 페이지 애니메이션 로직만 담당합니다.
+// 11.30 수정사항. [다크 모드 로직 삭제]: 다크 모드 관련 코드는 theme.js로 이관시켰음.
+// index.html에 대한 index.js 만의 javascript 구성
 
-// --- 2. 개별 섹션 애니메이션 로직 ---
+// 개별 섹션 애니메이션 로직
 document.addEventListener('DOMContentLoaded', () => {
 
     // [SECTION 1] 달력 애니메이션 로직
@@ -9,16 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const imgMainCalendar = document.getElementById('img-main-calendar');
     const monthlyCalendarGroup = document.getElementById('monthly-calendar-group');
     const monthlyImages = monthlyCalendarGroup.querySelectorAll('img');
+    // .js에서 사용하기 위해서 아이디 부여시키는 과정임.
 
     let calendarInterval = null;
     let calendarTimeout = null; // [추가] 초기 딜레이를 제어할 타임아웃 변수
     let currentMonthIndex = 0;
 
     const startCalendarAnim = () => {
-        // 실행 중이면 중복 실행 방지 (Timeout도 확인)
+        // 실행 중이면 중복 실행 방지 (Timeout도 확인) 예외 처리 매우 중요하다고 공부중...하
         if (calendarInterval || calendarTimeout) return;
 
-        // 1. 달력 그룹 컨테이너 보이기
+        // 1. 달력 그룹 컨테이너 보이기 - opacity 옵션으로 숨김/보임 옵션 조절중
         monthlyCalendarGroup.classList.remove('opacity-0');
         monthlyCalendarGroup.classList.add('opacity-100');
 
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             img.style.zIndex = '';
         });
 
-        // [수정] 1.5초 뒤에 표지를 숨기고 애니메이션 루프 시작
+        // 1.5초 뒤에 표지를 숨기고 애니메이션 루프 시작
         calendarTimeout = setTimeout(() => {
             // 표지 숨김 (뒤로 보내기)
             imgMainCalendar.classList.remove('opacity-100', 'z-10');
@@ -46,13 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 루프 시작
             calendarInterval = setInterval(() => {
-                if (currentMonthIndex >= 11) {
+                if (currentMonthIndex >= 11) { // 11개로 해야 마지막 12월까지 가는거임, 조심해서 무한 수정 완료...
                     clearInterval(calendarInterval);
                     calendarInterval = null;
                     return;
                 }
                 const currentImg = monthlyImages[currentMonthIndex];
-                const nextImg = monthlyImages[currentMonthIndex + 1];
+                const nextImg = monthlyImages[currentMonthIndex + 1]; // +1로 계속 이미지 값 넘기기
 
                 // 다음 달 미리 준비
                 if (nextImg) {
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1200);
 
             calendarTimeout = null; // 타임아웃 종료 표시
-        }, 1500); // 1.5초 딜레이 (표지 감상 시간)
+        }, 1500); // 1.5초 딜레이 (표지 감상 시간) → 처음에 너무 빨리 넘어가버리면 잔상으로 눈아플듯?
     };
 
     const stopCalendarAnim = () => {
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(calendarInterval);
             calendarInterval = null;
         }
-        // [수정] 대기 중인 타임아웃도 정지 (스크롤을 빨리 내렸을 경우 대비)
+        // 대기 중인 타임아웃도 정지 (스크롤을 빨리 내렸을 경우 대비) - 예외처리 중요!!!
         if (calendarTimeout) {
             clearTimeout(calendarTimeout);
             calendarTimeout = null;
@@ -122,10 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // [SECTION 2] 약속 등록 애니메이션 로직
     const sectionPromise = document.getElementById('section-promise');
     const promiseGroup = document.getElementById('promise-image-group');
-    const promiseImages = promiseGroup ? promiseGroup.querySelectorAll('img') : [];
+    const promiseImages = promiseGroup ? promiseGroup.querySelectorAll('img') : []; // 이미지에 대한 그룹을 'img' = monthlyImages 라는걸 까먹지 말것...
     let promiseInterval = null;
     let currentPromiseIndex = 0;
 
+    // 시작애니메이션
     const startPromiseAnim = () => {
         if (promiseInterval) return;
         promiseImages.forEach((img, idx) => {
@@ -152,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1200);
     };
 
+    // 마지막에서 멈춰야하는 애니메이션
     const stopPromiseAnim = () => {
         if (promiseInterval) {
             clearInterval(promiseInterval);
@@ -182,10 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // [SECTION 3] 11.26 추가 사항. D-Day 카운트다운 애니메이션 로직
-    const sectionDday = document.getElementById('section-dday');
-    const ddayDisplay = document.getElementById('dday-display');
-    const ddaySequence = ['D-7', 'D-6', 'D-5', 'D-4', 'D-3', 'D-2', 'D-1', 'D-Day'];
-    let ddayInterval = null;
+    const sectionDday = document.getElementById('section-dday'); // 위의 Id 가져와서 사용임.
+    const ddayDisplay = document.getElementById('dday-display'); // 위의 Id 가져와서 사용임.
+    const ddaySequence = ['D-7', 'D-6', 'D-5', 'D-4', 'D-3', 'D-2', 'D-1', 'D-Day']; // 표기되는 시퀀스값들 설정해둬야함
+    let ddayInterval = null; // 처음 초기값 null 설정해두기.
     let ddayIndex = 0;
 
     const startDDayAnim = () => {
@@ -235,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // [SECTION 4] 11.26 추가 사항. 체크인 토글 스위치 로직 (텍스트/아이콘 교체 방식)
+    // https://gurtn.tistory.com/161#google_vignette <- 토글 스위치 블로그 참고해서 도움 잘됨 ㅎ 토글스위치 만드는데만 1시간...하
     const checkinToggle = document.getElementById('checkin-toggle');
     const checkinStatus = document.getElementById('checkin-status');
     const checkinDesc = document.getElementById('checkin-desc');
