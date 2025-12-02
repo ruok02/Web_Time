@@ -10,7 +10,7 @@
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- 11.24 추가 사항. (다크 모드 설정을 위한 Tailwind Config 추가) -->
     <script>
         tailwind.config = {
@@ -24,15 +24,15 @@
                     // 11.28 추가 사항. Tailwind에 경복궁 폰트 등록
                     fontFamily: {
                         'gyeongbok': ['GyeongbokgungSumunjangBodyText', 'sans-serif'],
-                        'boardmark' : ['SchoolSafeBoardMarker', 'sans-serif'],
-                        'jalnan' : ['YeogiOttaeJalnan', 'sans-serif'],
-                        'gowoon' : ['GowoonDodum', 'sans-serilf'],
-                        'coding' : ['EllisDigitalCoding', 'sans-serilf']
+                        'boardmark': ['SchoolSafeBoardMarker', 'sans-serif'],
+                        'jalnan': ['YeogiOttaeJalnan', 'sans-serif'],
+                        'gowoon': ['GowoonDodum', 'sans-serilf'],
+                        'coding': ['EllisDigitalCoding', 'sans-serilf']
                         // font-gyeongbok 클래스로 사용 가능
+                    }
                 }
             }
         }
-    }
     </script>
 
     <!-- 11.28 변경 사항. <style>분리 이후 → main.css 링크 코드 추가 -->
@@ -40,10 +40,12 @@
 </head>
 
 <!-- 11.24 수정 사항. 다크 모드 클래스 적용 -->
+
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
 
     <!-- 헤더 -->
-    <header class="bg-white shadow-sm sticky top-0 z-50 dark:bg-gray-800 dark:border-b dark:border-gray-700 transition-colors duration-300">
+    <header
+        class="bg-white shadow-sm sticky top-0 z-50 dark:bg-gray-800 dark:border-b dark:border-gray-700 transition-colors duration-300">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
@@ -55,7 +57,8 @@
                     <!-- 11.24 추가 사항. 다크 모드 토글 버튼 →  -->
                     <button id="theme-toggle"
                         class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none">
-                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor"
+                            viewBox="0 0 20 20">
                             <path
                                 d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
                                 fill-rule="evenodd" clip-rule="evenodd"></path>
@@ -65,8 +68,10 @@
                         </svg>
                     </button>
                     <!-- 11.25 변경사항. Vercel 배포 경로 대응 (frontend/public이 root) -->
-                    <a href="/login.html" class="px-4 py-2 text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition duration-200 font-boardmark">로그인</a>
-                    <a href="/signup.html" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md font-boardmark">회원가입</a>
+                    <a href="/login.html"
+                        class="px-4 py-2 text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition duration-200 font-boardmark">로그인</a>
+                    <a href="/signup.html"
+                        class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md font-boardmark">회원가입</a>
                 </div>
             </div>
         </nav>
@@ -75,31 +80,41 @@
     <!-- 11.28 추가 사항. 현재 위의 h2 class, p class의 부분에다가 위의 가져온 font를 적용하는 방식을 적용.-->
     <section class="gradient-bg text-white py-20 px-4">
         <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight font-gyeongbok">약속을 지키는 습관,<br><span class="text-yellow-300">꼬옥!</span></h2>
-            <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto font-gyeongbok">지각 패널티 관리로 친구들과의 약속을 더 즐겁고 공정하게!</p>
+            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight font-gyeongbok">약속을 지키는 습관,<br><span
+                    class="text-yellow-300">꼬옥!</span></h2>
+            <p class="text-xl md:text-2xl mb-8 text-indigo-100 max-w-3xl mx-auto font-gyeongbok">지각 패널티 관리로 친구들과의 약속을 더
+                즐겁고 공정하게!</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
-                <a href="/signup.html" class="px-8 py-4 bg-white text-indigo-600 text-lg rounded-xl shadow-2xl hover:shadow-xl font-boardmark">무료로 시작하기 →</a>
-                <a href="#features" class="px-8 py-4 bg-indigo-700 text-white text-lg rounded-xl shadow-lg font-boardmark">기능 둘러보기</a>
+                <a href="/signup.html"
+                    class="px-8 py-4 bg-white text-indigo-600 text-lg rounded-xl shadow-2xl hover:shadow-xl font-boardmark">무료로
+                    시작하기 →</a>
+                <a href="#features"
+                    class="px-8 py-4 bg-indigo-700 text-white text-lg rounded-xl shadow-lg font-boardmark">기능 둘러보기</a>
             </div>
         </div>
     </section>
 
     <!-- 11.24 수정 사항. 전체 Features 섹션을 개별 섹션으로 분리하여 독립성 확보 -->
     <section id="features" class="py-20 px-4 bg-white dark:bg-gray-900 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto space-y-32"> 
+        <div class="max-w-6xl mx-auto space-y-32">
 
             <div class="text-center mb-16">
                 <h3 class="text-4xl font-extrabold text-gray-800 dark:text-white mb-4 font-jalnan">주요 기능</h3>
-                <p class="underline decoration-wavy text-2xl font-semibold text-blue-600 dark:text-blue-400 font-gowoon">약속 관리가 이렇게 쉬워집니다</p>
+                <p
+                    class="underline decoration-wavy text-2xl font-semibold text-blue-600 dark:text-blue-400 font-gowoon">
+                    약속 관리가 이렇게 쉬워집니다</p>
             </div>
 
             <!-- [SECTION 1] 달력 롤링 (독립된 공간) -->
             <div id="section-calendar" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
                 <!-- 왼쪽: 달력 이미지 -->
-                <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
+                <div
+                    class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
                     <!-- 11.24 수정 사항. 모든 달력 이미지를 하나의 그룹으로 통합 -->
-                    <img id="img-main-calendar" src="/images/Calendar/2025-CALENDAR.png" class="opacity-100 z-10 bg-white dark:bg-gray-800">
-                    <div id="monthly-calendar-group" class="absolute inset-0 opacity-0 transition-opacity duration-500 z-20">
+                    <img id="img-main-calendar" src="/images/Calendar/2025-CALENDAR.png"
+                        class="opacity-100 z-10 bg-white dark:bg-gray-800">
+                    <div id="monthly-calendar-group"
+                        class="absolute inset-0 opacity-0 transition-opacity duration-500 z-20">
                         <!-- 11.25 변경사항: 경로 수정 (/images/...) -->
                         <img src="/images/Calendar/January.png" class="opacity-0 bg-white dark:bg-gray-800">
                         <img src="/images/Calendar/February.png" class="opacity-0 bg-white dark:bg-gray-800">
@@ -119,7 +134,8 @@
                 <!-- 오른쪽: 텍스트 -->
                 <div>
                     <div class="text-5xl mb-4 text-indigo-600">📅</div>
-                    <h4 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4 font-jalnan">2025년 캘린더 & 월별 관리</h4>
+                    <h4 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4 font-jalnan">2025년 캘린더 & 월별 관리
+                    </h4>
                     <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed font-gowoon">
                         한 해의 모든 약속을 한눈에.<br>
                         <span class="text-indigo-600 dark:text-indigo-400 font-bold font-gowoon">1월부터 12월까지</span>,<br>
@@ -131,7 +147,8 @@
             <!-- [SECTION 2] 약속 등록 -->
             <div id="section-promise" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
                 <!-- 왼쪽: 약속 등록 이미지 -->
-                <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
+                <div
+                    class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
                     <!-- 11.24 추가 사항. 약속 등록 이미지 4장 (순차 재생) -->
                     <div id="promise-image-group">
                         <img src="/images/Promise/Promise_Date.png" class="opacity-100 bg-white dark:bg-gray-800">
@@ -152,18 +169,20 @@
                 </div>
             </div>
 
-             
+
             <!-- [SECTION 3] D-Day (11.26 추가 사항: 카운트다운 애니메이션 적용) -->
-             
+
             <div id="section-dday" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-                
+
                 <!-- 11.26 수정 사항. 왼쪽 이미지 박스 + D-Day 텍스트 오버레이 -->
-                <div class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 relative">
+                <div
+                    class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 relative">
                     <!-- 배경 이미지: 글씨가 잘 보이도록 opacity 조절 (0.4) -->
                     <img src="/images/Calendar/2025-Home.png" class="opacity-40 bg-white dark:bg-gray-800">
-                    
+
                     <!-- 11.26 추가 사항. D-Day 카운트다운 텍스트가 표시될 영역 -->
-                    <div id="dday-display" class="absolute inset-0 flex items-center justify-center text-7xl md:text-8xl font-black text-indigo-600 dark:text-indigo-400 z-10">
+                    <div id="dday-display"
+                        class="absolute inset-0 flex items-center justify-center text-7xl md:text-8xl font-black text-indigo-600 dark:text-indigo-400 z-10">
                         D-7
                     </div>
                 </div>
@@ -179,18 +198,20 @@
                 </div>
             </div>
 
-             
+
             <!-- [SECTION 4] 체크인 & 토글 스위치 (11.26 수정 사항) -->
-             
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-                
+
                 <!-- 11.26 수정 사항. 이미지를 제거하고 텍스트/아이콘 기반의 토글 UI로 전면 교체 -->
                 <!-- flex-col로 상/중/하 배치, transition-colors로 배경색 전환 효과 -->
-                <div id="checkin-container" class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center relative transition-colors duration-500">
-                    
+                <div id="checkin-container"
+                    class="feature-visual-box bg-gray-100 dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center relative transition-colors duration-500">
+
                     <!-- 상단: 상태 텍스트/아이콘 -->
                     <!-- 초기값: ❌ 장소 미도착 (Red) -->
-                    <div id="checkin-status" class="mb-8 text-3xl font-bold font-boardmark text-red-500 dark:text-red-400 transition-all duration-300 flex items-center">
+                    <div id="checkin-status"
+                        class="mb-8 text-3xl font-bold font-boardmark text-red-500 dark:text-red-400 transition-all duration-300 flex items-center">
                         <span class="mr-2 text-4xl">❌</span> 장소 미도착
                     </div>
 
@@ -203,7 +224,8 @@
                     </div>
 
                     <!-- 하단: 설명 텍스트 -->
-                    <div id="checkin-desc" class="mt-8 text-lg text-gray-500 font-boardmark dark:text-gray-400 font-medium transition-all duration-300">
+                    <div id="checkin-desc"
+                        class="mt-8 text-lg text-gray-500 font-boardmark dark:text-gray-400 font-medium transition-all duration-300">
                         약속장소 도착 후 체크하기!
                     </div>
 
@@ -229,8 +251,10 @@
             <h3 class="text-4xl md:text-5xl font-extrabold mb-6 font-gyeongbok">지금 바로 시작하세요</h3>
             <p class="text-xl mb-10 text-indigo-100 font-gyeongbok">무료로 가입하고 친구들과 약속을 더 즐겁게 지켜보세요!</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="/signup.html" class="px-10 py-4 bg-white text-indigo-600 text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl font-boardmark">회원가입하기</a>
-                <a href="/login.html" class="px-10 py-4 bg-indigo-700 text-white text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg border-2 border-white font-boardmark">로그인하기</a>
+                <a href="/signup.html"
+                    class="px-10 py-4 bg-white text-indigo-600 text-lg rounded-xl hover:bg-indigo-50 transition duration-300 shadow-2xl font-boardmark">회원가입하기</a>
+                <a href="/login.html"
+                    class="px-10 py-4 bg-indigo-700 text-white text-lg rounded-xl hover:bg-indigo-800 transition duration-300 shadow-lg border-2 border-white font-boardmark">로그인하기</a>
             </div>
         </div>
     </section>
@@ -240,7 +264,8 @@
             <div class="grid md:grid-cols-3 gap-8 mb-8">
                 <div>
                     <div class="flex items-center space-x-2 mb-4">
-                        <span class="text-3xl">⏰</span> <h4 class="text-xl font-bold text-white font-jalnan">꼬옥!</h4>
+                        <span class="text-3xl">⏰</span>
+                        <h4 class="text-xl font-bold text-white font-jalnan">꼬옥!</h4>
                     </div>
                     <p class="text-sm leading-relaxed font-boardmark">약속을 지키는 습관을 만드는<br>스마트한 지각 패널티 관리 앱</p>
                 </div>
@@ -254,7 +279,8 @@
                 </div>
                 <div>
                     <h5 class="font-semibold text-white mb-4 font-jalnan">프로젝트 정보</h5>
-                    <p class="text-sm leading-relaxed font-boardmark">3학년 웹 프로그래밍<br>사이드 프로젝트<br>개발 기간: 2025.11.04 ~ 2025.12.08</p>
+                    <p class="text-sm leading-relaxed font-boardmark">3학년 웹 프로그래밍<br>사이드 프로젝트<br>개발 기간: 2025.11.04 ~
+                        2025.12.08</p>
                 </div>
             </div>
             <div class="border-t border-gray-700 pt-6 text-center text-sm font-jalnan">
@@ -268,4 +294,5 @@
     <script src="./index.js" defer></script>
     <script src="./theme.js" defer></script>
 </body>
+
 </html>
