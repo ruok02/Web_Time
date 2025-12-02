@@ -19,7 +19,7 @@ if (loginForm) {
             localStorage.setItem('ko_og_logged_in', 'true');
             localStorage.setItem('ko_og_username', user.name);
             alert(`환영합니다, ${user.name}님!`);
-            window.location.href = '/user.html'; // 절대 경로 사용
+            window.location.href = 'user.html'; // 절대 경로 사용
         } else {
             // 로그인 실패
             alert('이메일 또는 비밀번호가 일치하지 않습니다.');
@@ -71,7 +71,7 @@ if (signupForm) {
         
         // 회원가입 성공
         alert(`회원가입이 완료되었습니다, ${name}님! 로그인 페이지로 이동합니다.`);
-        window.location.href = '/login.html'; // 절대 경로 사용 (Vercel 배포 환경 고려)
+        window.location.href = 'login.html'; // 절대 경로 사용 (Vercel 배포 환경 고려)
     });
 }
 
@@ -83,11 +83,11 @@ window.addEventListener('DOMContentLoaded', () => {
         // 11.29 추가사항. 회원가입 페이지에서는 확인창을 띄우는 로직을 유지
         if (document.title.includes('회원가입')) {
              if (confirm('이미 로그인되어 있습니다. 회원 페이지로 이동하시겠습니까?')) {
-                 window.location.href = '/user.html'; // 절대 경로 사용
+                 window.location.href = 'user.html'; // 절대 경로 사용
              }
         } else {
             // 로그인 페이지에서는 바로 리다이렉트 (간결하게)
-            window.location.href = '/user.html'; // 절대 경로 사용
+            window.location.href = 'user.html'; // 절대 경로 사용
         }
     }
 });

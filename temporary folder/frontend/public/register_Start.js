@@ -94,7 +94,7 @@ window.addEventListener('DOMContentLoaded', () => {
             try {
                 localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempData));
                 console.log("저장된 데이터:", tempData);
-                window.location.href = '/register_Calendar.html'; 
+                window.location.href = 'register_Calendar.html'; 
             } catch (error) {
                 alert("데이터 저장 실패: " + error);
             }

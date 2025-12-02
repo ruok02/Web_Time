@@ -18,7 +18,7 @@ let tempAppointmentData = JSON.parse(localStorage.getItem(TEMP_APPOINTMENT_KEY))
 function checkDataGuard() {
     if (!tempAppointmentData || !tempAppointmentData.schedule) {
         alert("약속 날짜 정보가 누락되었습니다. 2단계로 돌아갑니다.");
-        window.location.href = '/register_Calendar.html';
+        window.location.href = 'register_Calendar.html';
         return false;
     }
     return true;
@@ -53,7 +53,7 @@ function finalizeAppointment(penaltyText) {
     localStorage.removeItem(TEMP_APPOINTMENT_KEY);
 
     alert(`'${newAppointment.title}' 약속 등록이 완료되었습니다!`);
-    window.location.href = '/user.html';
+    window.location.href = 'user.html';
 }
 
 // --- 2. 폼 제출 로직 (완료하기) ---

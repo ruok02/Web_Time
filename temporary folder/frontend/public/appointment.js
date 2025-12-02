@@ -37,7 +37,7 @@ function logout() {
     localStorage.removeItem('ko_og_logged_in');
     localStorage.removeItem('ko_og_username');
     alert('로그아웃이 완료되었습니다.'); // 사용자 요청 메시지
-    window.location.href = '/index.html'; // 절대 경로 사용
+    window.location.href = 'index.html'; // 절대 경로 사용
 }
 
 // --- 2. 다크 모드 토글 로직 삭제 (theme.js로 이관) ---
@@ -364,7 +364,7 @@ window.onload = function () {
             localStorage.removeItem(TEMP_APPOINTMENT_KEY);
             
             // 11.30 변경사항. 파일명 변경 반영 (register_Start.html로 이동)
-            window.location.href = '/register_Start.html';
+            window.location.href = 'register_Start.html';
         });
     }
 

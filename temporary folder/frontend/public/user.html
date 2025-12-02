@@ -28,7 +28,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="/temporary folder/frontend/public/main.css">
+    <link rel="stylesheet" href="./main.css">
 
     <script>
         // 11.29 변경사항. 페이지 로드 전 로그인 여부 체크는 여기에 유지하여 리다이렉트 속도를 높임.
@@ -36,7 +36,7 @@
             const isLoggedIn = localStorage.getItem('ko_og_logged_in');
             if (!isLoggedIn) {
                 alert('로그인이 필요한 페이지입니다.');
-                window.location.href = '/login.html'; // 절대 경로 사용
+                window.location.href = 'login.html'; // 절대 경로 사용
             }
         });
     </script>
@@ -237,8 +237,8 @@
     </div>
 
 
-    <script src="/temporary folder/frontend/public/appointment.js" defer></script>
-    <script src="/temporary folder/frontend/public/theme.js" defer></script>
+    <script src="./appointment.js" defer></script>
+    <script src="./theme.js" defer></script>
 </body>
 
 </html>

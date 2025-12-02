@@ -184,7 +184,7 @@ function updateDateSummary() {
 function checkDataGuard() {
     if (!tempAppointmentData || !tempAppointmentData.title) {
         alert("약속 개요 정보가 누락되었습니다. 1단계로 돌아갑니다.");
-        window.location.href = '/register_Start.html';
+        window.location.href = 'register_Start.html';
         return false;
     }
     // 12.01 추가사항. 제목 표시
@@ -225,7 +225,7 @@ function handleNextStepClick(e) {
     localStorage.setItem(TEMP_APPOINTMENT_KEY, JSON.stringify(tempAppointmentData));
     
     // 3단계 페이지로 이동
-    window.location.href = '/register_Penalty.html';
+    window.location.href = 'register_Penalty.html';
 }
 
 
