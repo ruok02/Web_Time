@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'GyeongbokgungSumunjangBodyText';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyL.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GyeongbokgungSumunjangBodyText';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyM.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GyeongbokgungSumunjangBodyText';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_BodyB.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SchoolSafeBoardMarker';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/HakgyoansimBoadmarkerR.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YeogiOttaeJalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GowoonDodum';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunDodum-Regular.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'EllisDigitalCoding';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_220508@1.0/EliceDigitalBaeum_Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'EllisDigitalCoding';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_220508@1.0/EliceDigitalBaeum_Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+
+
+/* 전역/기반 스타일 : 이 스타일들은 모든 페이지(login.html, user.html)의 기본 폰트와 스크롤 동작을 정의한다. 
+   재사용성이 높기 때문에 외부 파일로 분리하여 모든 HTML이 공유하도록 해야한다.*/
+body {
+    font-family: 'Inter', sans-serif;
+    /* Inter 폰트가 없을 경우 그 다음 폰트인 sans-serif의 폰트를 사용 */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+
+.gradient-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 이미지 컨테이너 기본 스타일 */
+/*Tailwind 클래스로 표현할 수 없는 구조적/레이아웃 클래스입니다. HTML 코드의 가독성을 높이고, 해당 컴포넌트의 스타일 변경 시 main.css 파일 하나만 수정하면 되므로 유지보수성이 향상됩니다.*/
+.feature-visual-box {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+/*커스텀 컴포넌트/애니메이션*/
+/* 11.25 수정 사항. visual-box 크기 높이 조절 500px -> 350px */
+/* 애니메이션 모듈: 이는 페이지의 특수 효과를 정의하는 로직이기 떄문에 중요. CSS 애니메이션은 HTML이나 JS와 분리되어야 관심사의 분리(Separation of Concerns) 원칙을 따릅니다. → tailwindcss와 분리하는 이유에 대해서 해결완료 */
+@media (min-width: 768px) {
+    .feature-visual-box {
+        height: 350px;
+    }
+}
+
+/* 11.24 수정 사항. (기존 이미지 공통 스타일을 이쪽으로 이관함) */
+.feature-visual-box img,
+.feature-visual-box .mock-ui {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* 11.23 유지: 달력 플립 애니메이션 */
+.flip-scale-up-exit {
+    animation: flip-scale-up-exit 1.5s linear both;
+    transform-origin: 50% 0%;
+    z-index: 50;
+}
+
+/*@keyframes*/
+/* https://velog.io/@ye-ji/CSS-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98keyframes <- @keyframes 사용방법 매우 상세하게 잘나와있어서 도움 됨.*/
+@keyframes flip-scale-up-exit {
+    0% {
+        transform: translateY(0) rotateX(0) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-50%) rotateX(90deg) scale(2);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translateY(-100%) rotateX(180deg) scale(1);
+        opacity: 0;
+    }
+}
+
+/* 11.26 추가 사항. D-Day 텍스트 팝업(Pop-in) 애니메이션 CSS */
+.pop-in {
+    animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 11.26 추가 사항. [SECTION 4] 토글 스위치 커스텀 CSS (체크인 기능용) */
+/*커스텀 UI 컴포넌트: 체크인 스위치라는 특정 컴포넌트의 복잡한 상태 스타일을 정의합니다. HTML에 직접 넣는 것보다 main.css로 분리하여 컴포넌트 스타일을 한 곳에서 관리하는 것이 디버깅에 유리합니다.*/
+.toggleSwitch {
+    width: 100px;
+    height: 50px;
+    display: block;
+    position: relative;
+    border-radius: 30px;
+    background-color: #fff;
+    box-shadow: 0 0 16px 3px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    /* margin 제거 (Tailwind Flex로 중앙 정렬함) */
+}
+
+.toggleSwitch .toggleButton {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    /* 미세 조정 */
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #f03d3d;
+    /* 기본 빨간색 버튼 */
+    transition: all 0.2s ease-in;
+}
+
+/* 토글 체크되었을 때 스타일 */
+#checkin-toggle:checked+.toggleSwitch {
+    background: #f03d3d;
+    /* 배경이 빨개짐 */
+}
+
+#checkin-toggle:checked+.toggleSwitch .toggleButton {
+    left: calc(100% - 45px);
+    /* 버튼 오른쪽 이동 */
+    background: #fff;
+    /* 버튼이 하얗게 변함 */
+}
+
+/* 스텝 연결선 클래스 정의 */
+/*Tailwind 클래스로 표현할 수 없는 구조적/레이아웃 클래스입니다. HTML 코드의 가독성을 높이고, 해당 컴포넌트의 스타일 변경 시 main.css 파일 하나만 수정하면 되므로 유지보수성이 향상됩니다.*/
+.step-connector {
+    position: relative;
+}
+
+.step-connector::after {
+    content: '→';
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #667eea;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .step-connector::after {
+        content: '↓';
+        right: auto;
+        top: auto;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
