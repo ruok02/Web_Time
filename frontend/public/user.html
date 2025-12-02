@@ -236,6 +236,14 @@
         </nav>
     </div>
 
+    <script>
+        // ESC 키로도 모달 닫기 → 학교 수업시간에 배웠던 내용으로 'keydown'으로 창 끄게 하기
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeMessageModal();
+        }
+    });
+    </script>
 
     <script src="./appointment.js" defer></script>
     <script src="./theme.js" defer></script>

@@ -1,7 +1,7 @@
 // 11.29 추가사항. login.html과 signup.html이 공유할 공통 인증(Authentication) 로직
-// 이 파일은 localStorage 기반의 사용자 인증 및 회원가입 처리를 담당합니다.
 
-// --- 1. 로그인 폼 제출 처리 (login.html에서 사용) ---
+
+//  1. 로그인 폼 제출 처리 (login.html에서 사용) 
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', function (e) {
@@ -10,8 +10,8 @@ if (loginForm) {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        // localStorage에서 사용자 정보 확인 (간단한 데모 구현)
-        const users = JSON.parse(localStorage.getItem('ko_og_users') || '[]');
+        // localStorage에서 사용자 정보 확인 (간단한 데모 구현) → 값을 []로 일단 설정해둬야됨 아니면 추가가 안되서 문제가 생김.
+        const users = JSON.parse(localStorage.getItem('ko_og_u sers') || '[]');
         const user = users.find(u => u.email === email && u.password === password);
 
         if (user) {
@@ -27,7 +27,7 @@ if (loginForm) {
     });
 }
 
-// --- 2. 회원가입 폼 제출 처리 (signup.html에서 사용) ---
+//  2. 회원가입 폼 제출 처리 (signup.html에서 사용) 
 const signupForm = document.getElementById('signupForm');
 if (signupForm) {
     signupForm.addEventListener('submit', function(e) {
@@ -38,7 +38,7 @@ if (signupForm) {
         const password = document.getElementById('password').value;
         const passwordConfirm = document.getElementById('password_confirm').value;
         
-        // 비밀번호 유효성 검사 (길이 및 일치 여부)
+        // 비밀번호 유효성 검사 (길이 및 일치 여부) → 회원가입을 할 떄에 패스워드가 맞는지 안맞는지에 대해 설정해두는것
         if (password !== passwordConfirm) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
@@ -76,7 +76,7 @@ if (signupForm) {
 }
 
 
-// --- 3. 이미 로그인된 경우 자동 리다이렉트 (login.html, signup.html에서 사용) ---
+//  3. 이미 로그인된 경우 자동 리다이렉트 (login.html, signup.html에서 사용) 
 window.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('ko_og_logged_in');
     if (isLoggedIn) {

@@ -40,12 +40,12 @@ function logout() {
     window.location.href = '/index.html'; // 절대 경로 사용
 }
 
-// --- 2. 다크 모드 토글 로직 삭제 (theme.js로 이관) ---
+//  2. 다크 모드 토글 로직 삭제 (theme.js로 이관) 
 // initializeDarkMode() 함수 삭제됨
 
 /**
- * 11.30 추가사항. 다크 모드 전환 시 동적 요소들의 스타일을 업데이트합니다.
- * (목록 카드, 모달 콘텐츠 등) - theme.js에서 이 함수를 호출합니다.
+ 11.30 추가사항. 다크 모드 전환 시 동적 요소들의 스타일을 업데이트합니다.
+ (목록 카드, 모달 콘텐츠 등) - theme.js에서 이 함수를 호출합니다.
  */
 function updateDynamicStyles() {
     // renderAppointments를 호출하여 목록 카드 전체를 다시 렌더링하면 폰트/배경 색상 클래스가 업데이트됩니다.
@@ -80,7 +80,7 @@ function updateDynamicStyles() {
 
 
 /**
- * alert() 대신 사용할 사용자 지정 메시지 모달 함수
+ alert() 대신 사용할 사용자 지정 메시지 모달 함수
  */
 function showMessage(message) {
     // 11.29 변경사항. [모달 오류 수정]: 변수 선언 시점에 null일 수 있으므로 항상 체크
@@ -90,7 +90,7 @@ function showMessage(message) {
         mMessage.textContent = message;
         mModal.classList.remove('hidden');
     } else {
-        alert(message); // fallback
+        alert(message); // fallback 혹시 모르니깐 추가해뒀음.
     }
 }
 
@@ -102,7 +102,7 @@ function closeModal() {
 }
 
 /**
- * localStorage에서 약속 데이터를 불러오는 함수
+ localStorage에서 약속 데이터를 불러오는 함수
  */
 function getAppointments() {
     try {
@@ -115,7 +115,7 @@ function getAppointments() {
 }
 
 /**
- * D-Day를 계산하여 문자열로 반환합니다.
+ D-Day를 계산하여 문자열로 반환합니다. 여기 짜는게 좀 많이 힘들었음 Date() 객체 사용 후에 객체.setHours()로 값 설정 후에 상수들 더 넣고 그 뒤에 계산식까지 집어넣기
  */
 function calculateDDay(dateString) {
     const today = new Date();
@@ -132,7 +132,7 @@ function calculateDDay(dateString) {
 }
 
 
-// --- [NEW] 12.01 간편 수정 모달 열기 ---
+//  12.01 간편 수정 모달 열기 
 function openSimpleEditModal(id) {
     const appointments = getAppointments();
     const targetAppt = appointments.find(app => app.id === id);
@@ -155,13 +155,13 @@ function openSimpleEditModal(id) {
     simpleEditModal.classList.remove('hidden'); // 모달 보이기
 }
 
-// --- [NEW] 12.01 간편 수정 모달 닫기 ---
+//   12.01 간편 수정 모달 닫기 
 function closeSimpleEditModal() {
     simpleEditModal.classList.add('hidden');
     currentEditingId = null;
 }
 
-// --- [NEW] 12.01 간편 수정 저장 로직 ---
+//   12.01 간편 수정 저장 로직 
 function saveSimpleEdit() {
     if (!currentEditingId) return;
 
@@ -245,7 +245,7 @@ deleteConfirmModal.onclick = (e) => {
 };
 
 /**
- * 약속 목록을 화면에 렌더링하는 함수
+ 약속 목록을 화면에 렌더링하는 함수
  */
 function renderAppointments() {
     
